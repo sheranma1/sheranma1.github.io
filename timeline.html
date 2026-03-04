@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historical Timeline - Shuyi Ma</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- TimelineJS CSS -->
+    <link title="timeline-theme" rel="stylesheet"
+        href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+
+    <style>
+        /* Timeline specific overrides to match your site */
+        .tl-timeline {
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="index.html">About Me</a>
+        <a href="publications.html">Publications</a>
+        <a href="projects.html">Projects</a>
+        <a href="resources.html">Resources</a>
+        <a href="blog.html">Blog</a>
+    </nav>
+
+    <h1>Historical Timeline</h1>
+    <p>Chronology related to 16th-18th century Sino-Korean and Manchu-Korean relations, as well as broader cultural
+        exchanges in East Asia.</p>
+
+    <!-- Timeline Container -->
+    <div id="timeline-embed"
+        style="width: 100vw; height: 800px; margin: 40px calc(-50vw + 50%); box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    </div>
+
+    <!-- TimelineJS Script -->
+    <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+    <script src="timeline_data.js"></script>
+    <script type="text/javascript">
+        // Initialize TimelineJS with our local JS object
+        var timeline = new TL.Timeline('timeline-embed', timelineData, {
+            hash_bookmark: false,
+            initial_zoom: 2
+        });
+    </script>
+
+    <footer>
+        &copy; 2026 Shuyi Ma
+    </footer>
+</body>
+
+</html>

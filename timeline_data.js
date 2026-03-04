@@ -1,0 +1,57 @@
+var timelineData = {
+    "title": {
+        "text": {
+            "headline": "East Asian History Timeline (16th-18th Centuries)",
+            "text": "<p>A timeline of diplomatic events and cultural exchange among China, Japan, and Korea.</p>"
+        }
+    },
+    "events": [
+        {
+            "start_date": {
+                "year": "1592"
+            },
+            "end_date": {
+                "year": "1598"
+            },
+            "text": {
+                "headline": "Imjin War (壬辰倭亂)",
+                "text": "Toyotomi Hideyoshi invades the Korean peninsula, prompting Ming China to send forces to aid Joseon Korea. The war ended with Japanese withdrawal after Hideyoshi's death."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1618"
+            },
+            "end_date": {
+                "year": "1683"
+            },
+            "text": {
+                "headline": "Ming-Qing Transition (明清交替)",
+                "text": "The decades-long period of conflict between the declining Ming Dynasty, the peasant rebellions (like Li Zicheng), and the rising Manchu (Qing) power, ultimately leading to Qing conquest of China."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1627"
+            },
+            "text": {
+                "headline": "First Manchu Invasion of Korea (丁卯胡亂)",
+                "text": "The Later Jin (early Qing) forces under Hong Taiji invade Joseon Korea. The invasion resulted in Joseon agreeing to a 'brotherly' tributary relationship with the Later Jin, though Joseon still secretly favored the Ming."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1636",
+                "month": "12"
+            },
+            "end_date": {
+                "year": "1637",
+                "month": "1"
+            },
+            "text": {
+                "headline": "Second Manchu Invasion of Korea (丙子胡亂)",
+                "text": "Hong Taiji, now Emperor of the Qing Dynasty, launched a massive invasion against Joseon for failing to recognize Qing's suzerainty. King Injo surrendered at Samjeondo, officially severing ties with Ming and becoming a Qing tributary."
+            }
+        }
+    ]
+};
