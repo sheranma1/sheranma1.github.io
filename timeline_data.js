@@ -137,11 +137,21 @@ var timelineData = {
             },
             "end_date": {
                 "year": "1637",
-                "month": "2"
+                "month": "1"
             },
             "text": {
                 "headline": "Second Manchu Invasion of Korea (丙子胡亂)",
-                "text": "Hong Taiji, now Emperor of the Qing Dynasty, launched a massive invasion against Joseon. King Injo surrendered at Samjeondo, officially severing ties with Ming and becoming a Qing tributary. <br><br><blockquote>\"King Injo performed a ritual act of surrender to Hong Taiji in February 1637, the only one that a Korean king performed to a foreign ruler in recorded history, imprinted an indelible sense of shame on the entire Korean political body\"</blockquote> — JaHyun Kim Haboush, <i>The Great East Asian War and the Birth of the Korean Nation</i>"
+                "text": "Hong Taiji, now Emperor of the Qing Dynasty, launched a massive invasion against Joseon for failing to recognize Qing's suzerainty. King Injo surrendered at Samjeondo, officially severing ties with Ming and becoming a Qing tributary."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1637",
+                "month": "2"
+            },
+            "text": {
+                "headline": "King Injo's Ritual Act of Surrender",
+                "text": "King Injo performed a ritual act of surrender to Hong Taiji, marking a turning point in Joseon's diplomatic history. <br><br><i>\"King Injo performed a ritual act of surrender to Hong Taiji in February 1637, the only one that a Korean king performed to a foreign ruler in recorded history, imprinted an indelible sense of shame on the entire Korean political body\"</i> — JaHyun Kim Haboush, <i>The Great East Asian War and the Birth of the Korean Nation</i>"
             }
         }
     ]
