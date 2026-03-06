@@ -115,8 +115,20 @@ var timelineData = {
                 "month": "10"
             },
             "text": {
-                "headline": "Allied Victory at Chiksan; Battle of Myóngyang",
-                "text": "The Ming-Joseon allied forces achieved a victory at Chiksan, while Admiral Yi Sun-sin won a legendary naval battle at Myóngyang, decisively checking the Japanese advance."
+                "headline": "Allied Victory at Chiksan",
+                "text": "The Ming-Joseon allied forces achieved a decisive victory at Chiksan, checking the Japanese advance during the Second Invasion (Keichō Reconstruction)."
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1597",
+                "month": "10"
+            },
+            "text": {
+                "headline": "Battle of Myóngyang",
+                "text": "Admiral Yi Sun-sin won a legendary naval battle at Myóngyang, where his 13 ships defeated a massive Japanese fleet of over 130 vessels."
             }
         },
         {
@@ -128,19 +140,19 @@ var timelineData = {
             },
             "text": {
                 "headline": "Death of Hideyoshi; Japanese Withdrawal",
-                "text": "Toyotomi Hideyoshi dies in Japan. As the Japanese forces begin their withdrawal, the allied offensive continues to press their advantage."
+                "text": "Toyotomi Hideyoshi dies in Japan. Japanese forces begin their withdrawal from the Korean peninsula."
             }
         },
         {
             "group": "Events",
-            "tags": ["China", "Korea", "Japan"],
+            "tags": ["Korea", "Japan"],
             "start_date": {
                 "year": "1598",
                 "month": "12"
             },
             "text": {
                 "headline": "Battle of Noryang Straits; Death of Yi Sun-sin",
-                "text": "The Battle of Noryang Straits marks the end of the war as the final Japanese retreat is intercepted. Admiral Yi Sun-sin is killed in action during the battle."
+                "text": "The Battle of Noryang Straits marks the end of the war as the final Japanese retreat is intercepted. Admiral Yi Sun-sin is killed in action during this final engagement."
             }
         },
         {
