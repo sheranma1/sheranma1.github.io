@@ -165,6 +165,16 @@ var timelineData = {
         {
             "group": "Events",
             "start_date": {
+                "year": "1636"
+            },
+            "text": {
+                "headline": "Proclamation of the Qing Dynasty",
+                "text": "Hong Taiji obtained the Great Seal of the Yuan Dynasty from the Chahar Mongols and claimed the title of Khan of the Mongol Empire. Supported by Manchu, Han, and Mongol elites, he ascended as Emperor and renamed the state to the 'Great Qing' (Da Qing), ushering in the Chongde era."
+            }
+        },
+        {
+            "group": "Events",
+            "start_date": {
                 "year": "1636",
                 "month": "12"
             },
