@@ -264,7 +264,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Qing Army Enters the Shanhai Pass (Entry into Custom)",
-                "text": "The Qing army, led by Dorgon and allied with the Ming general Wu Sangui, enters the Shanhai Pass after the Battle of Shanhai Pass. <br><br><b>Original Text:</b> 1644年四月，清軍入關。"
+                "text": "The Qing army, led by Dorgon and allied with the Ming general Wu Sangui, enters the Shanhai Pass after the Battle of Shanhai Pass."
             }
         },
         {
@@ -276,7 +276,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Qing Army Enters Beijing",
-                "text": "The Qing forces enter Beijing, marking the definitive shift of the capital from the Ming to the Qing dynasty. <br><br><b>Original Text:</b> 1644年五月，清軍進北京城。"
+                "text": "The Qing forces enter Beijing, marking the definitive shift of the capital from the Ming to the Qing dynasty."
             }
         },
         {
@@ -287,7 +287,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Crown Prince Sohyeon Returns to Hanyang (1645)",
-                "text": "The Qing dynasty sends officials to escort Crown Prince Sohyeon back to Hanyang (Seoul) after years of being held as a hostage in Mukden. <br><br><b>Original Text:</b> 1645年二月，清朝派使臣送昭顯世子回漢城。"
+                "text": "The Qing dynasty sends officials to escort Crown Prince Sohyeon back to Hanyang (Seoul) after years of being held as a hostage in Mukden."
             }
         },
         {
