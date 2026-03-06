@@ -107,58 +107,6 @@
         h3 {
             font-family: Georgia, 'Times New Roman', serif;
         }
-
-        /* Era Tracks Styles */
-        .tl-era {
-            opacity: 0.8 !important;
-            border-bottom: 2px solid #ccc;
-            height: 25px !important;
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-            overflow: visible !important;
-        }
-
-        .tl-era-track-1 {
-            background-color: rgba(255, 200, 200, 0.4) !important;
-            top: 110px !important;
-        }
-
-        /* China */
-        .tl-era-track-2 {
-            background-color: rgba(200, 255, 200, 0.4) !important;
-            top: 140px !important;
-        }
-
-        /* Chosŏn */
-        .tl-era-track-3 {
-            background-color: rgba(200, 200, 255, 0.4) !important;
-            top: 170px !important;
-        }
-
-        /* Japan */
-
-        .tl-era-label {
-            font-family: Georgia, serif !important;
-            font-size: 11px !important;
-            font-weight: bold !important;
-            color: #444 !important;
-            pointer-events: none;
-            white-space: nowrap;
-        }
-
-        /* Labels for the tracks themselves */
-        .track-label {
-            position: absolute;
-            left: 10px;
-            font-size: 10px;
-            font-weight: bold;
-            color: #888;
-            pointer-events: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            z-index: 10;
-        }
     </style>
 </head>
 
@@ -195,48 +143,9 @@
             currentTimeline = new TL.Timeline('timeline-embed', data, {
                 hash_bookmark: false,
                 initial_zoom: 2,
-                timenav_height_percentage: 60, // Increased for era tracks
+                timenav_height_percentage: 50,
                 font: null
             });
-
-            // Post-load styling for eras
-            setTimeout(processEras, 1000);
-            // Also run on scroll/zoom as TimelineJS might re-render
-            window.addEventListener('resize', processEras);
-        }
-
-        function processEras() {
-            const eras = document.querySelectorAll('.tl-era');
-            eras.forEach(era => {
-                const headline = era.querySelector('.tl-headline');
-                if (!headline) return;
-
-                const text = headline.innerText;
-                if (text.startsWith('CH:')) {
-                    era.classList.add('tl-era-track-1');
-                    headline.innerText = text.replace('CH:', '').trim();
-                } else if (text.startsWith('KR:')) {
-                    era.classList.add('tl-era-track-2');
-                    headline.innerText = text.replace('KR:', '').trim();
-                } else if (text.startsWith('JP:')) {
-                    era.classList.add('tl-era-track-3');
-                    headline.innerText = text.replace('JP:', '').trim();
-                }
-
-                era.classList.add('processed');
-                headline.classList.add('tl-era-label');
-            });
-
-            // Add persistent track indicators if not already present
-            const nav = document.querySelector('.tl-timenav');
-            if (nav && !document.querySelector('.track-label')) {
-                const l1 = document.createElement('div'); l1.className = 'track-label'; l1.innerText = 'China'; l1.style.top = '115px';
-                const l2 = document.createElement('div'); l2.className = 'track-label'; l2.innerText = 'Chosŏn'; l2.style.top = '145px';
-                const l3 = document.createElement('div'); l3.className = 'track-label'; l3.innerText = 'Japan'; l3.style.top = '175px';
-                nav.appendChild(l1);
-                nav.appendChild(l2);
-                nav.appendChild(l3);
-            }
         }
 
         function filterTimeline(tag) {

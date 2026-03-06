@@ -252,35 +252,5 @@ var timelineData = {
                 "text": "The Qing dynasty begins adopting the Chosŏn model for managing its external relations. <br><br><i>\"In the first years after 1644, the Qing found the Chosŏn model the most powerful and practical way of managing its relations with other countries and of extending its influence and authority.\"</i> — Yuanchong Wang, <i>Remaking the Chinese Empire</i>"
             }
         }
-    ],
-    "eras": [
-        /* China (Ming/Qing) */
-        { "start_date": { "year": "1573" }, "end_date": { "year": "1620" }, "text": { "headline": "CH: Wanli (萬曆)" } },
-        { "start_date": { "year": "1621" }, "end_date": { "year": "1627" }, "text": { "headline": "CH: Tianqi (天啓)" } },
-        { "start_date": { "year": "1628" }, "end_date": { "year": "1644" }, "text": { "headline": "CH: Chongzhen (崇禎)" } },
-        { "start_date": { "year": "1644" }, "end_date": { "year": "1661" }, "text": { "headline": "CH: Shunzhi (順治)" } },
-        { "start_date": { "year": "1662" }, "end_date": { "year": "1722" }, "text": { "headline": "CH: Kangxi (康熙)" } },
-
-        /* Chosŏn (Kings) */
-        { "start_date": { "year": "1567" }, "end_date": { "year": "1608" }, "text": { "headline": "KR: Sŏnjo (宣祖)" } },
-        { "start_date": { "year": "1608" }, "end_date": { "year": "1623" }, "text": { "headline": "KR: Gwanghaegun (光海君)" } },
-        { "start_date": { "year": "1623" }, "end_date": { "year": "1649" }, "text": { "headline": "KR: Injo (仁祖)" } },
-        { "start_date": { "year": "1649" }, "end_date": { "year": "1659" }, "text": { "headline": "KR: Hyojong (孝宗)" } },
-        { "start_date": { "year": "1659" }, "end_date": { "year": "1674" }, "text": { "headline": "KR: Hyeonjong (顯宗)" } },
-        { "start_date": { "year": "1674" }, "end_date": { "year": "1720" }, "text": { "headline": "KR: Sukjong (肅宗)" } },
-
-        /* Japan (Nengo) */
-        { "start_date": { "year": "1592" }, "end_date": { "year": "1596" }, "text": { "headline": "JP: Bunroku (文禄)" } },
-        { "start_date": { "year": "1596" }, "end_date": { "year": "1615" }, "text": { "headline": "JP: Keichō (慶長)" } },
-        { "start_date": { "year": "1615" }, "end_date": { "year": "1624" }, "text": { "headline": "JP: Genna (元和)" } },
-        { "start_date": { "year": "1624" }, "end_date": { "year": "1644" }, "text": { "headline": "JP: Kan'ei (寛永)" } },
-        { "start_date": { "year": "1644" }, "end_date": { "year": "1648" }, "text": { "headline": "JP: Shōhō (正保)" } },
-        { "start_date": { "year": "1648" }, "end_date": { "year": "1652" }, "text": { "headline": "JP: Keian (慶安)" } },
-        { "start_date": { "year": "1652" }, "end_date": { "year": "1655" }, "text": { "headline": "JP: Jōō (承応)" } },
-        { "start_date": { "year": "1655" }, "end_date": { "year": "1658" }, "text": { "headline": "JP: Meireki (明暦)" } },
-        { "start_date": { "year": "1658" }, "end_date": { "year": "1661" }, "text": { "headline": "JP: Manji (万治)" } },
-        { "start_date": { "year": "1661" }, "end_date": { "year": "1673" }, "text": { "headline": "JP: Kanbun (寛文)" } },
-        { "start_date": { "year": "1673" }, "end_date": { "year": "1681" }, "text": { "headline": "JP: Enpō (延宝)" } },
-        { "start_date": { "year": "1681" }, "end_date": { "year": "1684" }, "text": { "headline": "JP: Tenna (天和)" } }
     ]
 };
