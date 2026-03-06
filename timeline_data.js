@@ -111,6 +111,15 @@ var timelineData = {
         },
         {
             "start_date": {
+                "year": "1616"
+            },
+            "text": {
+                "headline": "Nurhaci Unites Jurchens and Ascends as Khan",
+                "text": "努爾哈赤統一多數女真族，於西元一六一六年即位為汗，建立後金 (Later Jin)."
+            }
+        },
+        {
+            "start_date": {
                 "year": "1618"
             },
             "end_date": {
