@@ -101,7 +101,8 @@ var timelineData = {
                 "year": "1592"
             },
             "end_date": {
-                "year": "1598"
+                "year": "1598",
+                "month": "12"
             },
             "text": {
                 "headline": "Imjin War (壬辰倭亂)",
