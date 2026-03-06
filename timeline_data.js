@@ -299,7 +299,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "First Post-War Mission to Japan (1607)",
-                "text": "The first official diplomatic mission to Japan after the Imjin War. Envoys Yeo U-gil, Gyeong Seom, and Jeong Ho-gwan return from Japan, marking the normalization of relations via the Tsushima Domain. <br><br>Source: 朝鮮王朝實錄 ／ 宣祖實錄 ／ 卷二百一十四　七月 ／ 19日"
+                "text": "The first official diplomatic mission to Japan after the Imjin War. Envoys Yeo U-gil, Gyeong Seom, and Jeong Ho-gwan return from Japan, marking the normalization of relations via the Tsushima Domain. <br><br><b>Original Text:</b> 呂祐吉、慶暹、丁好寬等回自日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Seonjo, Vol. 214, July 19."
             }
         },
         {
@@ -312,7 +312,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Diplomatic Mission of O Yun-gyeom (1617)",
-                "text": "A Tongsinsa mission led by Senior Envoy O Yun-gyeom, Deputy Envoy Pak Jae, and Secretary Yi Gyeong-jik. The mission was sent to congratulate the Tokugawa Shogunate on the victory at the Siege of Osaka. <br><br>Source: 朝鮮王朝實錄 ／ 光海君日記 ／ 卷一百二十一　十一月 ／ 13日"
+                "text": "A Tongsinsa mission led by Senior Envoy O Yun-gyeom, Deputy Envoy Pak Jae, and Secretary Yi Gyeong-jik. The mission was sent to congratulate the Tokugawa Shogunate on the victory at the Siege of Osaka. <br><br><b>Original Text:</b> 回答使吳允謙、副使朴榟、從事官李景稷等入來啟辭。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Diaries of Gwanghaegun, Taebaeksan Edition, Vol. 121, November 13."
             }
         },
         {
@@ -325,7 +325,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Diplomatic Mission of Jeong Rip (1624)",
-                "text": "Chosŏn appoints Jeong Rip as the Senior Envoy and Kang Hong-jung as the Deputy Envoy to Japan. The mission was sent following the enthronement of King Injo to stabilize relations. <br><br>Source: 朝鮮王朝實錄 ／ 仁祖實錄 ／ 二年（1624） 卷五 三月 ／ 25日"
+                "text": "Chosŏn appoints Jeong Rip as the Senior Envoy and Kang Hong-jung as the Deputy Envoy to Japan. The mission was sent following the enthronement of King Injo to stabilize relations. <br><br><b>Original Text:</b> 鄭岦為日本回答使，姜弘重為副使，金南重為從事官，李德泂為奏聞使，權盼為副使，高傅川為書狀官。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Injo, Vol. 5, March 25."
             }
         },
         {
@@ -338,7 +338,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Mission of Im Gwang Returns (1637)",
-                "text": "Senior Envoy Im Gwang, Deputy Envoy Kim Se-ryeom, and Secretary Hwang Ho return from Japan. This mission took place amidst the internal turmoil of the Manchu invasions in Chosŏn. <br><br>Source: 朝鮮王朝實錄 ／ 仁祖實錄 ／ 十五年（1637） 卷三十四 三月 ／ 9日"
+                "text": "Senior Envoy Im Gwang, Deputy Envoy Kim Se-ryeom, and Secretary Hwang Ho return from Japan. This mission took place amidst the internal turmoil of the Manchu invasions in Chosŏn. <br><br><b>Original Text:</b> 通信使任絖、副使金世濂、從事官黃㦿，還自日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Injo, Vol. 34, March 9."
             }
         },
         {
@@ -351,7 +351,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Mission of Yun Sun-ji Departs (1643)",
-                "text": "The Chosŏn court sends a Tongsinsa mission to Japan led by Yun Sun-ji, Jo Gyeong, and Shin Yu to congratulate the birth of the Shogun's heir. <br><br>Source: 朝鮮王朝實錄 ／ 仁祖實錄 ／ 二十一年（1643） 卷四十四 ／ 二月 ／ 20日"
+                "text": "The Chosŏn court sends a Tongsinsa mission to Japan led by Yun Sun-ji, Jo Gyeong, and Shin Yu to congratulate the birth of the Shogun's heir. <br><br><b>Original Text:</b> 通信上使尹順之、副使趙䌹、從事官申濡辭朝，上召見之。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Injo, Vol. 44, February 20."
             }
         },
         {
@@ -364,7 +364,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Mission of Jo Hyeong (1655)",
-                "text": "A diplomatic mission led by Jo Hyeong, Yu Chang, and Nam Yong-ik departs for Japan. King Hyojong personally grants an audience to the envoys before their departure. <br><br>Source: 朝鮮王朝實錄 ／ 孝宗實錄 ／ 六年（1655） 卷十四 夏四月 ／ 20日"
+                "text": "A diplomatic mission led by Jo Hyeong, Yu Chang, and Nam Yong-ik departs for Japan. King Hyojong personally grants an audience to the envoys before their departure. <br><br><b>Original Text:</b> 日本通信使趙珩、副使兪玚、從事官南龍翼辭朝，面諭以遣之。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Hyojong, Vol. 14, April 20."
             }
         },
         {
@@ -377,7 +377,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Mission of Yun Ji-wan (1682)",
-                "text": "Envoys Yun Ji-wan, Yi Eon-gang, and Pak Gyeong-hu depart for Japan. This was the first mission after the Revolt of the Three Feudatories in China, reflecting Chosŏn's role in the regional balance. <br><br>Source: 朝鮮王朝實錄 ／ 肃宗實錄 ／ 八年（1682） 卷十三 五月 ／ 8日"
+                "text": "Envoys Yun Ji-wan, Yi Eon-gang, and Pak Gyeong-hu depart for Japan. This was the first mission after the Revolt of the Three Feudatories in China, reflecting Chosŏn's role in the regional balance. <br><br><b>Original Text:</b> 通信使尹趾完、副使李彥綱、從事官朴慶後如日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sukjong, Vol. 13, May 8."
             }
         },
         {
@@ -390,7 +390,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Mission of Jo Tae-eok (1711)",
-                "text": "A Tongsinsa mission led by Jo Tae-eok, Im Su-gan, and Yi Bang-eon. This mission is notable for its discussions on diplomatic protocols and the title of the Shogun. <br><br>Source: 朝鮮王朝實錄 ／ 肃宗實錄 ／ 三十七年（1711） 卷五十 五月 ／ 15日"
+                "text": "A Tongsinsa mission led by Jo Tae-eok, Im Su-gan, and Yi Bang-eon. This mission is notable for its discussions on diplomatic protocols and the title of the Shogun. <br><br><b>Original Text:</b> 通信使趙泰億、副使任守干、從事官李邦彥辭陛，命引見。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sukjong, Vol. 50, May 15."
             }
         },
         {
@@ -403,7 +403,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Mission of Hong Chi-jung (1719)",
-                "text": "The Chosŏn Crown Prince grants an audience to Senior Envoy Hong Chi-jung, Deputy Envoy Hwang Seon, and Secretary Yi Myeong-eon before their departure to Japan. <br><br>Source: 朝鮮王朝實錄 ／ 肃宗實錄 ／ 四十五年（1719） 卷六十三 正月 ／ 29日"
+                "text": "The Chosŏn Crown Prince grants an audience to Senior Envoy Hong Chi-jung, Deputy Envoy Hwang Seon, and Secretary Yi Myeong-eon before their departure to Japan. <br><br><b>Original Text:</b> 通信正使洪致中、副使黃璿、從事官李明彥等請對，世子召見。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sukjong, Vol. 63, January 29."
             }
         },
         {
@@ -416,7 +416,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Mission of Hong Gye-hui (1747)",
-                "text": "The Chosŏn court dispatches a mission led by Hong Gye-hui, Nam Tae-gi, and Jo Myeong-chae to Japan. <br><br>Source: 朝鮮王朝實錄 ／ 英祖實錄 ／ 二十三年（1747） 卷六十六 十一月 ／ 28日"
+                "text": "The Chosŏn court dispatches a mission led by Hong Gye-hui, Nam Tae-gi, and Jo Myeong-chae to Japan. <br><br><b>Original Text:</b> 遣通信上使洪啟禧、副使南泰耆、從事官曹命采，往使日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Yeongjo, Vol. 66, November 28."
             }
         },
         {
@@ -429,7 +429,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Mission of Jo Eom (1763)",
-                "text": "A Tongsinsa mission led by Jo Eom, Yi In-bae, and Kim Sang-ik. Jo Eom is famously credited with introducing the sweet potato to Korea from Japan during this journey. <br><br>Source: 朝鮮王朝實錄 ／ 英祖實錄 ／ 三十九年（1763） 卷一百二 八月 ／ 3日"
+                "text": "A Tongsinsa mission led by Jo Eom, Yi In-bae, and Kim Sang-ik. Jo Eom is famously credited with introducing the sweet potato to Korea from Japan during this journey. <br><br><b>Original Text:</b> 通信正使趙曮、副使李仁培、從事官金相翊辭陛，上召見之。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Yeongjo, Vol. 102, August 3."
             }
         },
         {
@@ -442,7 +442,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Final Mission to Japan (1811)",
-                "text": "King Sunjo grants an audience to the final Tongsinsa mission led by Kim I-gyo and Yi Myeon-gu. Due to various constraints, the mission was received on Tsushima Island rather than traveling to Edo. <br><br>Source: 朝鮮王朝實錄 ／ 純祖實錄 ／ 十一年（1811） 卷十四 二月 ／ 12日"
+                "text": "King Sunjo grants an audience to the final Tongsinsa mission led by Kim I-gyo and Yi Myeon-gu. Due to various constraints, the mission was received on Tsushima Island rather than traveling to Edo. <br><br><b>Original Text:</b> 召見通信正使金履喬、副使李勉求，辭陛也。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sunjo, Vol. 14, February 12."
             }
         }
     ]
