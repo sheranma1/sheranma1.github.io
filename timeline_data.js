@@ -30,7 +30,7 @@ var timelineData = {
                 "year": "1643"
             },
             "text": {
-                "headline": "Qing-Joseon Diplomatic High Frequency (1637–1643)",
+                "headline": "Qing-Chosŏn Diplomatic High Frequency (1637–1643)",
                 "text": "A period of intense diplomatic activity following the Second Manchu Invasion. <br><br><i>\"From 1637 to 1643, the Qing sent twelve missions and twenty-eight emissaries to Chosŏn, an average of one and a half missions per year, while Chosŏn sent fifty-six missions and 102 emissaries to the Qing, an average of seven missions per year.\"</i> — Yuanchong Wang, <i>Remaking the Chinese Empire</i>"
             }
         },
@@ -46,7 +46,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Imjin War (壬辰倭亂)",
-                "text": "Toyotomi Hideyoshi invades the Korean peninsula, prompting Ming China to send forces to aid Joseon Korea. The war ended with Japanese withdrawal after Hideyoshi's death."
+                "text": "Toyotomi Hideyoshi invades the Korean peninsula, prompting Ming China to send forces to aid Chosŏn Korea. The war ended with Japanese withdrawal after Hideyoshi's death."
             }
         },
         {
@@ -70,7 +70,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "King Sŏnjo and his Court flee Seoul",
-                "text": "As Japanese forces advanced towards the capital, King Sŏnjo and the Joseon court fled Seoul, heading north towards Pyongyang and eventually Uiju."
+                "text": "As Japanese forces advanced towards the capital, King Sŏnjo and the Chosŏn court fled Seoul, heading north towards Pyongyang and eventually Uiju."
             }
         },
         {
@@ -82,7 +82,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Ming Expeditionary Force Annihilated at Pyongyang",
-                "text": "The first Ming expeditionary force sent to aid Joseon, under General Zu Chengxun, was decisively defeated by Japanese forces near Pyongyang."
+                "text": "The first Ming expeditionary force sent to aid Chosŏn, under General Zu Chengxun, was decisively defeated by Japanese forces near Pyongyang."
             }
         },
         {
@@ -94,7 +94,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Ming Relief Forces Arrive in Korea",
-                "text": "A large-scale Ming relief army, led by General Li Rusong, arrives in Joseon to counter the Japanese invasion."
+                "text": "A large-scale Ming relief army, led by General Li Rusong, arrives in Chosŏn to counter the Japanese invasion."
             }
         },
         {
@@ -130,7 +130,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Allied Victory at Chiksan",
-                "text": "The Ming-Joseon allied forces achieved a decisive victory at Chiksan, checking the Japanese advance during the Second Invasion (Keichō Reconstruction)."
+                "text": "The Ming-Chosŏn allied forces achieved a decisive victory at Chiksan, checking the Japanese advance during the Second Invasion (Keichō Reconstruction)."
             }
         },
         {
@@ -188,7 +188,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Injo Restoration (仁祖反正)",
-                "text": "In 1623, a coup d'état took place in Joseon. Gwanghaegun was deposed and King Injo was enthroned."
+                "text": "In 1623, a coup d'état took place in Chosŏn. Gwanghaegun was deposed and King Injo was enthroned."
             }
         },
         {
@@ -199,7 +199,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "First Manchu Invasion of Korea (丁卯胡亂)",
-                "text": "The Later Jin (early Qing) forces under Hong Taiji invade Joseon Korea. The invasion resulted in Joseon agreeing to a 'brotherly' tributary relationship with the Later Jin, though Joseon still secretly favored the Ming."
+                "text": "The Later Jin (early Qing) forces under Hong Taiji invade Chosŏn Korea. The invasion resulted in Chosŏn agreeing to a 'brotherly' tributary relationship with the Later Jin, though Chosŏn still secretly favored the Ming."
             }
         },
         {
@@ -226,7 +226,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Second Manchu Invasion of Korea (丙子胡亂)",
-                "text": "Hong Taiji, now Emperor of the Qing Dynasty, launched a massive invasion against Joseon for failing to recognize Qing's suzerainty. King Injo surrendered at Samjeondo, officially severing ties with Ming and becoming a Qing tributary."
+                "text": "Hong Taiji, now Emperor of the Qing Dynasty, launched a massive invasion against Chosŏn for failing to recognize Qing's suzerainty. King Injo surrendered at Samjeondo, officially severing ties with Ming and becoming a Qing tributary."
             }
         },
         {
@@ -238,7 +238,18 @@ var timelineData = {
             },
             "text": {
                 "headline": "King Injo's Ritual Act of Surrender",
-                "text": "King Injo performed a ritual act of surrender to Hong Taiji, marking a turning point in Joseon's diplomatic history. <br><br><i>\"King Injo performed a ritual act of surrender to Hong Taiji in February 1637, the only one that a Korean king performed to a foreign ruler in recorded history, imprinted an indelible sense of shame on the entire Korean political body\"</i> — JaHyun Kim Haboush, <i>The Great East Asian War and the Birth of the Korean Nation</i>"
+                "text": "King Injo performed a ritual act of surrender to Hong Taiji, marking a turning point in Chosŏn's diplomatic history. <br><br><i>\"King Injo performed a ritual act of surrender to Hong Taiji in February 1637, the only one that a Korean king performed to a foreign ruler in recorded history, imprinted an indelible sense of shame on the entire Korean political body\"</i> — JaHyun Kim Haboush, <i>The Great East Asian War and the Birth of the Korean Nation</i>"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["China", "Korea"],
+            "start_date": {
+                "year": "1645"
+            },
+            "text": {
+                "headline": "The 'Chosŏn Model' of Diplomacy",
+                "text": "The Qing dynasty begins adopting the Chosŏn model for managing its external relations. <br><br><i>\"In the first years after 1644, the Qing found the Chosŏn model the most powerful and practical way of managing its relations with other countries and of extending its influence and authority.\"</i> — Yuanchong Wang, <i>Remaking the Chinese Empire</i>"
             }
         }
     ]
