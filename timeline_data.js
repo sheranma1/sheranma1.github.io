@@ -245,6 +245,17 @@ var timelineData = {
             "group": "Events",
             "tags": ["China", "Korea"],
             "start_date": {
+                "year": "1645"
+            },
+            "text": {
+                "headline": "The 'Chosŏn Model' of Diplomacy",
+                "text": "The Qing dynasty begins adopting the Chosŏn model for managing its external relations. <br><br><i>\"In the first years after 1644, the Qing found the Chosŏn model the most powerful and practical way of managing its relations with other countries and of extending its influence and authority.\"</i> — Yuanchong Wang, <i>Remaking the Chinese Empire</i>"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["China", "Korea"],
+            "start_date": {
                 "year": "1674",
                 "month": "3"
             },
