@@ -282,8 +282,7 @@ var timelineData = {
             "group": "Events",
             "tags": ["China", "Korea"],
             "start_date": {
-                "year": "1674",
-                "month": "3"
+                "year": "1674"
             },
             "text": {
                 "headline": "Chosŏn Receives News of the 'Revolt of the Three Feudatories'",
