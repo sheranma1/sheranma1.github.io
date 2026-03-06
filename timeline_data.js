@@ -2,7 +2,7 @@ var timelineData = {
     "title": {
         "text": {
             "headline": "East Asian History Timeline (16th-18th Centuries)",
-            "text": "<p>A timeline of diplomatic events and cultural exchange among China, Japan, and Korea.</p><p><i>Source for Imjin War chronology: Kenneth Swope, 'A Dragon's Head and a Serpent's Tail: Ming China and the First Greater East Asian War, 1592-1598'.</i></p>"
+            "text": "<p>A chronology related to 16th-18th century Sino-Korean and Manchu-Korean relations, as well as broader cultural exchanges in East Asia.</p><p><i>Source for Imjin War chronology: Kenneth Swope, 'A Dragon's Head and a Serpent's Tail: Ming China and the First Greater East Asian War, 1592-1598'.</i></p>"
         }
     },
     "events": [
