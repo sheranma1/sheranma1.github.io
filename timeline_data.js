@@ -8,6 +8,31 @@ var timelineData = {
     "events": [
         {
             "start_date": {
+                "year": "1618"
+            },
+            "end_date": {
+                "year": "1683"
+            },
+            "text": {
+                "headline": "Ming-Qing Transition (明清交替)",
+                "text": "The decades-long period of conflict between the declining Ming Dynasty, the peasant rebellions (like Li Zicheng), and the rising Manchu (Qing) power, ultimately leading to Qing conquest of China."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1592"
+            },
+            "end_date": {
+                "year": "1598",
+                "month": "12"
+            },
+            "text": {
+                "headline": "Imjin War (壬辰倭亂)",
+                "text": "Toyotomi Hideyoshi invades the Korean peninsula, prompting Ming China to send forces to aid Joseon Korea. The war ended with Japanese withdrawal after Hideyoshi's death."
+            }
+        },
+        {
+            "start_date": {
                 "year": "1592",
                 "month": "5"
             },
@@ -98,36 +123,11 @@ var timelineData = {
         },
         {
             "start_date": {
-                "year": "1592"
-            },
-            "end_date": {
-                "year": "1598",
-                "month": "12"
-            },
-            "text": {
-                "headline": "Imjin War (壬辰倭亂)",
-                "text": "Toyotomi Hideyoshi invades the Korean peninsula, prompting Ming China to send forces to aid Joseon Korea. The war ended with Japanese withdrawal after Hideyoshi's death."
-            }
-        },
-        {
-            "start_date": {
                 "year": "1616"
             },
             "text": {
                 "headline": "Nurhaci Unites Jurchens and Ascends as Khan",
                 "text": "Nurhaci unites most Jurchen tribes and ascends as Khan, establishing the Later Jin dynasty."
-            }
-        },
-        {
-            "start_date": {
-                "year": "1618"
-            },
-            "end_date": {
-                "year": "1683"
-            },
-            "text": {
-                "headline": "Ming-Qing Transition (明清交替)",
-                "text": "The decades-long period of conflict between the declining Ming Dynasty, the peasant rebellions (like Li Zicheng), and the rising Manchu (Qing) power, ultimately leading to Qing conquest of China."
             }
         },
         {
