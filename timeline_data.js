@@ -257,14 +257,26 @@ var timelineData = {
         },
         {
             "group": "Events",
-            "tags": ["China", "Korea"],
+            "tags": ["China"],
+            "start_date": {
+                "year": "1644",
+                "month": "4"
+            },
+            "text": {
+                "headline": "Qing Army Enters the Shanhai Pass (Entry into Custom)",
+                "text": "The Qing army, led by Dorgon and allied with the Ming general Wu Sangui, enters the Shanhai Pass after the Battle of Shanhai Pass. <br><br><b>Original Text:</b> 1644年四月，清軍入關。"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["China"],
             "start_date": {
                 "year": "1644",
                 "month": "5"
             },
             "text": {
-                "headline": "Qing Army Enters the Shanhai Pass (Entry into Custom)",
-                "text": "The Qing army, led by Dorgon and joined by the Ming general Wu Sangui, enters the Shanhai Pass and defeats the rebel forces of Li Zicheng, marking the beginning of the Qing conquest of China proper."
+                "headline": "Qing Army Enters Beijing",
+                "text": "The Qing forces enter Beijing, marking the definitive shift of the capital from the Ming to the Qing dynasty. <br><br><b>Original Text:</b> 1644年五月，清軍進北京城。"
             }
         },
         {
