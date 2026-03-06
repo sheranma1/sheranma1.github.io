@@ -61,6 +61,22 @@
             color: #333 !important;
         }
 
+        /* Correct alignment and remove the background wrapper specific to this page */
+        body {
+            background-color: #f4f4f4;
+            /* Match site background */
+            background-image: none !important;
+            /* Remove any textures if not wanted, or keep if part of base */
+        }
+
+        /* Target the main container from style.css if it exists */
+        body::before,
+        .container,
+        main {
+            background: none !important;
+            box-shadow: none !important;
+        }
+
         h1,
         h2,
         h3 {
