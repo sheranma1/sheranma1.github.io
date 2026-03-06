@@ -68,6 +68,36 @@ var timelineData = {
         },
         {
             "start_date": {
+                "year": "1597",
+                "month": "10"
+            },
+            "text": {
+                "headline": "Allied Victory at Chiksan; Battle of Myóngyang",
+                "text": "The Ming-Joseon allied forces achieved a victory at Chiksan, while Admiral Yi Sun-sin won a legendary naval battle at Myóngyang, decisively checking the Japanese advance."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1598",
+                "month": "10"
+            },
+            "text": {
+                "headline": "Death of Hideyoshi; Japanese Withdrawal",
+                "text": "Toyotomi Hideyoshi dies in Japan. As the Japanese forces begin their withdrawal, the allied offensive continues to press their advantage."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1598",
+                "month": "12"
+            },
+            "text": {
+                "headline": "Battle of Noryang Straits; Death of Yi Sun-sin",
+                "text": "The Battle of Noryang Straits marks the end of the war as the final Japanese retreat is intercepted. Admiral Yi Sun-sin is killed in action during the battle."
+            }
+        },
+        {
+            "start_date": {
                 "year": "1592"
             },
             "end_date": {
