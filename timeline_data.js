@@ -32,8 +32,8 @@ var timelineData = {
                 "month": "1"
             },
             "text": {
-                "headline": "Ming Expeditionary Force Annihilated at Pyongyang",
-                "text": "The second Ming expeditionary force suffered a major defeat at Pyongyang."
+                "headline": "Ming Relief Forces Arrive in Korea",
+                "text": "A large-scale Ming relief army, led by General Li Rusong, arrives in Joseon to counter the Japanese invasion."
             }
         },
         {
