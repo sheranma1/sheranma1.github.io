@@ -300,7 +300,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: First Post-War Mission to Japan (1607)",
-                "text": "The first official diplomatic mission to Japan after the Imjin War. Envoys Yeo U-gil, Gyeong Seom, and Jeong Ho-gwan return from Japan, marking the normalization of relations via the Tsushima Domain. <br><br><b>Original Text:</b> 呂祐吉、慶暹、丁好寬等回自日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Seonjo, Vol. 214, July 19."
+                "text": "The first official diplomatic mission to Japan after the Imjin War. Envoys Yeo U-gil, Gyeong Seom, and Jeong Ho-gwan return from Japan, marking the normalization of relations via the Tsushima Domain. <br><br><b>Original Text:</b> 呂祐吉、慶暹、丁好寬等回自日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Seonjo, Vol. 214, 7th month, 19th day."
             }
         },
         {
@@ -314,7 +314,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: Diplomatic Mission of O Yun-gyeom (1617)",
-                "text": "A Tongsinsa mission led by Senior Envoy O Yun-gyeom, Deputy Envoy Pak Jae, and Secretary Yi Gyeong-jik. The mission was sent to congratulate the Tokugawa Shogunate on the victory at the Siege of Osaka. <br><br><b>Original Text:</b> 回答使吳允謙、副使朴榟、從事官李景稷等入來啟辭。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Diaries of Gwanghaegun, Taebaeksan Edition, Vol. 121, November 13."
+                "text": "A Tongsinsa mission led by Senior Envoy O Yun-gyeom, Deputy Envoy Pak Jae, and Secretary Yi Gyeong-jik. The mission was sent to congratulate the Tokugawa Shogunate on the victory at the Siege of Osaka. <br><br><b>Original Text:</b> 回答使吳允謙、副使朴榟、從事官李景稷等入來啟辭。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Diaries of Gwanghaegun, Taebaeksan Edition, Vol. 121, 11th month, 13th day."
             }
         },
         {
@@ -328,7 +328,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: Diplomatic Mission of Jeong Rip (1624)",
-                "text": "Chosŏn appoints Jeong Rip as the Senior Envoy and Kang Hong-jung as the Deputy Envoy to Japan. The mission was sent following the enthronement of King Injo to stabilize relations. <br><br><b>Original Text:</b> 鄭岦為日本回答使，姜弘重為副使，金南重為從事官，李德泂為奏聞使，權盼為副使，高傅川為書狀官。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Injo, Vol. 5, March 25."
+                "text": "Chosŏn appoints Jeong Rip as the Senior Envoy and Kang Hong-jung as the Deputy Envoy to Japan. The mission was sent following the enthronement of King Injo to stabilize relations. <br><br><b>Original Text:</b> 鄭岦為日本回答使，姜弘重為副使，金南重為從事官，李德泂為奏聞使，權盼為副使，高傅川為書狀官。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Injo, Vol. 5, 3rd month, 25th day."
             }
         },
         {
@@ -342,7 +342,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: Mission of Im Gwang Returns (1637)",
-                "text": "Senior Envoy Im Gwang, Deputy Envoy Kim Se-ryeom, and Secretary Hwang Ho return from Japan. This mission took place amidst the internal turmoil of the Manchu invasions in Chosŏn. <br><br><b>Original Text:</b> 通信使任絖、副使金世濂、從事官黃㦿，還自日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Injo, Vol. 34, March 9."
+                "text": "Senior Envoy Im Gwang, Deputy Envoy Kim Se-ryeom, and Secretary Hwang Ho return from Japan. This mission took place amidst the internal turmoil of the Manchu invasions in Chosŏn. <br><br><b>Original Text:</b> 通信使任絖、副使金世濂、從事官黃㦿，還自日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Injo, Vol. 34, 3rd month, 9th day."
             }
         },
         {
@@ -356,7 +356,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: Mission of Yun Sun-ji Departs (1643)",
-                "text": "The Chosŏn court sends a Tongsinsa mission to Japan led by Yun Sun-ji, Jo Gyeong, and Shin Yu to congratulate the birth of the Shogun's heir. <br><br><b>Original Text:</b> 通信上使尹順之、副使趙䌹、從事官申濡辭朝，上召見之。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Injo, Vol. 44, February 20."
+                "text": "The Chosŏn court sends a Tongsinsa mission to Japan led by Yun Sun-ji, Jo Gyeong, and Shin Yu to congratulate the birth of the Shogun's heir. <br><br><b>Original Text:</b> 通信上使尹順之、副使趙䌹、從事官申濡辭朝，上召見之。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Injo, Vol. 44, 2nd month, 20th day."
             }
         },
         {
@@ -370,7 +370,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: Mission of Jo Hyeong (1655)",
-                "text": "A diplomatic mission led by Jo Hyeong, Yu Chang, and Nam Yong-ik departs for Japan. King Hyojong personally grants an audience to the envoys before their departure. <br><br><b>Original Text:</b> 日本通信使趙珩、副使兪玚、從事官南龍翼辭朝，面諭以遣之。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Hyojong, Vol. 14, April 20."
+                "text": "A diplomatic mission led by Jo Hyeong, Yu Chang, and Nam Yong-ik departs for Japan. King Hyojong personally grants an audience to the envoys before their departure. <br><br><b>Original Text:</b> 日本通信使趙珩、副使兪玚、從事官南龍翼辭朝，面諭以遣之。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Hyojong, Vol. 14, 4th month, 20th day."
             }
         },
         {
@@ -384,7 +384,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: Mission of Yun Ji-wan (1682)",
-                "text": "Envoys Yun Ji-wan, Yi Eon-gang, and Pak Gyeong-hu depart for Japan. This was the first mission after the Revolt of the Three Feudatories in China, reflecting Chosŏn's role in the regional balance. <br><br><b>Original Text:</b> 通信使尹趾完、副使李彥綱、從事官朴慶後如日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sukjong, Vol. 13, May 8."
+                "text": "Envoys Yun Ji-wan, Yi Eon-gang, and Pak Gyeong-hu depart for Japan. This was the first mission after the Revolt of the Three Feudatories in China, reflecting Chosŏn's role in the regional balance. <br><br><b>Original Text:</b> 通信使尹趾完、副使李彥綱、從事官朴慶後如日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sukjong, Vol. 13, 5th month, 8th day."
             }
         },
         {
@@ -398,7 +398,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: Mission of Jo Tae-eok (1711)",
-                "text": "A Tongsinsa mission led by Jo Tae-eok, Im Su-gan, and Yi Bang-eon. This mission is notable for its discussions on diplomatic protocols and the title of the Shogun. <br><br><b>Original Text:</b> 通信使趙泰億、副使任守干、從事官李邦彥辭陛，命引見。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sukjong, Vol. 50, May 15."
+                "text": "A Tongsinsa mission led by Jo Tae-eok, Im Su-gan, and Yi Bang-eon. This mission is notable for its discussions on diplomatic protocols and the title of the Shogun. <br><br><b>Original Text:</b> 通信使趙泰億、副使任守干、從事官李邦彥辭陛，命引見。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sukjong, Vol. 50, 5th month, 15th day."
             }
         },
         {
@@ -412,7 +412,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: Mission of Hong Chi-jung (1719)",
-                "text": "The Chosŏn Crown Prince grants an audience to Senior Envoy Hong Chi-jung, Deputy Envoy Hwang Seon, and Secretary Yi Myeong-eon before their departure to Japan. <br><br><b>Original Text:</b> 通信正使洪致中、副使黃璿、從事官李明彥等請對，世子召見。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sukjong, Vol. 63, January 29."
+                "text": "The Chosŏn Crown Prince grants an audience to Senior Envoy Hong Chi-jung, Deputy Envoy Hwang Seon, and Secretary Yi Myeong-eon before their departure to Japan. <br><br><b>Original Text:</b> 通信正使洪致中、副使黃璿、從事官李明彥等請對，世子召見。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sukjong, Vol. 63, 1st month, 29th day."
             }
         },
         {
@@ -426,7 +426,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: Mission of Hong Gye-hui (1747)",
-                "text": "The Chosŏn court dispatches a mission led by Hong Gye-hui, Nam Tae-gi, and Jo Myeong-chae to Japan. <br><br><b>Original Text:</b> 遣通信上使洪啟禧、副使南泰耆、從事官曹命采，往使日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Yeongjo, Vol. 66, November 28."
+                "text": "The Chosŏn court dispatches a mission led by Hong Gye-hui, Nam Tae-gi, and Jo Myeong-chae to Japan. <br><br><b>Original Text:</b> 遣通信上使洪啟禧、副使南泰耆、從事官曹命采，往使日本。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Yeongjo, Vol. 66, 11th month, 28th day."
             }
         },
         {
@@ -440,7 +440,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: Mission of Jo Eom (1763)",
-                "text": "A Tongsinsa mission led by Jo Eom, Yi In-bae, and Kim Sang-ik. Jo Eom is famously credited with introducing the sweet potato to Korea from Japan during this journey. <br><br><b>Original Text:</b> 通信正使趙曮、副使李仁培、從事官金相翊辭陛，上召見之。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Yeongjo, Vol. 102, August 3."
+                "text": "A Tongsinsa mission led by Jo Eom, Yi In-bae, and Kim Sang-ik. Jo Eom is famously credited with introducing the sweet potato to Korea from Japan during this journey. <br><br><b>Original Text:</b> 通信正使趙曮、副使李仁培、從事官金相翊辭陛，上召見之。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Yeongjo, Vol. 102, 8th month, 3rd day."
             }
         },
         {
@@ -454,7 +454,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "K-J: Final Mission to Japan (1811)",
-                "text": "King Sunjo grants an audience to the final Tongsinsa mission led by Kim I-gyo and Yi Myeon-gu. Due to various constraints, the mission was received on Tsushima Island rather than traveling to Edo. <br><br><b>Original Text:</b> 召見通信正使金履喬、副使李勉求，辭陛也。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sunjo, Vol. 14, February 12."
+                "text": "King Sunjo grants an audience to the final Tongsinsa mission led by Kim I-gyo and Yi Myeon-gu. Due to various constraints, the mission was received on Tsushima Island rather than traveling to Edo. <br><br><b>Original Text:</b> 召見通信正使金履喬、副使李勉求，辭陛也。<br><br>Source: <i>Annals of the Chosŏn Dynasty</i>, Annals of Sunjo, Vol. 14, 2nd month, 12th day."
             }
         }
     ]
