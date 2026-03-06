@@ -61,6 +61,31 @@
             color: #333 !important;
         }
 
+        /* Filter Buttons Styles */
+        .filter-button {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            color: #555;
+            padding: 8px 16px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            transition: all 0.2s ease;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+
+        .filter-button:hover {
+            background-color: #f5f5f5;
+            border-color: #bbb;
+        }
+
+        .filter-button.active {
+            background-color: #333;
+            color: #fff;
+            border-color: #333;
+        }
+
         /* Correct alignment and remove the background wrapper specific to this page */
         body {
             background-color: #f4f4f4;
@@ -94,6 +119,14 @@
         <a href="blog.html">Blog</a>
     </nav>
 
+    <!-- Country Filter Buttons -->
+    <div class="filter-container" style="text-align: center; margin: 20px 0; font-family: Georgia, serif;">
+        <button class="filter-button active" onclick="filterTimeline('All')">All</button>
+        <button class="filter-button" onclick="filterTimeline('China')">China</button>
+        <button class="filter-button" onclick="filterTimeline('Korea')">Korea</button>
+        <button class="filter-button" onclick="filterTimeline('Japan')">Japan</button>
+    </div>
+
     <!-- Timeline Container: Full width breakout -->
     <div id="timeline-embed"
         style="width: 100vw; height: 850px; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); box-shadow: none; background: #ffffff;">
@@ -103,13 +136,44 @@
     <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
     <script src="timeline_data.js"></script>
     <script type="text/javascript">
-        // Initialize TimelineJS with our local JS object
-        var timeline = new TL.Timeline('timeline-embed', timelineData, {
-            hash_bookmark: false,
-            initial_zoom: 2,
-            timenav_height_percentage: 40, // Keep the improved proportions
-            font: null // Use our custom CSS
-        });
+        var currentTimeline;
+
+        function initTimeline(data) {
+            // Re-initialize TimelineJS
+            currentTimeline = new TL.Timeline('timeline-embed', data, {
+                hash_bookmark: false,
+                initial_zoom: 2,
+                timenav_height_percentage: 40,
+                font: null
+            });
+        }
+
+        function filterTimeline(tag) {
+            // Update button styles
+            const buttons = document.querySelectorAll('.filter-button');
+            buttons.forEach(btn => {
+                if (btn.innerText === tag) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            if (tag === 'All') {
+                initTimeline(timelineData);
+                return;
+            }
+
+            // Deep clone timelineData to avoid accidental mutation
+            const filteredData = {
+                title: timelineData.title,
+                events: timelineData.events.filter(event =>
+                    event.tags && event.tags.includes(tag)
+                )
+            };
+
+            initTimeline(filteredData);
+        }
+
+        // Initial Load
+        initTimeline(timelineData);
     </script>
 
     <footer>

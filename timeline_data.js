@@ -8,6 +8,7 @@ var timelineData = {
     "events": [
         {
             "group": "Periods",
+            "tags": ["China"],
             "start_date": {
                 "year": "1618"
             },
@@ -21,6 +22,7 @@ var timelineData = {
         },
         {
             "group": "Periods",
+            "tags": ["China", "Korea", "Japan"],
             "start_date": {
                 "year": "1592"
             },
@@ -35,6 +37,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["Korea", "Japan"],
             "start_date": {
                 "year": "1592",
                 "month": "5"
@@ -46,6 +49,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["Korea"],
             "start_date": {
                 "year": "1592",
                 "month": "6"
@@ -57,6 +61,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["China", "Korea", "Japan"],
             "start_date": {
                 "year": "1592",
                 "month": "8"
@@ -68,6 +73,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["China", "Korea"],
             "start_date": {
                 "year": "1593",
                 "month": "1"
@@ -79,6 +85,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["Korea"],
             "start_date": {
                 "year": "1593",
                 "month": "11"
@@ -90,6 +97,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["China", "Japan"],
             "start_date": {
                 "year": "1595",
                 "month": "2"
@@ -101,6 +109,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["China", "Korea", "Japan"],
             "start_date": {
                 "year": "1597",
                 "month": "10"
@@ -112,6 +121,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["Japan", "Korea"],
             "start_date": {
                 "year": "1598",
                 "month": "10"
@@ -123,6 +133,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["China", "Korea", "Japan"],
             "start_date": {
                 "year": "1598",
                 "month": "12"
@@ -134,6 +145,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["China"],
             "start_date": {
                 "year": "1616"
             },
@@ -144,6 +156,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["Korea"],
             "start_date": {
                 "year": "1623"
             },
@@ -154,6 +167,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["China", "Korea"],
             "start_date": {
                 "year": "1627"
             },
@@ -164,6 +178,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["China"],
             "start_date": {
                 "year": "1636"
             },
@@ -174,6 +189,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["China", "Korea"],
             "start_date": {
                 "year": "1636",
                 "month": "12"
@@ -189,6 +205,7 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["China", "Korea"],
             "start_date": {
                 "year": "1637",
                 "month": "2"
