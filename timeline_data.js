@@ -8,6 +8,36 @@ var timelineData = {
     "events": [
         {
             "start_date": {
+                "year": "1592",
+                "month": "5"
+            },
+            "text": {
+                "headline": "Japanese Forces Land at Pusan (釜山)",
+                "text": "Japanese forces under Toyotomi Hideyoshi land at Pusan, marking the opening of the Imjin War (壬辰倭亂). The city fell within a day, beginning the Japanese invasion of the Korean peninsula."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1592",
+                "month": "8"
+            },
+            "text": {
+                "headline": "Ming Expeditionary Force Annihilated at Pyongyang",
+                "text": "The first Ming expeditionary force sent to aid Joseon, under General Zu Chengxun, was decisively defeated by Japanese forces near Pyongyang."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1593",
+                "month": "1"
+            },
+            "text": {
+                "headline": "Ming Expeditionary Force Annihilated at Pyongyang",
+                "text": "The second Ming expeditionary force suffered a major defeat at Pyongyang."
+            }
+        },
+        {
+            "start_date": {
                 "year": "1592"
             },
             "end_date": {
