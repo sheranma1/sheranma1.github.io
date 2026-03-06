@@ -288,6 +288,162 @@ var timelineData = {
                 "headline": "Chosŏn Receives News of the 'Revolt of the Three Feudatories'",
                 "text": "<i>In the 15th year of King Hyeonjong (13th year of Kangxi), the Chosŏn court officially received news of Wu Sangui's rebellion. Kim Su-hang, the Envoy of Gratitude (Saeunsa), dispatched an interpreter from Beijing to Seoul ahead of his return to report on the uprising. This marked Chosŏn's first official notification of the 'Revolt of the Three Feudatories' (三藩之亂).</i> <br><br>Translated from 孫衛國《從「尊明」到「奉清」：朝鮮王朝對清意識的演变（1627—1910）》"
             }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1607",
+                "month": "7",
+                "day": "19"
+            },
+            "text": {
+                "headline": "First Post-War Mission to Japan (1607)",
+                "text": "The first official diplomatic mission to Japan after the Imjin War. Envoys Yeo U-gil, Gyeong Seom, and Jeong Ho-gwan return from Japan, marking the normalization of relations via the Tsushima Domain. <br><br>Source: 朝鮮王朝實錄 ／ 宣祖實錄 ／ 卷二百一十四　七月 ／ 19日"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1617",
+                "month": "11",
+                "day": "13"
+            },
+            "text": {
+                "headline": "Diplomatic Mission of O Yun-gyeom (1617)",
+                "text": "A Tongsinsa mission led by Senior Envoy O Yun-gyeom, Deputy Envoy Pak Jae, and Secretary Yi Gyeong-jik. The mission was sent to congratulate the Tokugawa Shogunate on the victory at the Siege of Osaka. <br><br>Source: 朝鮮王朝實錄 ／ 光海君日記 ／ 卷一百二十一　十一月 ／ 13日"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1624",
+                "month": "3",
+                "day": "25"
+            },
+            "text": {
+                "headline": "Diplomatic Mission of Jeong Rip (1624)",
+                "text": "Chosŏn appoints Jeong Rip as the Senior Envoy and Kang Hong-jung as the Deputy Envoy to Japan. The mission was sent following the enthronement of King Injo to stabilize relations. <br><br>Source: 朝鮮王朝實錄 ／ 仁祖實錄 ／ 二年（1624） 卷五 三月 ／ 25日"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1637",
+                "month": "3",
+                "day": "9"
+            },
+            "text": {
+                "headline": "Mission of Im Gwang Returns (1637)",
+                "text": "Senior Envoy Im Gwang, Deputy Envoy Kim Se-ryeom, and Secretary Hwang Ho return from Japan. This mission took place amidst the internal turmoil of the Manchu invasions in Chosŏn. <br><br>Source: 朝鮮王朝實錄 ／ 仁祖實錄 ／ 十五年（1637） 卷三十四 三月 ／ 9日"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1643",
+                "month": "2",
+                "day": "20"
+            },
+            "text": {
+                "headline": "Mission of Yun Sun-ji Departs (1643)",
+                "text": "The Chosŏn court sends a Tongsinsa mission to Japan led by Yun Sun-ji, Jo Gyeong, and Shin Yu to congratulate the birth of the Shogun's heir. <br><br>Source: 朝鮮王朝實錄 ／ 仁祖實錄 ／ 二十一年（1643） 卷四十四 ／ 二月 ／ 20日"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1655",
+                "month": "4",
+                "day": "20"
+            },
+            "text": {
+                "headline": "Mission of Jo Hyeong (1655)",
+                "text": "A diplomatic mission led by Jo Hyeong, Yu Chang, and Nam Yong-ik departs for Japan. King Hyojong personally grants an audience to the envoys before their departure. <br><br>Source: 朝鮮王朝實錄 ／ 孝宗實錄 ／ 六年（1655） 卷十四 夏四月 ／ 20日"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1682",
+                "month": "5",
+                "day": "8"
+            },
+            "text": {
+                "headline": "Mission of Yun Ji-wan (1682)",
+                "text": "Envoys Yun Ji-wan, Yi Eon-gang, and Pak Gyeong-hu depart for Japan. This was the first mission after the Revolt of the Three Feudatories in China, reflecting Chosŏn's role in the regional balance. <br><br>Source: 朝鮮王朝實錄 ／ 肃宗實錄 ／ 八年（1682） 卷十三 五月 ／ 8日"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1711",
+                "month": "5",
+                "day": "15"
+            },
+            "text": {
+                "headline": "Mission of Jo Tae-eok (1711)",
+                "text": "A Tongsinsa mission led by Jo Tae-eok, Im Su-gan, and Yi Bang-eon. This mission is notable for its discussions on diplomatic protocols and the title of the Shogun. <br><br>Source: 朝鮮王朝實錄 ／ 肃宗實錄 ／ 三十七年（1711） 卷五十 五月 ／ 15日"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1719",
+                "month": "1",
+                "day": "29"
+            },
+            "text": {
+                "headline": "Mission of Hong Chi-jung (1719)",
+                "text": "The Chosŏn Crown Prince grants an audience to Senior Envoy Hong Chi-jung, Deputy Envoy Hwang Seon, and Secretary Yi Myeong-eon before their departure to Japan. <br><br>Source: 朝鮮王朝實錄 ／ 肃宗實錄 ／ 四十五年（1719） 卷六十三 正月 ／ 29日"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1747",
+                "month": "11",
+                "day": "28"
+            },
+            "text": {
+                "headline": "Mission of Hong Gye-hui (1747)",
+                "text": "The Chosŏn court dispatches a mission led by Hong Gye-hui, Nam Tae-gi, and Jo Myeong-chae to Japan. <br><br>Source: 朝鮮王朝實錄 ／ 英祖實錄 ／ 二十三年（1747） 卷六十六 十一月 ／ 28日"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1763",
+                "month": "8",
+                "day": "3"
+            },
+            "text": {
+                "headline": "Mission of Jo Eom (1763)",
+                "text": "A Tongsinsa mission led by Jo Eom, Yi In-bae, and Kim Sang-ik. Jo Eom is famously credited with introducing the sweet potato to Korea from Japan during this journey. <br><br>Source: 朝鮮王朝實錄 ／ 英祖實錄 ／ 三十九年（1763） 卷一百二 八月 ／ 3日"
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["Korea", "Japan"],
+            "start_date": {
+                "year": "1811",
+                "month": "2",
+                "day": "12"
+            },
+            "text": {
+                "headline": "Final Mission to Japan (1811)",
+                "text": "King Sunjo grants an audience to the final Tongsinsa mission led by Kim I-gyo and Yi Myeon-gu. Due to various constraints, the mission was received on Tsushima Island rather than traveling to Edo. <br><br>Source: 朝鮮王朝實錄 ／ 純祖實錄 ／ 十一年（1811） 卷十四 二月 ／ 12日"
+            }
         }
     ]
 };
