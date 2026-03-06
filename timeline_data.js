@@ -245,11 +245,12 @@ var timelineData = {
             "group": "Events",
             "tags": ["China", "Korea"],
             "start_date": {
-                "year": "1645"
+                "year": "1674",
+                "month": "3"
             },
             "text": {
-                "headline": "The 'Chosŏn Model' of Diplomacy",
-                "text": "The Qing dynasty begins adopting the Chosŏn model for managing its external relations. <br><br><i>\"In the first years after 1644, the Qing found the Chosŏn model the most powerful and practical way of managing its relations with other countries and of extending its influence and authority.\"</i> — Yuanchong Wang, <i>Remaking the Chinese Empire</i>"
+                "headline": "Chosŏn Receives News of the 'Revolt of the Three Feudatories'",
+                "text": "In the 15th year of King Hyeonjong (13th year of Kangxi), the Chosŏn court officially received news of Wu Sangui's rebellion. Kim Su-hang, the Envoy of Gratitude (Saeunsa), dispatched an interpreter from Beijing to Seoul ahead of his return to report on the uprising. This marked Chosŏn's first official notification of the 'Revolt of the Three Feudatories' (三藩之亂). <br><br>Source: 孫衛國《從「尊明」到「奉清」：朝鮮王朝對清意識的演變（1627—1910）》"
             }
         }
     ]
