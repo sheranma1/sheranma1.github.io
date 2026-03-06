@@ -115,7 +115,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Nurhaci Unites Jurchens and Ascends as Khan",
-                "text": "努爾哈赤統一多數女真族，於西元一六一六年即位為汗，建立後金 (Later Jin)."
+                "text": "Nurhaci unites most Jurchen tribes and ascends as Khan, establishing the Later Jin dynasty."
             }
         },
         {
@@ -136,7 +136,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Injo Restoration (仁祖反正)",
-                "text": "In 1623, a coup d'état took place in Joseon. Gwanghaegun was deposed and King Injo was enthroned. <br>(西元一六二三年，朝鮮發生政變，光海君遭廢黜，擁立仁祖。)"
+                "text": "In 1623, a coup d'état took place in Joseon. Gwanghaegun was deposed and King Injo was enthroned."
             }
         },
         {
