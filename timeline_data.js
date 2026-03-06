@@ -2,7 +2,7 @@ var timelineData = {
     "title": {
         "text": {
             "headline": "East Asian History Timeline (16th-18th Centuries)",
-            "text": "<p>A timeline of diplomatic events and cultural exchange among China, Japan, and Korea.</p>"
+            "text": "<p>A timeline of diplomatic events and cultural exchange among China, Japan, and Korea.</p><p><i>Source for Imjin War chronology: Kenneth Swope, 'A Dragon's Head and a Serpent's Tail: Ming China and the First Greater East Asian War, 1592-1598'.</i></p>"
         }
     },
     "events": [
@@ -54,6 +54,16 @@ var timelineData = {
             "text": {
                 "headline": "King Sŏnjo returns to Seoul",
                 "text": "After the liberation of the capital from Japanese occupation, King Sŏnjo and the court returned to a devastated Seoul."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1595",
+                "month": "2"
+            },
+            "text": {
+                "headline": "Wanli decides to invest Hideyoshi as 'King of Japan'",
+                "text": "During the peace negotiations, the Wanli Emperor decided to officially invest Toyotomi Hideyoshi as the 'King of Japan', a move intended to bring Japan into the Ming tributary system."
             }
         },
         {
