@@ -54,11 +54,32 @@
         .tl-timemarker .tl-timemarker-content-container {
             background-color: #f9f9f9 !important;
             border-color: #ddd !important;
+            transition: all 0.2s ease-in-out;
+            z-index: 10;
+        }
+
+        /* Reveal full text on hover */
+        .tl-timemarker:hover .tl-timemarker-content-container {
+            background-color: #ffffff !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+            z-index: 999 !important;
+            transform: scale(1.05);
+            min-width: 200px !important;
+            max-width: 400px !important;
+            height: auto !important;
+            overflow: visible !important;
+        }
+
+        .tl-timemarker:hover .tl-timemarker-content-container .tl-timemarker-text .tl-headline {
+            white-space: normal !important;
+            overflow: visible !important;
+            font-weight: bold !important;
         }
 
         .tl-timemarker .tl-timemarker-content-container .tl-timemarker-text .tl-headline {
             font-size: 14px !important;
             color: #333 !important;
+            transition: all 0.2s ease-in-out;
         }
 
         /* Filter Buttons Styles */
@@ -121,10 +142,10 @@
 
     <!-- Country Filter Buttons -->
     <div class="filter-container" style="text-align: center; margin: 20px 0; font-family: Georgia, serif;">
-        <button class="filter-button active" onclick="filterTimeline('All')">All</button>
-        <button class="filter-button" onclick="filterTimeline('China')">China</button>
-        <button class="filter-button" onclick="filterTimeline('Korea')">Korea</button>
-        <button class="filter-button" onclick="filterTimeline('Japan')">Japan</button>
+        <button class="filter-button active" id="filter-All" onclick="filterTimeline('All')">All</button>
+        <button class="filter-button" id="filter-China" onclick="filterTimeline('China')">China</button>
+        <button class="filter-button" id="filter-Korea" onclick="filterTimeline('Korea')">Korea</button>
+        <button class="filter-button" id="filter-Japan" onclick="filterTimeline('Japan')">Japan</button>
     </div>
 
     <!-- Timeline Container: Full width breakout -->
@@ -137,6 +158,7 @@
     <script src="timeline_data.js"></script>
     <script type="text/javascript">
         var currentTimeline;
+        var activeFilters = new Set();
 
         function initTimeline(data) {
             // Re-initialize TimelineJS
@@ -149,27 +171,64 @@
         }
 
         function filterTimeline(tag) {
-            // Update button styles
-            const buttons = document.querySelectorAll('.filter-button');
-            buttons.forEach(btn => {
-                if (btn.innerText === tag) btn.classList.add('active');
-                else btn.classList.remove('active');
-            });
+            const allBtn = document.getElementById('filter-All');
+            const countryTags = ['China', 'Korea', 'Japan'];
 
             if (tag === 'All') {
+                activeFilters.clear();
+                updateButtonStyles();
                 initTimeline(timelineData);
                 return;
             }
 
-            // Deep clone timelineData to avoid accidental mutation
+            // Toggle the tag
+            if (activeFilters.has(tag)) {
+                activeFilters.delete(tag);
+            } else {
+                activeFilters.add(tag);
+            }
+
+            // If all countries are selected, or none are selected, reset to "All"
+            if (activeFilters.size === 3 || activeFilters.size === 0) {
+                activeFilters.clear();
+                updateButtonStyles();
+                initTimeline(timelineData);
+                return;
+            }
+
+            updateButtonStyles();
+
+            // Deep clone and filter
             const filteredData = {
                 title: timelineData.title,
                 events: timelineData.events.filter(event =>
-                    event.tags && event.tags.includes(tag)
+                    event.tags && Array.from(activeFilters).some(activeTag => event.tags.includes(activeTag))
                 )
             };
 
             initTimeline(filteredData);
+        }
+
+        function updateButtonStyles() {
+            const countryTags = ['China', 'Korea', 'Japan'];
+            const allBtn = document.getElementById('filter-All');
+
+            if (activeFilters.size === 0) {
+                allBtn.classList.add('active');
+                countryTags.forEach(tag => {
+                    document.getElementById('filter-' + tag).classList.remove('active');
+                });
+            } else {
+                allBtn.classList.remove('active');
+                countryTags.forEach(tag => {
+                    const btn = document.getElementById('filter-' + tag);
+                    if (activeFilters.has(tag)) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
         }
 
         // Initial Load
