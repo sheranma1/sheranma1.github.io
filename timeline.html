@@ -15,49 +15,50 @@
         /* Timeline specific overrides to match your site */
         .tl-timeline {
             font-family: Georgia, 'Times New Roman', serif;
-            background-color: #2c2c2c !important;
-            background-image: url('https://www.transparenttextures.com/patterns/dark-stone.png') !important;
+            background-color: #ffffff !important;
         }
 
-        /* Force background on slides and navigation */
+        /* Clean Light Aesthetic */
         .tl-slide,
         .tl-slidenormal,
         .tl-timenav,
         .tl-timegroup,
         .tl-timegroup-message {
-            background: transparent !important;
+            background: #ffffff !important;
         }
 
         /* Content area background */
         .tl-storyslider {
-            background-color: rgba(44, 44, 44, 0.4) !important;
+            background-color: #ffffff !important;
         }
 
         /* Typography */
         .tl-headline {
             font-size: 42px !important;
             line-height: 1.2 !important;
-            color: #f5f5f5 !important;
+            color: #333333 !important;
         }
 
         .tl-text p {
             font-size: 20px !important;
             line-height: 1.6 !important;
-            color: #e0e0e0 !important;
+            color: #444444 !important;
         }
 
         .tl-caption {
             font-size: 14px !important;
+            color: #666 !important;
         }
 
         /* Marker Styles */
         .tl-timemarker .tl-timemarker-content-container {
-            background-color: #444 !important;
-            border-color: #666 !important;
+            background-color: #f9f9f9 !important;
+            border-color: #ddd !important;
         }
 
         .tl-timemarker .tl-timemarker-content-container .tl-timemarker-text .tl-headline {
             font-size: 14px !important;
+            color: #333 !important;
         }
 
         h1,
@@ -83,7 +84,7 @@
 
     <!-- Timeline Container -->
     <div id="timeline-embed"
-        style="width: 100vw; height: 900px; margin: 40px calc(-50vw + 50%) 0; box-shadow: 0 4px 20px rgba(0,0,0,0.5); background: #2c2c2c;">
+        style="width: 100vw; height: 900px; margin: 40px calc(-50vw + 50%) 0; box-shadow: 0 4px 20px rgba(0,0,0,0.1); background: #ffffff;">
     </div>
 
     <!-- TimelineJS Script -->
@@ -94,7 +95,7 @@
         var timeline = new TL.Timeline('timeline-embed', timelineData, {
             hash_bookmark: false,
             initial_zoom: 2,
-            timenav_height_percentage: 40, // Increase height of the bottom navigation part
+            timenav_height_percentage: 40, // Keep the improved proportions
             font: null // Use our custom CSS
         });
     </script>
