@@ -261,7 +261,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Chosŏn Receives News of the 'Revolt of the Three Feudatories'",
-                "text": "In the 15th year of King Hyeonjong (13th year of Kangxi), the Chosŏn court officially received news of Wu Sangui's rebellion. Kim Su-hang, the Envoy of Gratitude (Saeunsa), dispatched an interpreter from Beijing to Seoul ahead of his return to report on the uprising. This marked Chosŏn's first official notification of the 'Revolt of the Three Feudatories' (三藩之亂). <br><br>Source: 孫衛國《從「尊明」到「奉清」：朝鮮王朝對清意識的演變（1627—1910）》"
+                "text": "<i>In the 15th year of King Hyeonjong (13th year of Kangxi), the Chosŏn court officially received news of Wu Sangui's rebellion. Kim Su-hang, the Envoy of Gratitude (Saeunsa), dispatched an interpreter from Beijing to Seoul ahead of his return to report on the uprising. This marked Chosŏn's first official notification of the 'Revolt of the Three Feudatories' (三藩之亂).</i> <br><br>Translated from 孫衛國《從「尊明」到「奉清」：朝鮮王朝對清意識的演变（1627—1910）》"
             }
         }
     ]
