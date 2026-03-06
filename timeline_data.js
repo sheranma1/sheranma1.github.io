@@ -132,6 +132,15 @@ var timelineData = {
         },
         {
             "start_date": {
+                "year": "1623"
+            },
+            "text": {
+                "headline": "Injo Restoration (仁祖反正)",
+                "text": "In 1623, a coup d'état took place in Joseon. Gwanghaegun was deposed and King Injo was enthroned. <br>(西元一六二三年，朝鮮發生政變，光海君遭廢黜，擁立仁祖。)"
+            }
+        },
+        {
+            "start_date": {
                 "year": "1627"
             },
             "text": {
