@@ -31,7 +31,7 @@ var timelineData = {
             },
             "text": {
                 "headline": "Qing-Chosŏn Diplomatic High Frequency (1637–1643)",
-                "text": "A period of intense diplomatic activity following the Second Manchu Invasion. <br><br><i>\"From 1637 to 1643, the Qing sent twelve missions and twenty-eight emissaries to Chosŏn, an average of one and a half missions per year, while Chosŏn sent fifty-six missions and 102 emissaries to the Qing, an average of seven missions per year.\"</i> — Yuanchong Wang, <i>Remaking the Chinese Empire</i>"
+                "text": "A period of intense diplomatic activity and extreme political pressure following the Second Manchu Invasion. During these years, the Qing maintained a high-pressure policy toward Chosŏn, holding the Chosŏn Crown Prince (Sohyeon) as a hostage in Mukden and strictly monitoring Chosŏn officials to suppress those who secretly maintained loyalty to the Ming dynasty. <br><br><i>\"From 1637 to 1643, the Qing sent twelve missions and twenty-eight emissaries to Chosŏn, an average of one and a half missions per year, while Chosŏn sent fifty-six missions and 102 emissaries to the Qing, an average of seven missions per year.\"</i> — Yuanchong Wang, <i>Remaking the Chinese Empire</i>"
             }
         },
         {
