@@ -19,6 +19,16 @@ var timelineData = {
         {
             "start_date": {
                 "year": "1592",
+                "month": "6"
+            },
+            "text": {
+                "headline": "King Sŏnjo and his Court flee Seoul",
+                "text": "As Japanese forces advanced towards the capital, King Sŏnjo and the Joseon court fled Seoul, heading north towards Pyongyang and eventually Uiju."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1592",
                 "month": "8"
             },
             "text": {
@@ -34,6 +44,16 @@ var timelineData = {
             "text": {
                 "headline": "Ming Relief Forces Arrive in Korea",
                 "text": "A large-scale Ming relief army, led by General Li Rusong, arrives in Joseon to counter the Japanese invasion."
+            }
+        },
+        {
+            "start_date": {
+                "year": "1593",
+                "month": "11"
+            },
+            "text": {
+                "headline": "King Sŏnjo returns to Seoul",
+                "text": "After the liberation of the capital from Japanese occupation, King Sŏnjo and the court returned to a devastated Seoul."
             }
         },
         {
