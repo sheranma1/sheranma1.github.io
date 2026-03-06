@@ -36,6 +36,20 @@ var timelineData = {
         },
         {
             "group": "Periods",
+            "tags": ["China", "Korea"],
+            "start_date": {
+                "year": "1673"
+            },
+            "end_date": {
+                "year": "1681"
+            },
+            "text": {
+                "headline": "Revolt of the Three Feudatories (1673–1681)",
+                "text": "A major rebellion in China during the early reign of the Kangxi Emperor. Led by the three generals Wu Sangui, Geng Jingzhong, and Shang Zhixin, the revolt posed a significant challenge to Qing authority and had profound diplomatic implications for Chosŏn-Qing relations."
+            }
+        },
+        {
+            "group": "Periods",
             "tags": ["China", "Korea", "Japan"],
             "start_date": {
                 "year": "1592"
