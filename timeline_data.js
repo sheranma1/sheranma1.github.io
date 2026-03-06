@@ -269,6 +269,17 @@ var timelineData = {
         },
         {
             "group": "Events",
+            "tags": ["Korea", "China"],
+            "start_date": {
+                "year": "1645"
+            },
+            "text": {
+                "headline": "Crown Prince Sohyeon Returns to Hanyang (1645)",
+                "text": "The Qing dynasty sends officials to escort Crown Prince Sohyeon back to Hanyang (Seoul) after years of being held as a hostage in Mukden. <br><br><b>Original Text:</b> 1645年二月，清朝派使臣送昭顯世子回漢城。"
+            }
+        },
+        {
+            "group": "Events",
             "tags": ["China", "Korea"],
             "start_date": {
                 "year": "1645"
