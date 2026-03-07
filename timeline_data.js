@@ -60,7 +60,20 @@ var timelineData = {
             },
             "text": {
                 "headline": "Imjin War (壬辰倭亂)",
-                "text": "Toyotomi Hideyoshi invades the Korean peninsula, prompting Ming China to send forces to aid Chosŏn Korea. The war ended with Japanese withdrawal after Hideyoshi's death."
+                "text": "Toyotomi Hideyoshi invades the Korean peninsula, prompting Ming China to send forces to aid Chosŏn Korea. The war ended with Japanese withdrawal after Hideyoshi's death. (Scroll for detailed designation intro)."
+            }
+        },
+        {
+            "group": "Events",
+            "tags": ["China", "Korea", "Japan"],
+            "start_date": {
+                "year": "1592",
+                "month": "1",
+                "day": "1"
+            },
+            "text": {
+                "headline": "Introduction: Designations of the Imjin War (壬辰倭亂)",
+                "text": "<i>“The war’s designation is a subject of debate. In Korea it is generally referred to as the Imjin War, or Imjin Waeran (壬辰倭亂; “the Japanese calamity of 1592,” imjin 壬辰 being the designation for the year 1592, the Year of the Black Water Dragon in the Chinese sexagenary calendar then employed throughout East Asia). The Japanese generally call it Hideyoshi no Chôsen shinryaku (秀吉の朝鮮侵略; Hideyoshi’s Invasion of Korea) or the Bunroku-keichô no eki (文禄・慶長の役; the Campaigns of 1592 and 1597). Japanese sources from the Tokugawa (1603–1868) and Meiji (1868–1912) eras often refer to the war as either the Seikan (征韓; Glorious Conquest of Korea) or the Seibatsu (征伐; Glorious Pacification of Korea). In China the war has been called the yuan Chaoxian (援朝鮮; the Rescue of Korea) or the dong zheng (東征; Eastern Expedition).”</i> <br><br>Source: Kenneth Swope, <i>A Dragon's Head and a Serpent's Tail: Ming China and the First Greater East Asian War, 1592-1598</i>, Introduction."
             }
         },
         {
