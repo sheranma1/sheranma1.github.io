@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地圖點擊座標工具</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Georgia, serif;
+            background: #1a1a2e;
+            color: #eee;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            background: #2c3e50;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            flex-wrap: wrap;
+        }
+
+        .top-bar h1 { font-size: 18px; color: #f39c12; }
+
+        .instruction {
+            font-size: 13px;
+            color: #bdc3c7;
+            flex: 1;
+        }
+
+        .next-label {
+            background: #c0392b;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: bold;
+            min-width: 200px;
+        }
+
+        .btn {
+            background: #2980b9;
+            color: white;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: Georgia, serif;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #1a6fa0; }
+        .btn.danger { background: #c0392b; }
+        .btn.danger:hover { background: #a03020; }
+        .btn.success { background: #27ae60; }
+        .btn.success:hover { background: #1e8c4a; }
+
+        /* Layout */
+        .main {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+
+        /* Map panel */
+        .map-panel {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+            background: #111;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Zoom wrapper — transform applied by JS */
+        .zoom-outer {
+            display: inline-block;
+            transform-origin: top center;
+            transition: transform 0.15s ease;
+        }
+
+        .img-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: crosshair;
+        }
+
+        #hist-map {
+            display: block;
+            width: 680px;        /* base display width */
+            height: auto;
+            border: 2px solid #c9b99a;
+            border-radius: 4px;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* Placed pins overlay */
+        .pin {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #c0392b;
+            border: 1.5px solid white;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.8);
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 7px;
+            font-weight: bold;
+            pointer-events: none;
+            transition: background 0.2s;
+        }
+
+        .pin.placed { background: #27ae60; }
+        .pin.skipped { background: #7f8c8d; }
+
+        /* Coordinates label on pin */
+        .pin-label {
+            position: absolute;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            font-size: 8px;
+            padding: 1px 4px;
+            border-radius: 3px;
+            white-space: nowrap;
+            pointer-events: none;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Right sidebar */
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            background: #16213e;
+            border-left: 1px solid #2c3e50;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 12px 16px;
+            background: #0f3460;
+            font-size: 14px;
+            font-weight: bold;
+            color: #f39c12;
+            border-bottom: 1px solid #2c3e50;
+        }
+
+        .stop-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .stop-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 14px;
+            border-bottom: 1px solid #1e2d40;
+            font-size: 13px;
+            transition: background 0.15s;
+        }
+
+        .stop-row.current { background: rgba(192, 57, 43, 0.25); }
+        .stop-row.done { background: rgba(39, 174, 96, 0.15); color: #aaa; }
+        .stop-row.skip { background: rgba(127, 140, 141, 0.15); color: #666; }
+
+        .stop-num { font-size: 11px; color: #888; min-width: 20px; }
+        .stop-name { flex: 1; }
+        .stop-status { font-size: 11px; color: #888; }
+
+        /* Output panel */
+        .output-panel {
+            padding: 12px 14px;
+            background: #0d1b2a;
+            border-top: 1px solid #2c3e50;
+        }
+
+        .output-panel h3 {
+            font-size: 13px;
+            color: #f39c12;
+            margin-bottom: 6px;
+        }
+
+        #output-box {
+            width: 100%;
+            height: 120px;
+            font-family: monospace;
+            font-size: 11px;
+            background: #0a0f18;
+            color: #7fdbca;
+            border: 1px solid #2c3e50;
+            padding: 8px;
+            border-radius: 4px;
+            resize: none;
+        }
+
+        .output-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        /* Progress bar */
+        .progress-bar-wrap {
+            height: 4px;
+            background: #2c3e50;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: #27ae60;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <h1>📍 地圖標記工具</h1>
+    <div class="instruction">點擊地圖上對應的位置 → 自動記錄 | 找不到請按「跳過」</div>
+    <div class="next-label" id="next-label">載入中…</div>
+    <button class="btn danger" id="btn-skip" onclick="skipStop()">跳過此站</button>
+    <button class="btn" id="btn-undo" onclick="undoLast()">↩ 撤銷</button>
+</div>
+
+<div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+</div>
+
+<div class="main">
+    <!-- Map panel -->
+    <div class="map-panel" id="map-panel">
+        <div class="zoom-outer" id="zoom-outer">
+            <div class="img-wrapper" id="img-wrapper">
+                <img id="hist-map" src="joseon_map.jpg" alt="朝鮮地圖" draggable="false">
+                <!-- Pins placed here by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">📋 待標記地點（朝鮮境內）</div>
+        <div class="stop-list" id="stop-list"></div>
+        <div class="output-panel">
+            <h3>📤 座標輸出（完成後複製給我）</h3>
+            <textarea id="output-box" readonly placeholder="標記完成後會自動生成座標…"></textarea>
+            <div class="output-actions">
+                <button class="btn success" onclick="copyOutput()">📋 複製全部</button>
+                <button class="btn" onclick="downloadOutput()">💾 下載 JSON</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Only Korea stops (1-22) — the ones visible on the Joseon map
+    const stops = [
+        { id: 1,  name: "南漢城",              region: "京畿道（廣州）" },
+        { id: 2,  name: "高陽郡",              region: "京畿道" },
+        { id: 3,  name: "城外·梨川",            region: "京畿道" },
+        { id: 4,  name: "積城·尺瀑",            region: "京畿道" },
+        { id: 5,  name: "長湍（板浮村·板門）",   region: "京畿道" },
+        { id: 6,  name: "松都（開城府）",        region: "京畿道" },
+        { id: 7,  name: "平山·船岩村",          region: "黃海道" },
+        { id: 8,  name: "長湍串",              region: "黃海道" },
+        { id: 9,  name: "鳳山（含溝·草阜·草丘）", region: "黃海道" },
+        { id: 10, name: "黃州",               region: "黃海道" },
+        { id: 11, name: "中和邑",              region: "平安道（南）" },
+        { id: 12, name: "平壤·梨山",            region: "平安道（南）" },
+        { id: 13, name: "永柔縣（綠沙村）",      region: "平安道（南）" },
+        { id: 14, name: "安州（長坪·橫瀝）",     region: "平安道（南）" },
+        { id: 15, name: "肅川·碧柯汀",          region: "平安道（北）" },
+        { id: 16, name: "嘉山·長串",            region: "平安道（北）" },
+        { id: 17, name: "納淸亭",              region: "平安道（北）" },
+        { id: 18, name: "定州（鑑岩·玉汝洞）",   region: "平安道（北）" },
+        { id: 19, name: "宜川·林群",            region: "平安道（北）" },
+        { id: 20, name: "鐵山·板橋",            region: "平安道（北）" },
+        { id: 21, name: "牛鬙磁",              region: "平安道（北）" },
+        { id: 22, name: "義州（古津江邊·古城倉）", region: "平安道（北）" },
+    ];
+
+    const results = {}; // id → { x, y, skipped }
+    let currentIdx = 0;
+
+    const imgEl = document.getElementById('hist-map');
+    const wrapper = document.getElementById('img-wrapper');
+    const zoomOuter = document.getElementById('zoom-outer');
+    const mapPanel = document.getElementById('map-panel');
+    const listEl = document.getElementById('stop-list');
+    const nextLabel = document.getElementById('next-label');
+    const outputBox = document.getElementById('output-box');
+    const progressBar = document.getElementById('progress-bar');
+
+    // ── Scroll-wheel zoom ──
+    let scale = 1;
+    const MIN_SCALE = 0.5;
+    const MAX_SCALE = 5;
+
+    mapPanel.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.15 : 0.15;
+        scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale + delta));
+        zoomOuter.style.transform = `scale(${scale})`;
+        zoomOuter.style.transformOrigin = 'top center';
+    }, { passive: false });
+
+    // Build sidebar list
+    stops.forEach((stop, i) => {
+        const row = document.createElement('div');
+        row.className = 'stop-row' + (i === 0 ? ' current' : '');
+        row.id = `row-${stop.id}`;
+        row.innerHTML = `
+            <div class="stop-num">${stop.id}</div>
+            <div class="stop-name">${stop.name}<br><span style="font-size:11px;color:#888">${stop.region}</span></div>
+            <div class="stop-status" id="status-${stop.id}">—</div>`;
+        listEl.appendChild(row);
+    });
+
+    function updateUI() {
+        if (currentIdx >= stops.length) {
+            nextLabel.textContent = '✅ 全部完成！請複製座標';
+            nextLabel.style.background = '#27ae60';
+            generateOutput();
+            return;
+        }
+        const stop = stops[currentIdx];
+        nextLabel.textContent = `→ 第 ${stop.id} 站：${stop.name}`;
+        // Highlight current row
+        document.querySelectorAll('.stop-row').forEach(r => r.classList.remove('current'));
+        const row = document.getElementById(`row-${stop.id}`);
+        if (row) {
+            row.classList.add('current');
+            row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+        // Progress
+        const pct = (currentIdx / stops.length) * 100;
+        progressBar.style.width = pct + '%';
+    }
+
+    function placePin(xPct, yPct, stop, skipped) {
+        const pin = document.createElement('div');
+        pin.className = 'pin' + (skipped ? ' skipped' : ' placed');
+        pin.id = `pin-${stop.id}`;
+        pin.textContent = stop.id;
+        pin.style.left = xPct + '%';
+        pin.style.top = yPct + '%';
+        // Label
+        const lbl = document.createElement('div');
+        lbl.className = 'pin-label';
+        lbl.textContent = stop.name;
+        pin.appendChild(lbl);
+        wrapper.appendChild(pin);
+    }
+
+    // Click on map
+    imgEl.addEventListener('click', (e) => {
+        if (currentIdx >= stops.length) return;
+
+        const rect = imgEl.getBoundingClientRect();
+        const xPx = e.clientX - rect.left;
+        const yPx = e.clientY - rect.top;
+        const xPct = (xPx / rect.width * 100).toFixed(2);
+        const yPct = (yPx / rect.height * 100).toFixed(2);
+
+        const stop = stops[currentIdx];
+        results[stop.id] = { x: parseFloat(xPct), y: parseFloat(yPct), skipped: false };
+
+        // Update sidebar
+        const statusEl = document.getElementById(`status-${stop.id}`);
+        if (statusEl) { statusEl.textContent = '✓'; statusEl.style.color = '#27ae60'; }
+        document.getElementById(`row-${stop.id}`).classList.replace('current', 'done');
+
+        placePin(xPct, yPct, stop, false);
+        currentIdx++;
+        updateUI();
+        generateOutput();
+    });
+
+    function skipStop() {
+        if (currentIdx >= stops.length) return;
+        const stop = stops[currentIdx];
+        results[stop.id] = { x: null, y: null, skipped: true };
+
+        const statusEl = document.getElementById(`status-${stop.id}`);
+        if (statusEl) { statusEl.textContent = '跳過'; statusEl.style.color = '#888'; }
+        document.getElementById(`row-${stop.id}`).classList.replace('current', 'skip');
+
+        currentIdx++;
+        updateUI();
+        generateOutput();
+    }
+
+    function undoLast() {
+        if (currentIdx === 0) return;
+        currentIdx--;
+        const stop = stops[currentIdx];
+        delete results[stop.id];
+
+        // Remove pin
+        const pin = document.getElementById(`pin-${stop.id}`);
+        if (pin) pin.remove();
+
+        // Reset row
+        const row = document.getElementById(`row-${stop.id}`);
+        row.classList.remove('done', 'skip');
+        row.classList.add('current');
+        const statusEl = document.getElementById(`status-${stop.id}`);
+        if (statusEl) { statusEl.textContent = '—'; statusEl.style.color = '#888'; }
+
+        nextLabel.style.background = '#c0392b';
+        updateUI();
+        generateOutput();
+    }
+
+    function generateOutput() {
+        const out = stops.map(s => {
+            const r = results[s.id];
+            if (!r) return null;
+            return {
+                id: s.id,
+                name: s.name,
+                imgX: r.skipped ? null : r.x,
+                imgY: r.skipped ? null : r.y,
+                skipped: r.skipped
+            };
+        }).filter(Boolean);
+        outputBox.value = JSON.stringify(out, null, 2);
+    }
+
+    function copyOutput() {
+        outputBox.select();
+        document.execCommand('copy');
+        alert('已複製！請貼給我（Antigravity）。');
+    }
+
+    function downloadOutput() {
+        const blob = new Blob([outputBox.value], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'joseon_map_coords.json';
+        a.click();
+    }
+
+    // Init
+    updateUI();
+</script>
+</body>
+</html>
