@@ -181,6 +181,54 @@
             text-align: center;
         }
 
+        /* Historical map pins */
+        .hist-map-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .hist-pin {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #c0392b;
+            border: 2px solid rgba(255,255,255,0.9);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+            transition: transform 0.2s, background 0.2s;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .hist-pin:hover {
+            transform: translate(-50%, -50%) scale(1.4);
+            background: #f39c12;
+            z-index: 10;
+        }
+
+        .hist-pin-tooltip {
+            position: absolute;
+            top: -26px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s, top 0.2s;
+            z-index: 11;
+        }
+
+        .hist-pin:hover .hist-pin-tooltip {
+            opacity: 1;
+            top: -30px;
+        }
+
         /* Lightbox overlay */
         #lightbox {
             display: none;
@@ -320,10 +368,12 @@
     <div class="historical-map-section">
         <h2>底圖參考：17世紀朝鮮地圖</h2>
         <div class="hist-map-wrapper">
-            <img id="hist-map-img" class="hist-map-img" src="joseon_map.jpg"
-                alt="17世紀朝鮮半島地圖"
-                title="點擊放大"
-                onclick="openLightbox(this.src)">
+            <div class="hist-map-container" id="hist-map-container">
+                <img id="hist-map-img" class="hist-map-img" src="joseon_map.jpg"
+                    alt="17世紀朝鮮半島地圖"
+                    title="點擊放大"
+                    onclick="openLightbox(this.src)">
+            </div>
             <div class="hist-map-caption">
                 Click to enlarge &nbsp;·&nbsp;
                 <em>Paldo Chongdo</em> (八道總圖), from <em>Paldo Chido</em> 《八道地圖》(奎10331), ca. 1776–1787.
@@ -346,28 +396,28 @@
         // ── Data: 33 stops from the Shenyang Diary ──
         const stops = [
             // Korea section
-            { id: 1,  name: "南漢城",           region: "京畿道（廣州）",    country: "韓國",            context: "勤兵被掠之處",         lat: 37.480, lng: 127.179 },
-            { id: 2,  name: "高陽郡",           region: "京畿道",           country: "韓國",            context: "世子行次止宿",         lat: 37.658, lng: 126.832 },
+            { id: 1,  name: "南漢城",           region: "京畿道（廣州）",    country: "韓國",            context: "勤兵被掠之處",         lat: 37.480, lng: 127.179, imgX: 37.18, imgY: 58.97 },
+            { id: 2,  name: "高陽郡",           region: "京畿道",           country: "韓國",            context: "世子行次止宿",         lat: 37.658, lng: 126.832, imgX: 34.59, imgY: 56.08 },
             { id: 3,  name: "城外·梨川",         region: "京畿道",           country: "韓國",            context: "抵受有旨之處",         lat: 37.790, lng: 126.855 },
-            { id: 4,  name: "積城·尺瀑",         region: "京畿道",           country: "韓國",            context: "渡涉之地",             lat: 37.867, lng: 126.700 },
-            { id: 5,  name: "長湍（板浮村·板門）", region: "京畿道",           country: "韓國（DMZ附近）", context: "止宿之所",             lat: 37.940, lng: 126.670 },
-            { id: 6,  name: "松都（開城府）",     region: "京畿道",           country: "韓國",            context: "兼補徵收糧米之地",     lat: 37.970, lng: 126.560 },
-            { id: 7,  name: "平山·船岩村",       region: "黃海道",           country: "北韓",            context: "世子行次止宿",         lat: 38.330, lng: 126.380 },
+            { id: 4,  name: "積城·尺瀑",         region: "京畿道",           country: "韓國",            context: "渡涉之地",             lat: 37.867, lng: 126.700, imgX: 35.81, imgY: 53.41 },
+            { id: 5,  name: "長湍（板浮村·板門）", region: "京畿道",           country: "韓國（DMZ附近）", context: "止宿之所",             lat: 37.940, lng: 126.670, imgX: 33.30, imgY: 52.94 },
+            { id: 6,  name: "松都（開城府）",     region: "京畿道",           country: "韓國",            context: "兼補徵收糧米之地",     lat: 37.970, lng: 126.560, imgX: 30.92, imgY: 52.89 },
+            { id: 7,  name: "平山·船岩村",       region: "黃海道",           country: "北韓",            context: "世子行次止宿",         lat: 38.330, lng: 126.380, imgX: 29.25, imgY: 49.08 },
             { id: 8,  name: "長湍串",           region: "黃海道",           country: "北韓",            context: "止宿，廚房失火之處",   lat: 38.500, lng: 126.050 },
-            { id: 9,  name: "鳳山（含溝·草阜·草丘）", region: "黃海道",      country: "北韓",            context: "多次止宿留駐",         lat: 38.680, lng: 125.900 },
-            { id: 10, name: "黃州",             region: "黃海道",           country: "北韓",            context: "判官李朝商遣援馬匹",   lat: 38.620, lng: 125.780 },
-            { id: 11, name: "中和邑",           region: "平安道（南）",     country: "北韓",            context: "止宿，驛馬替換之地",   lat: 38.920, lng: 125.760 },
-            { id: 12, name: "平壤·梨山",         region: "平安道（南）",     country: "北韓",            context: "途中止宿",             lat: 39.030, lng: 125.750 },
-            { id: 13, name: "永柔縣（綠沙村）",   region: "平安道（南）",     country: "北韓",            context: "世子留駐最久之所",     lat: 39.280, lng: 125.600 },
-            { id: 14, name: "安州（長坪·橫瀝）", region: "平安道（南）",     country: "北韓",            context: "止宿，與馬大人相議之地", lat: 39.620, lng: 125.590 },
-            { id: 15, name: "肅川·碧柯汀",       region: "平安道（北）",     country: "北韓",            context: "野次止宿",             lat: 39.400, lng: 125.720 },
+            { id: 9,  name: "鳳山（含溝·草阜·草丘）", region: "黃海道",      country: "北韓",            context: "多次止宿留駐",         lat: 38.680, lng: 125.900, imgX: 22.81, imgY: 46.06 },
+            { id: 10, name: "黃州",             region: "黃海道",           country: "北韓",            context: "判官李朝商遣援馬匹",   lat: 38.620, lng: 125.780, imgX: 23.29, imgY: 44.25 },
+            { id: 11, name: "中和邑",           region: "平安道（南）",     country: "北韓",            context: "止宿，驛馬替換之地",   lat: 38.920, lng: 125.760, imgX: 23.61, imgY: 42.65 },
+            { id: 12, name: "平壤·梨山",         region: "平安道（南）",     country: "北韓",            context: "途中止宿",             lat: 39.030, lng: 125.750, imgX: 23.13, imgY: 40.69 },
+            { id: 13, name: "永柔縣（綠沙村）",   region: "平安道（南）",     country: "北韓",            context: "世子留駐最久之所",     lat: 39.280, lng: 125.600, imgX: 20.75, imgY: 37.82 },
+            { id: 14, name: "安州（長坪·橫瀝）", region: "平安道（南）",     country: "北韓",            context: "止宿，與馬大人相議之地", lat: 39.620, lng: 125.590, imgX: 22.66, imgY: 34.70 },
+            { id: 15, name: "肅川·碧柯汀",       region: "平安道（北）",     country: "北韓",            context: "野次止宿",             lat: 39.400, lng: 125.720, imgX: 22.42, imgY: 37.13 },
             { id: 16, name: "嘉山·長串",         region: "平安道（北）",     country: "北韓",            context: "野次止宿",             lat: 39.750, lng: 125.850 },
             { id: 17, name: "納淸亭",           region: "平安道（北）",     country: "北韓",            context: "途中標地（寨山近處）", lat: 39.900, lng: 125.700 },
-            { id: 18, name: "定州（鑑岩·玉汝洞）", region: "平安道（北）",   country: "北韓",            context: "野次止宿",             lat: 39.860, lng: 125.320 },
-            { id: 19, name: "宜川·林群",         region: "平安道（北）",     country: "北韓",            context: "途中標地",             lat: 40.000, lng: 125.050 },
-            { id: 20, name: "鐵山·板橋",         region: "平安道（北）",     country: "北韓",            context: "野次止宿",             lat: 39.980, lng: 124.880 },
+            { id: 18, name: "定州（鑑岩·玉汝洞）", region: "平安道（北）",   country: "北韓",            context: "野次止宿",             lat: 39.860, lng: 125.320, imgX: 16.61, imgY: 34.70 },
+            { id: 19, name: "宜川·林群",         region: "平安道（北）",     country: "北韓",            context: "途中標地",             lat: 40.000, lng: 125.050, imgX: 12.56, imgY: 34.50 },
+            { id: 20, name: "鐵山·板橋",         region: "平安道（北）",     country: "北韓",            context: "野次止宿",             lat: 39.980, lng: 124.880, imgX: 9.46, imgY: 35.23 },
             { id: 21, name: "牛鬙磁",           region: "平安道（北）",     country: "北韓",            context: "途中標地（鐵山近處）", lat: 40.080, lng: 124.600 },
-            { id: 22, name: "義州（古津江邊·古城倉）", region: "平安道（北）", country: "北韓",           context: "渡江前止宿",           lat: 40.105, lng: 124.390 },
+            { id: 22, name: "義州（古津江邊·古城倉）", region: "平安道（北）", country: "北韓",           context: "渡江前止宿",           lat: 40.105, lng: 124.390, imgX: 5.33, imgY: 30.70 },
             // Yalu River crossing
             // China section
             { id: 23, name: "九連城",           region: "清朝盛京（遼東）", country: "中國遼寧省丹東市", context: "越江後首個止宿地",     lat: 40.120, lng: 124.380 },
@@ -507,6 +557,38 @@
                     sideItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
                 }
             });
+        });
+
+        // ── Historical Map Markers ──
+        const histMapContainer = document.getElementById('hist-map-container');
+        stops.filter(s => s.imgX && s.imgY).forEach(stop => {
+            const pin = document.createElement('div');
+            pin.className = 'hist-pin';
+            pin.style.left = `${stop.imgX}%`;
+            pin.style.top = `${stop.imgY}%`;
+            
+            const tooltip = document.createElement('div');
+            tooltip.className = 'hist-pin-tooltip';
+            tooltip.textContent = `${stop.id}. ${stop.name}`;
+            
+            pin.appendChild(tooltip);
+            
+            // Link to modern map marker
+            pin.addEventListener('click', (e) => {
+                e.stopPropagation(); // prevent lightbox
+                document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
+                map.flyTo([stop.lat, stop.lng], 9, { duration: 1 });
+                leafletMarkers[stop.id - 1].openPopup();
+                
+                // Highlight side list
+                document.querySelectorAll('.stop-item').forEach(el => el.classList.remove('active'));
+                const sideItem = document.getElementById(`stop-item-${stop.id}`);
+                if (sideItem) {
+                    sideItem.classList.add('active');
+                }
+            });
+            
+            histMapContainer.appendChild(pin);
         });
 
         // ── Lightbox ──
