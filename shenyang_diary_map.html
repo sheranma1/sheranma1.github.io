@@ -152,39 +152,35 @@
             margin-top: 0;
         }
 
-        .hist-map-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 16px;
-            gap: 12px;
-        }
-
-        .hist-map-img {
-            max-width: 540px;
+        .hist-map-viewport {
             width: 100%;
+            height: 600px;
+            overflow: hidden;
             border: 2px solid #c9b99a;
             border-radius: 6px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            cursor: zoom-in;
-            transition: box-shadow 0.2s, transform 0.2s;
-        }
-
-        .hist-map-img:hover {
-            box-shadow: 0 8px 28px rgba(0,0,0,0.25);
-            transform: scale(1.01);
-        }
-
-        .hist-map-caption {
-            font-size: 14px;
-            color: #888;
-            text-align: center;
-        }
-
-        /* Historical map pins */
-        .hist-map-container {
+            background: #e9e4d4;
             position: relative;
+            cursor: grab;
+            margin-top: 16px;
+            margin-bottom: 12px;
+        }
+
+        .hist-map-viewport:active {
+            cursor: grabbing;
+        }
+
+        .hist-map-container {
+            position: absolute;
+            transform-origin: 0 0;
             display: inline-block;
+        }
+
+        .hist-map-img {
+            display: block;
+            width: 800px; /* Base width before zoom */
+            height: auto;
+            pointer-events: none; /* Let container handle dragged events */
         }
 
         .hist-pin {
@@ -196,20 +192,20 @@
             border-radius: 50%;
             transform: translate(-50%, -50%);
             box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-            transition: transform 0.2s, background 0.2s;
+            transition: background 0.2s, box-shadow 0.2s;
             cursor: pointer;
             z-index: 2;
         }
 
         .hist-pin:hover {
-            transform: translate(-50%, -50%) scale(1.4);
+            box-shadow: 0 0 0 4px rgba(243, 156, 18, 0.4);
             background: #f39c12;
             z-index: 10;
         }
 
         .hist-pin-tooltip {
             position: absolute;
-            top: -26px;
+            top: -28px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0,0,0,0.85);
@@ -220,52 +216,13 @@
             white-space: nowrap;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.2s, top 0.2s;
+            transition: opacity 0.2s;
             z-index: 11;
         }
 
         .hist-pin:hover .hist-pin-tooltip {
             opacity: 1;
-            top: -30px;
         }
-
-        /* Lightbox overlay */
-        #lightbox {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            cursor: zoom-out;
-        }
-
-        #lightbox.active {
-            display: flex;
-        }
-
-        #lightbox img {
-            max-width: 92vw;
-            max-height: 92vh;
-            border-radius: 6px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-            object-fit: contain;
-        }
-
-        #lightbox-close {
-            position: fixed;
-            top: 18px;
-            right: 24px;
-            color: white;
-            font-size: 36px;
-            cursor: pointer;
-            line-height: 1;
-            opacity: 0.8;
-            transition: opacity 0.15s;
-        }
-
-        #lightbox-close:hover { opacity: 1; }
 
         /* Leaflet popup customization */
         .custom-popup .leaflet-popup-content-wrapper {
@@ -367,25 +324,18 @@
     <!-- Historical map section -->
     <div class="historical-map-section">
         <h2>底圖參考：17世紀朝鮮地圖</h2>
-        <div class="hist-map-wrapper">
+        
+        <div class="hist-map-viewport" id="hist-map-viewport">
             <div class="hist-map-container" id="hist-map-container">
-                <img id="hist-map-img" class="hist-map-img" src="joseon_map.jpg"
-                    alt="17世紀朝鮮半島地圖"
-                    title="點擊放大"
-                    onclick="openLightbox(this.src)">
-            </div>
-            <div class="hist-map-caption">
-                Click to enlarge &nbsp;·&nbsp;
-                <em>Paldo Chongdo</em> (八道總圖), from <em>Paldo Chido</em> 《八道地圖》(奎10331), ca. 1776–1787.
-                Manuscript. Kyujanggak Institute for Korean Studies, Seoul National University.
+                <img id="hist-map-img" class="hist-map-img" src="joseon_map.jpg" alt="17世紀朝鮮半島地圖">
             </div>
         </div>
-    </div>
-
-    <!-- Lightbox -->
-    <div id="lightbox" onclick="closeLightbox()">
-        <span id="lightbox-close" onclick="closeLightbox()">×</span>
-        <img id="lightbox-img" src="" alt="放大地圖">
+        
+        <div class="hist-map-caption">
+            💡 提示：滑鼠滾輪縮放，按住拖曳平移 &nbsp;·&nbsp;
+            <em>Paldo Chongdo</em> (八道總圖), from <em>Paldo Chido</em> 《八道地圖》(奎10331), ca. 1776–1787.
+            Manuscript. Kyujanggak Institute for Korean Studies, Seoul National University.
+        </div>
     </div>
 
     <footer>
@@ -591,21 +541,68 @@
             histMapContainer.appendChild(pin);
         });
 
-        // ── Lightbox ──
-        function openLightbox(src) {
-            document.getElementById('lightbox-img').src = src;
-            document.getElementById('lightbox').classList.add('active');
-            document.body.style.overflow = 'hidden';
+        // ── Historical Map Pan/Zoom Logic ──
+        const viewport = document.getElementById('hist-map-viewport');
+        
+        let histScale = 1;
+        let histX = 0;
+        let histY = 0;
+        let isDragging = false;
+        let startX, startY;
+
+        function updateHistTransform() {
+            histMapContainer.style.transform = `translate(${histX}px, ${histY}px) scale(${histScale})`;
         }
 
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeLightbox();
+        // Mouse Drag Panning
+        viewport.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX - histX;
+            startY = e.clientY - histY;
         });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            histX = e.clientX - startX;
+            histY = e.clientY - startY;
+            updateHistTransform();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // Wheel Zooming
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            
+            // Get mouse position relative to viewport
+            const rect = viewport.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            // Calculate zoom direction
+            const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
+            const newScale = Math.min(Math.max(0.5, histScale * zoomDelta), 5); // Clamped between 0.5x and 5x
+
+            if (newScale !== histScale) {
+                // Adjust translation to zoom in/out at the mouse pointer
+                histX = mouseX - (mouseX - histX) * (newScale / histScale);
+                histY = mouseY - (mouseY - histY) * (newScale / histScale);
+                histScale = newScale;
+                updateHistTransform();
+            }
+        }, { passive: false });
+        
+        // Initial centering (optional)
+        window.addEventListener('load', () => {
+            const img = document.getElementById('hist-map-img');
+            const vWidth = viewport.clientWidth;
+            // center the 800px wide image in viewport
+            histX = (vWidth - 800) / 2;
+            updateHistTransform();
+        });
+
     </script>
 </body>
 
