@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>古地圖自訂標記工具 (Historical Map Annotator)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #1e1e1e;
+            color: #eee;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            background: #2d2d2d;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid #444;
+            z-index: 100;
+        }
+
+        .top-bar h1 { font-size: 16px; font-weight: 500; color: #fff; margin-right: 20px; }
+
+        .btn {
+            background: #4a4a4a;
+            color: white;
+            border: 1px solid #555;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn:hover { background: #5a5a5a; border-color: #777; }
+        .btn.primary { background: #0066cc; border-color: #0077ee; }
+        .btn.primary:hover { background: #0077ee; }
+        .btn.success { background: #28a745; border-color: #2ebf4f; }
+        .btn.success:hover { background: #2ebf4f; }
+        .btn.danger { color: #ff6b6b; border-color: transparent; background: transparent; padding: 4px 8px; }
+        .btn.danger:hover { background: rgba(255,107,107,0.1); }
+
+        #upload-btn { display: none; }
+        
+        /* Layout */
+        .workspace {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 54px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 340px;
+            background: #252526;
+            border-right: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ccc;
+            border-bottom: 1px solid #333;
+            background: #2d2d2d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .point-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background: #1e1e1e;
+        }
+
+        .point-item {
+            background: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .point-item.active {
+            border-color: #0077ee;
+            box-shadow: 0 0 0 1px #0077ee;
+        }
+
+        .point-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+
+        .point-num {
+            background: #0066cc;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .point-title {
+            font-size: 14px;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .input-group {
+            margin-bottom: 8px;
+        }
+        
+        .input-group label {
+            display: block;
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 4px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            background: #1e1e1e;
+            border: 1px solid #444;
+            color: #eee;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #0077ee;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #777;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* Map Area */
+        .map-area {
+            flex: 1;
+            position: relative;
+            background: #111;
+            overflow: hidden;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .map-area:active { cursor: grabbing; }
+
+        .map-area.mode-add { cursor: crosshair; }
+
+        .map-container {
+            position: absolute;
+            transform-origin: 0 0;
+            display: inline-block;
+        }
+
+        #bg-image {
+            display: block;
+            pointer-events: none;
+            max-width: none;
+        }
+
+        /* SVG Overlay for Lines */
+        #svg-layer {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .route-line {
+            fill: none;
+            stroke: #ff9f43;
+            stroke-width: 3;
+            stroke-dasharray: 6 4;
+            opacity: 0.8;
+        }
+
+        /* Pins */
+        .pin {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #ff4757;
+            border: 2px solid white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 2;
+            transition: transform 0.1s;
+        }
+
+        .pin.active {
+            background: #0066cc;
+            transform: translate(-50%, -50%) scale(1.3);
+            z-index: 10;
+            box-shadow: 0 0 0 3px rgba(0,102,204,0.3);
+        }
+
+        .pin:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+        
+        .pin-label {
+            position: absolute;
+            top: 100%;
+            margin-top: 6px;
+            background: rgba(0,0,0,0.7);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        /* Pre-upload overlay */
+        .upload-overlay {
+            position: absolute;
+            inset: 0;
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+
+        .upload-box {
+            background: #252526;
+            padding: 40px;
+            border: 2px dashed #444;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .upload-box h2 { margin-bottom: 12px; font-weight: 500; }
+        .upload-box p { color: #888; font-size: 13px; margin-bottom: 24px; line-height: 1.5;}
+
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <h1>📍 古地圖路線標記器</h1>
+    
+    <label for="upload-btn" class="btn">📁 上傳地圖圖片</label>
+    <input type="file" id="upload-btn" accept="image/png, image/jpeg, image/webp">
+
+    <button class="btn primary" id="mode-btn" disabled>＋ 新增地點 (開啟)</button>
+    <button class="btn" id="toggle-line-btn" disabled>〰 切換連線</button>
+    
+    <div style="flex:1"></div>
+    
+    <button class="btn success" id="export-html-btn" disabled>💾 導出互動網頁</button>
+    <button class="btn" id="export-json-btn" disabled>📄 下載數據 (JSON)</button>
+</div>
+
+<div class="workspace">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <span>標記點列表</span>
+            <span id="point-count" style="font-weight:normal; font-size:11px; background:#444; padding:2px 6px; border-radius:10px;">0</span>
+        </div>
+        <div class="point-list" id="sidebar-list">
+            <div class="empty-state" id="empty-state">
+                <br>👈 <strong>第一步</strong>：請先從上方上傳一張地圖圖片。<br><br>
+                👆 <strong>第二步</strong>：點擊「新增地點」按鈕，然後點擊地圖添加標記。<br><br>
+                📝 <strong>第三步</strong>：在這裡為每個標記填寫名稱、時間和引文。
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Area -->
+    <div class="map-area" id="map-area">
+        <div class="upload-overlay" id="upload-overlay">
+            <div class="upload-box">
+                <h2>上傳您的地圖底圖</h2>
+                <p>支援 JPG / PNG / WEBP 格式。<br>圖片不會上傳到任何伺服器，僅在您的瀏覽器中處理，保證隱私與速度。</p>
+                <label for="upload-btn" class="btn primary" style="font-size:14px; padding:10px 20px;">選擇圖片檔案</label>
+            </div>
+        </div>
+
+        <div class="map-container" id="map-container" style="display:none;">
+            <img id="bg-image" src="" alt="Map Base">
+            <svg id="svg-layer"></svg>
+            <div id="pins-layer"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // System State
+    let points = [];
+    let isAddMode = false;
+    let showLines = true;
+    let imageLoaded = false;
+    let activePointId = null;
+
+    // Pan/Zoom State
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let startX, startY;
+
+    // DOM Elements
+    const uploadInput = document.getElementById('upload-btn');
+    const mapArea = document.getElementById('map-area');
+    const mapContainer = document.getElementById('map-container');
+    const bgImage = document.getElementById('bg-image');
+    const svgLayer = document.getElementById('svg-layer');
+    const pinsLayer = document.getElementById('pins-layer');
+    const sidebarList = document.getElementById('sidebar-list');
+    const emptyState = document.getElementById('empty-state');
+    const modeBtn = document.getElementById('mode-btn');
+    const toggleLineBtn = document.getElementById('toggle-line-btn');
+    const exportJsonBtn = document.getElementById('export-json-btn');
+    const exportHtmlBtn = document.getElementById('export-html-btn');
+    const uploadOverlay = document.getElementById('upload-overlay');
+    const pointCount = document.getElementById('point-count');
+
+    // ── 1. Image Upload ──
+    let currentImageName = "map";
+
+    uploadInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        currentImageName = file.name.split('.')[0];
+        const reader = new FileReader();
+        
+        reader.onload = (event) => {
+            const imgUrl = event.target.result;
+            bgImage.src = imgUrl;
+            
+            bgImage.onload = () => {
+                imageLoaded = true;
+                uploadOverlay.style.display = 'none';
+                mapContainer.style.display = 'inline-block';
+                
+                // Enable buttons
+                modeBtn.disabled = false;
+                toggleLineBtn.disabled = false;
+                exportJsonBtn.disabled = false;
+                exportHtmlBtn.disabled = false;
+                
+                emptyState.innerHTML = '已載入地圖！<br><br>請點擊「新增地點」，然後在地圖上點擊以放置標記。';
+                
+                // Reset View
+                scale = 1;
+                // Center map loosely
+                panX = (mapArea.clientWidth - bgImage.naturalWidth) / 2;
+                if (panX > 0) panX = 0;
+                panY = 0;
+                updateTransform();
+            };
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // ── 2. Viewport Pan & Zoom ──
+    function updateTransform() {
+        mapContainer.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+    }
+
+    mapArea.addEventListener('mousedown', (e) => {
+        if (isAddMode || !imageLoaded) return;
+        if (e.target.closest('.pin')) return; // Don't drag if clicking pin
+        isDragging = true;
+        startX = e.clientX - panX;
+        startY = e.clientY - panY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        panX = e.clientX - startX;
+        panY = e.clientY - startY;
+        updateTransform();
+    });
+
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+    mapArea.addEventListener('wheel', (e) => {
+        if (!imageLoaded) return;
+        e.preventDefault();
+        
+        const rect = mapArea.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
+        const newScale = Math.min(Math.max(0.1, scale * zoomDelta), 10);
+
+        if (newScale !== scale) {
+            panX = mouseX - (mouseX - panX) * (newScale / scale);
+            panY = mouseY - (mouseY - panY) * (newScale / scale);
+            scale = newScale;
+            updateTransform();
+        }
+    }, { passive: false });
+
+    // ── 3. Modes & Interaction ──
+    modeBtn.addEventListener('click', () => {
+        isAddMode = !isAddMode;
+        if (isAddMode) {
+            mapArea.classList.add('mode-add');
+            modeBtn.style.background = '#dc3545';
+            modeBtn.style.borderColor = '#dc3545';
+            modeBtn.textContent = '停止新增 (關閉)';
+        } else {
+            mapArea.classList.remove('mode-add');
+            modeBtn.style.background = '#0066cc';
+            modeBtn.style.borderColor = '#0077ee';
+            modeBtn.textContent = '＋ 新增地點 (開啟)';
+        }
+    });
+
+    toggleLineBtn.addEventListener('click', () => {
+        showLines = !showLines;
+        renderMap();
+    });
+
+    // Map Click -> Add Point
+    bgImage.addEventListener('click', (e) => {
+        if (!isAddMode) return;
+        
+        const rect = bgImage.getBoundingClientRect();
+        // Calculate percentages relative to image natural size
+        const xPct = ((e.clientX - rect.left) / rect.width) * 100;
+        const yPct = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        addPoint(xPct, yPct);
+    });
+
+    // ── 4. Data Management ──
+    function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    }
+
+    function addPoint(xPct, yPct) {
+        const pt = {
+            id: generateId(),
+            x: xPct,
+            y: yPct,
+            name: `地點 ${points.length + 1}`,
+            date: '',
+            quote: ''
+        };
+        points.push(pt);
+        activatePoint(pt.id);
+        renderSidebar();
+        renderMap();
+    }
+
+    function removePoint(id) {
+        points = points.filter(p => p.id !== id);
+        if (activePointId === id) activePointId = null;
+        renderSidebar();
+        renderMap();
+    }
+
+    function updatePoint(id, field, value) {
+        const pt = points.find(p => p.id === id);
+        if (pt) {
+            pt[field] = value;
+            renderMap(); // update labels
+        }
+    }
+
+    function activatePoint(id) {
+        activePointId = id;
+        renderSidebar();
+        renderMap();
+        
+        // Scroll sidebar to point
+        const el = document.getElementById(`side-${id}`);
+        if(el) el.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+    }
+
+    // ── 5. Rendering ──
+    function renderSidebar() {
+        if (points.length === 0) {
+            emptyState.style.display = 'block';
+            sidebarList.innerHTML = '';
+            sidebarList.appendChild(emptyState);
+            pointCount.textContent = '0';
+            return;
+        }
+
+        emptyState.style.display = 'none';
+        pointCount.textContent = points.length;
+        sidebarList.innerHTML = '';
+
+        points.forEach((pt, index) => {
+            const item = document.createElement('div');
+            item.className = `point-item ${pt.id === activePointId ? 'active' : ''}`;
+            item.id = `side-${pt.id}`;
+            item.onclick = (e) => {
+                // Ignore click if it's on an input/button
+                if(!['INPUT', 'TEXTAREA', 'BUTTON'].includes(e.target.tagName)) {
+                    activatePoint(pt.id);
+                    // Also center map on point (optional polish)
+                    const ctrX = mapArea.clientWidth / 2;
+                    const ctrY = mapArea.clientHeight / 2;
+                    const mapImgWid = bgImage.naturalWidth * scale;
+                    const mapImgHgt = bgImage.naturalHeight * scale;
+                    panX = ctrX - (pt.x / 100 * mapImgWid);
+                    panY = ctrY - (pt.y / 100 * mapImgHgt);
+                    updateTransform();
+                }
+            };
+
+            item.innerHTML = `
+                <div class="point-header">
+                    <div class="point-num">${index + 1}</div>
+                    <div class="point-title">#${index + 1}</div>
+                    <button class="btn danger" onclick="removePoint('${pt.id}')">刪除</button>
+                </div>
+                <div class="input-group">
+                    <label>地點名稱 / Place Name</label>
+                    <input type="text" value="${pt.name}" onchange="updatePoint('${pt.id}', 'name', this.value)" onkeyup="updatePoint('${pt.id}', 'name', this.value)">
+                </div>
+                <div class="input-group">
+                    <label>時間 / Date</label>
+                    <input type="text" value="${pt.date}" placeholder="例如：崇禎十年正月十五" onchange="updatePoint('${pt.id}', 'date', this.value)">
+                </div>
+                <div class="input-group" style="margin-bottom:0;">
+                    <label>引文 / Quote & Context</label>
+                    <textarea placeholder="例如日記原文..." onchange="updatePoint('${pt.id}', 'quote', this.value)">${pt.quote}</textarea>
+                </div>
+            `;
+            sidebarList.appendChild(item);
+        });
+    }
+
+    function renderMap() {
+        // Clear pins
+        pinsLayer.innerHTML = '';
+        
+        // Render Pins
+        points.forEach((pt, index) => {
+            const pin = document.createElement('div');
+            pin.className = `pin ${pt.id === activePointId ? 'active' : ''}`;
+            pin.style.left = `${pt.x}%`;
+            pin.style.top = `${pt.y}%`;
+            pin.innerHTML = `${index + 1}<div class="pin-label">${pt.name}</div>`;
+            
+            pin.onclick = (e) => {
+                e.stopPropagation();
+                activatePoint(pt.id);
+            };
+            
+            pinsLayer.appendChild(pin);
+        });
+
+        // Render Lines
+        svgLayer.innerHTML = '';
+        if (showLines && points.length > 1 && bgImage.naturalWidth) {
+            // Set SVG viewBox to match natural image size so percentage coordinates map perfectly globally
+            svgLayer.setAttribute('viewBox', `0 0 100 100`);
+            svgLayer.setAttribute('preserveAspectRatio', 'none');
+            
+            let pathD = `M ${points[0].x} ${points[0].y}`;
+            for (let i = 1; i < points.length; i++) {
+                pathD += ` L ${points[i].x} ${points[i].y}`;
+            }
+
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", pathD);
+            path.setAttribute("class", "route-line");
+            // Normalize stroke width irrespective of viewBox scaling
+            path.setAttribute("vector-effect", "non-scaling-stroke");
+            svgLayer.appendChild(path);
+        }
+    }
+
+    // ── 6. Export Features ──
+    
+    // Export Data as JSON
+    exportJsonBtn.addEventListener('click', () => {
+        const data = {
+            mapImageName: currentImageName,
+            routeData: points
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `${currentImageName}_route_data.json`;
+        a.click();
+    });
+
+    // Generate Standalone HTML Page
+    exportHtmlBtn.addEventListener('click', () => {
+        if (!imageLoaded) return alert("請先上傳地圖！");
+        if (points.length === 0) return alert("請至少標記一個地點！");
+
+        // We embed the original image as base64 so it's a single file, OR assume it sits next to the html.
+        // For a true universal export without massive file sizes, we'll assume the user puts the image in the same folder.
+        
+        const template = `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動地圖 - ${currentImageName}</title>
+    <style>
+        body { margin:0; padding:0; background:#111; font-family:sans-serif; overflow:hidden; display:flex; height:100vh; color:#fff;}
+        .map-viewport { flex:1; overflow:hidden; position:relative; cursor:grab; }
+        .map-viewport:active { cursor:grabbing; }
+        .map-wrapper { position:absolute; transform-origin:0 0; }
+        img { display:block; pointer-events:none; }
+        
+        /* SVG Line */
+        svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
+        .route-line { fill:none; stroke:#ff9f43; stroke-width:3; stroke-dasharray:6 4; opacity:0.8; }
+        
+        /* Pins */
+        .pin { position:absolute; width:16px; height:16px; background:#ff4757; border:2px solid #fff; border-radius:50%; transform:translate(-50%, -50%); box-shadow:0 2px 6px rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:bold; cursor:pointer; z-index:2; transition:transform 0.2s, background 0.2s;}
+        .pin.active { background:#0066cc; transform:translate(-50%, -50%) scale(1.3); z-index:10; }
+        .pin-tooltip { position:absolute; top:-25px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); padding:3px 6px; border-radius:3px; font-size:11px; white-space:nowrap; pointer-events:none; opacity:0; transition:opacity 0.2s;}
+        .pin:hover .pin-tooltip { opacity:1; }
+        
+        /* Sidebar Info */
+        .info-panel { width:320px; background:#222; border-left:1px solid #444; padding:20px; overflow-y:auto; box-sizing:border-box;}
+        h1 { font-size:18px; border-bottom:1px solid #444; padding-bottom:10px; margin-top:0;}
+        .info-title { font-size:22px; color:#ff9f43; margin-bottom:5px; margin-top:0;}
+        .info-date { font-size:13px; color:#aaa; margin-bottom:15px; }
+        .info-quote { background:#111; border-left:3px solid #ff9f43; padding:10px; font-size:14px; line-height:1.6; color:#ddd; white-space:pre-wrap;}
+        
+        .hint { text-align:center; color:#666; margin-top:50px; font-size:14px;}
+        .nav-btns { display:flex; gap:10px; margin-bottom:20px;}
+        button { flex:1; padding:8px; background:#333; color:#fff; border:none; cursor:pointer; border-radius:4px;}
+        button:hover { background:#444; }
+        button:disabled { background:#222; color:#555; cursor:not-allowed;}
+    </style>
+</head>
+<body>
+    <div class="map-viewport" id="viewport">
+        <div class="map-wrapper" id="wrapper">
+            <!-- Ensure your image file is named correctly and placed next to this HTML file -->
+            <img src="${currentImageName}.jpg" id="map-img" onerror="this.src='${currentImageName}.png'">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path class="route-line" vector-effect="non-scaling-stroke" d="${generateSVGPath()}"></path>
+            </svg>
+            <div id="pins"></div>
+        </div>
+    </div>
+    <div class="info-panel">
+        <h1>路線資訊</h1>
+        <div class="nav-btns">
+            <button id="btn-prev" disabled>上一站</button>
+            <button id="btn-next">下一站</button>
+        </div>
+        <div id="content">
+            <div class="hint">← 點擊地圖上的標記，或使用上方按鈕瀏覽路線。</div>
+        </div>
+    </div>
+
+    <script>
+        const data = ${JSON.stringify(points)};
+        const wrapper = document.getElementById('wrapper');
+        const viewport = document.getElementById('viewport');
+        const pinsLayer = document.getElementById('pins');
+        const content = document.getElementById('content');
+        const mapImg = document.getElementById('map-img');
+        
+        let activeIdx = -1;
+        
+        // Render Pins
+        data.forEach((pt, i) => {
+            const pin = document.createElement('div');
+            pin.className = 'pin';
+            pin.id = 'pin-' + i;
+            pin.style.left = pt.x + '%';
+            pin.style.top = pt.y + '%';
+            pin.innerHTML = (i+1) + '<div class="pin-tooltip">' + pt.name + '</div>';
+            pin.onclick = () => selectPoint(i);
+            pinsLayer.appendChild(pin);
+        });
+
+        function selectPoint(idx) {
+            if(idx < 0 || idx >= data.length) return;
+            activeIdx = idx;
+            
+            // UI
+            document.querySelectorAll('.pin').forEach(p => p.classList.remove('active'));
+            document.getElementById('pin-'+idx).classList.add('active');
+            
+            document.getElementById('btn-prev').disabled = idx === 0;
+            document.getElementById('btn-next').disabled = idx === data.length - 1;
+            
+            const pt = data[idx];
+            content.innerHTML = '<h2 class="info-title">' + pt.name + '</h2>' + 
+                              (pt.date ? '<div class="info-date">🗓 ' + pt.date + '</div>' : '') + 
+                              (pt.quote ? '<div class="info-quote">' + pt.quote + '</div>' : '');
+                              
+            // Center map on point
+            const ctrX = viewport.clientWidth / 2;
+            const ctrY = viewport.clientHeight / 2;
+            const mw = mapImg.naturalWidth * scale;
+            const mh = mapImg.naturalHeight * scale;
+            if(mw > 0) {
+                panX = ctrX - (pt.x / 100 * mw);
+                panY = ctrY - (pt.y / 100 * mh);
+                updateTransform();
+            }
+        }
+
+        document.getElementById('btn-prev').onclick = () => selectPoint(activeIdx - 1);
+        document.getElementById('btn-next').onclick = () => selectPoint(activeIdx + 1);
+
+        // Pan & Zoom logic
+        let scale = 1, panX = 0, panY = 0, isDragging = false, startX, startY;
+        
+        function updateTransform() { wrapper.style.transform = 'translate('+panX+'px, '+panY+'px) scale('+scale+')'; }
+        
+        viewport.onmousedown = e => { isDragging = true; startX = e.clientX - panX; startY = e.clientY - panY; };
+        window.onmousemove = e => { if(isDragging){ panX = e.clientX - startX; panY = e.clientY - startY; updateTransform(); }};
+        window.onmouseup = () => isDragging = false;
+        
+        viewport.onwheel = e => {
+            e.preventDefault();
+            const rect = viewport.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left, mouseY = e.clientY - rect.top;
+            const zoom = e.deltaY > 0 ? 0.9 : 1.1;
+            const ns = Math.min(Math.max(0.2, scale * zoom), 10);
+            if(ns !== scale) {
+                panX = mouseX - (mouseX - panX) * (ns / scale);
+                panY = mouseY - (mouseY - panY) * (ns / scale);
+                scale = ns;
+                updateTransform();
+            }
+        };
+
+        // Init center
+        window.onload = () => {
+             panX = (viewport.clientWidth - mapImg.naturalWidth)/2;
+             if(panX > 0) panX = 0;
+             updateTransform();
+        };
+    <\/script>
+</body>
+</html>`;
+
+        const blob = new Blob([template], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `${currentImageName}_interactive.html`;
+        a.click();
+    });
+
+    function generateSVGPath() {
+        if(points.length === 0) return '';
+        let d = `M ${points[0].x} ${points[0].y}`;
+        for(let i=1; i<points.length; i++) {
+            d += ` L ${points[i].x} ${points[i].y}`;
+        }
+        return d;
+    }
+
+</script>
+</body>
+</html>
