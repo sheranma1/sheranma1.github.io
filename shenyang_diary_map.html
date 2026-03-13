@@ -154,24 +154,70 @@
 
         .hist-map-wrapper {
             display: flex;
-            gap: 28px;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
             margin-top: 16px;
+            gap: 12px;
         }
 
         .hist-map-img {
-            width: 320px;
-            flex-shrink: 0;
+            max-width: 540px;
+            width: 100%;
             border: 2px solid #c9b99a;
             border-radius: 6px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            cursor: zoom-in;
+            transition: box-shadow 0.2s, transform 0.2s;
         }
 
-        .hist-map-desc {
-            font-size: 16px;
-            line-height: 1.75;
-            color: #444;
+        .hist-map-img:hover {
+            box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+            transform: scale(1.01);
         }
+
+        .hist-map-caption {
+            font-size: 14px;
+            color: #888;
+            text-align: center;
+        }
+
+        /* Lightbox overlay */
+        #lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
+
+        #lightbox.active {
+            display: flex;
+        }
+
+        #lightbox img {
+            max-width: 92vw;
+            max-height: 92vh;
+            border-radius: 6px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+            object-fit: contain;
+        }
+
+        #lightbox-close {
+            position: fixed;
+            top: 18px;
+            right: 24px;
+            color: white;
+            font-size: 36px;
+            cursor: pointer;
+            line-height: 1;
+            opacity: 0.8;
+            transition: opacity 0.15s;
+        }
+
+        #lightbox-close:hover { opacity: 1; }
 
         /* Leaflet popup customization */
         .custom-popup .leaflet-popup-content-wrapper {
@@ -276,16 +322,16 @@
         <div class="hist-map-wrapper">
             <img id="hist-map-img" class="hist-map-img" src="joseon_map.jpg"
                 alt="17世紀朝鮮半島地圖"
-                onerror="this.style.display='none';document.getElementById('hist-map-placeholder').style.display='block'">
-            <div id="hist-map-placeholder" style="display:none; width:320px; height:400px; border:2px dashed #c9b99a; border-radius:6px; display:flex; align-items:center; justify-content:center; background:rgba(245,242,235,0.7); color:#aaa; font-size:14px; text-align:center; padding:20px; flex-shrink:0;">
-                請將17世紀朝鮮地圖圖片<br>命名為 <strong>joseon_map.jpg</strong><br>放入網站根目錄
-            </div>
-            <div class="hist-map-desc">
-                <p>此地圖為17世紀朝鮮時代所繪製的朝鮮半島全圖，以漢文標注各道及地名，是研究朝鮮後期地理的重要史料。地圖採傳統東亞輿圖的繪製方式，北方位於上方，詳細標注了主要山川、道路及行政區劃。</p>
-                <p>《瀋陽日記》所記行程沿京畿道北上，經黃海道、平安道，最終渡鴨綠江進入清朝盛京境內。沿途地點大多可在此圖上找到對應標記。</p>
-                <p style="font-size:14px; color:#888; margin-top:12px;">〔地圖來源待標注〕</p>
-            </div>
+                title="點擊放大"
+                onclick="openLightbox(this.src)">
+            <div class="hist-map-caption">點擊圖片可放大查看 · 〔地圖來源待標注〕</div>
         </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <span id="lightbox-close" onclick="closeLightbox()">×</span>
+        <img id="lightbox-img" src="" alt="放大地圖">
     </div>
 
     <footer>
@@ -457,6 +503,22 @@
                     sideItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
                 }
             });
+        });
+
+        // ── Lightbox ──
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeLightbox();
         });
     </script>
 </body>
