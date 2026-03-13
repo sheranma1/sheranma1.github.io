@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>《瀋陽日記》行路圖 — Shuyi Ma</title>
+    <title>Interactive Route Map: Shenyang Diary (1637) — Shuyi Ma</title>
     <link rel="stylesheet" href="style.css">
 
     <!-- Leaflet CSS -->
@@ -291,48 +291,48 @@
         <a href="blog.html">Blog</a>
     </nav>
 
-    <h1>《瀋陽日記》行路圖</h1>
-    <p style="color:#888;font-size:16px;margin-bottom:12px;">Interactive Route Map · 朝鮮→瀋陽 · 1637</p>
+    <h1>Interactive Route Map: <em>Shenyang Diary</em></h1>
+    <p style="color:#888;font-size:16px;margin-bottom:12px;">The Journey from Chosŏn to Shenyang · 1637</p>
 
     <div class="page-intro">
-        <strong>《瀋陽日記》</strong>是朝鮮世子昭顯世子及其隨行人員在丙子胡亂（1636–37）後被押送至清朝瀋陽為人質期間所留下的行程記錄。此地圖依日記所載，標註自漢城（首爾）至瀋陽沿途33處地點，跨越朝鮮八道及清朝盛京（今遼寧省）。
+        <strong>The <em>Shenyang Diary</em> (瀋陽日記)</strong> records the journey and subsequent hostage period of Crown Prince Sohyeon and his retinue following the Qing invasion of Chosŏn in 1636–37. This map illustrates 33 stops mentioned in the diary, tracking their route from Hanseong (Seoul) across the Yalu River to the Qing capital of Mukden (Shenyang).
     </div>
 
     <div class="map-legend">
         <div class="legend-item">
             <div class="legend-dot" style="background:#c0392b;"></div>
-            <span>朝鮮境內（京畿道、黃海道、平安道）</span>
+            <span>Chosŏn Territory (Gyeonggi, Hwanghae, Pyeongan)</span>
         </div>
         <div class="legend-item">
             <div class="legend-dot" style="background:#2471a3;"></div>
-            <span>清朝境內（盛京遼東）</span>
+            <span>Qing Territory (Liaodong / Shengjing)</span>
         </div>
         <div class="legend-item">
             <div class="legend-dot" style="background:#f39c12; width:16px; height:16px; border-radius:3px;"></div>
-            <span>渡江點（鴨綠江）</span>
+            <span>Yalu River Crossing</span>
         </div>
     </div>
 
     <div class="map-container">
         <div id="map"></div>
         <div class="sidebar">
-            <h3>📍 行程地點列表</h3>
+            <h3>📍 Route Stops</h3>
             <div id="stop-list"></div>
         </div>
     </div>
 
     <!-- Historical map section -->
     <div class="historical-map-section">
-        <h2>底圖參考：17世紀朝鮮地圖</h2>
+        <h2>Reference: 17th-Century Chosŏn Map</h2>
         
         <div class="hist-map-viewport" id="hist-map-viewport">
             <div class="hist-map-container" id="hist-map-container">
-                <img id="hist-map-img" class="hist-map-img" src="joseon_map.jpg" alt="17世紀朝鮮半島地圖">
+                <img id="hist-map-img" class="hist-map-img" src="joseon_map.jpg" alt="17th Century Map of the Korean Peninsula">
             </div>
         </div>
         
         <div class="hist-map-caption">
-            💡 提示：滑鼠滾輪縮放，按住拖曳平移 &nbsp;·&nbsp;
+            💡 Tip: Scroll to zoom, drag to pan &nbsp;·&nbsp;
             <em>Paldo Chongdo</em> (八道總圖), from <em>Paldo Chido</em> 《八道地圖》(奎10331), ca. 1776–1787.
             Manuscript. Kyujanggak Institute for Korean Studies, Seoul National University.
         </div>
@@ -346,41 +346,40 @@
         // ── Data: 33 stops from the Shenyang Diary ──
         const stops = [
             // Korea section
-            { id: 1,  name: "南漢城",           region: "京畿道（廣州）",    country: "韓國",            context: "勤兵被掠之處",         lat: 37.480, lng: 127.179, imgX: 37.18, imgY: 58.97 },
-            { id: 2,  name: "高陽郡",           region: "京畿道",           country: "韓國",            context: "世子行次止宿",         lat: 37.658, lng: 126.832, imgX: 34.59, imgY: 56.08 },
-            { id: 3,  name: "城外·梨川",         region: "京畿道",           country: "韓國",            context: "抵受有旨之處",         lat: 37.790, lng: 126.855 },
-            { id: 4,  name: "積城·尺瀑",         region: "京畿道",           country: "韓國",            context: "渡涉之地",             lat: 37.867, lng: 126.700, imgX: 35.81, imgY: 53.41 },
-            { id: 5,  name: "長湍（板浮村·板門）", region: "京畿道",           country: "韓國（DMZ附近）", context: "止宿之所",             lat: 37.940, lng: 126.670, imgX: 33.30, imgY: 52.94 },
-            { id: 6,  name: "松都（開城府）",     region: "京畿道",           country: "韓國",            context: "兼補徵收糧米之地",     lat: 37.970, lng: 126.560, imgX: 30.92, imgY: 52.89 },
-            { id: 7,  name: "平山·船岩村",       region: "黃海道",           country: "北韓",            context: "世子行次止宿",         lat: 38.330, lng: 126.380, imgX: 29.25, imgY: 49.08 },
-            { id: 8,  name: "長湍串",           region: "黃海道",           country: "北韓",            context: "止宿，廚房失火之處",   lat: 38.500, lng: 126.050 },
-            { id: 9,  name: "鳳山（含溝·草阜·草丘）", region: "黃海道",      country: "北韓",            context: "多次止宿留駐",         lat: 38.680, lng: 125.900, imgX: 22.81, imgY: 46.06 },
-            { id: 10, name: "黃州",             region: "黃海道",           country: "北韓",            context: "判官李朝商遣援馬匹",   lat: 38.620, lng: 125.780, imgX: 23.29, imgY: 44.25 },
-            { id: 11, name: "中和邑",           region: "平安道（南）",     country: "北韓",            context: "止宿，驛馬替換之地",   lat: 38.920, lng: 125.760, imgX: 23.61, imgY: 42.65 },
-            { id: 12, name: "平壤·梨山",         region: "平安道（南）",     country: "北韓",            context: "途中止宿",             lat: 39.030, lng: 125.750, imgX: 23.13, imgY: 40.69 },
-            { id: 13, name: "永柔縣（綠沙村）",   region: "平安道（南）",     country: "北韓",            context: "世子留駐最久之所",     lat: 39.280, lng: 125.600, imgX: 20.75, imgY: 37.82 },
-            { id: 14, name: "安州（長坪·橫瀝）", region: "平安道（南）",     country: "北韓",            context: "止宿，與馬大人相議之地", lat: 39.620, lng: 125.590, imgX: 22.66, imgY: 34.70 },
-            { id: 15, name: "肅川·碧柯汀",       region: "平安道（北）",     country: "北韓",            context: "野次止宿",             lat: 39.400, lng: 125.720, imgX: 22.42, imgY: 37.13 },
-            { id: 16, name: "嘉山·長串",         region: "平安道（北）",     country: "北韓",            context: "野次止宿",             lat: 39.750, lng: 125.850 },
-            { id: 17, name: "納淸亭",           region: "平安道（北）",     country: "北韓",            context: "途中標地（寨山近處）", lat: 39.900, lng: 125.700 },
-            { id: 18, name: "定州（鑑岩·玉汝洞）", region: "平安道（北）",   country: "北韓",            context: "野次止宿",             lat: 39.860, lng: 125.320, imgX: 16.61, imgY: 34.70 },
-            { id: 19, name: "宜川·林群",         region: "平安道（北）",     country: "北韓",            context: "途中標地",             lat: 40.000, lng: 125.050, imgX: 12.56, imgY: 34.50 },
-            { id: 20, name: "鐵山·板橋",         region: "平安道（北）",     country: "北韓",            context: "野次止宿",             lat: 39.980, lng: 124.880, imgX: 9.46, imgY: 35.23 },
-            { id: 21, name: "牛鬙磁",           region: "平安道（北）",     country: "北韓",            context: "途中標地（鐵山近處）", lat: 40.080, lng: 124.600 },
-            { id: 22, name: "義州（古津江邊·古城倉）", region: "平安道（北）", country: "北韓",           context: "渡江前止宿",           lat: 40.105, lng: 124.390, imgX: 5.33, imgY: 30.70 },
-            // Yalu River crossing
+            { id: 1,  name: "南漢城",           region: "Gyeonggi Province (Gwangju)",  country: "South Korea",            context: "Where escorting soldiers were captured", lat: 37.480, lng: 127.179, imgX: 37.18, imgY: 58.97 },
+            { id: 2,  name: "高陽郡",           region: "Gyeonggi Province",            country: "South Korea",            context: "Overnight stop for the Crown Prince",    lat: 37.658, lng: 126.832, imgX: 34.59, imgY: 56.08 },
+            { id: 3,  name: "城外·梨川",         region: "Gyeonggi Province",            country: "South Korea",            context: "Where royal orders were received",       lat: 37.790, lng: 126.855 },
+            { id: 4,  name: "積城·尺瀑",         region: "Gyeonggi Province",            country: "South Korea",            context: "River crossing point",                   lat: 37.867, lng: 126.700, imgX: 35.81, imgY: 53.41 },
+            { id: 5,  name: "長湍（板浮村·板門）", region: "Gyeonggi Province",            country: "South Korea (near DMZ)", context: "Overnight stop",                        lat: 37.940, lng: 126.670, imgX: 33.30, imgY: 52.94 },
+            { id: 6,  name: "松都（開城府）",     region: "Gyeonggi Province",            country: "North Korea",            context: "Stop for collecting grain provisions",   lat: 37.970, lng: 126.560, imgX: 30.92, imgY: 52.89 },
+            { id: 7,  name: "平山·船岩村",       region: "Hwanghae Province",            country: "North Korea",            context: "Overnight stop for the Crown Prince",    lat: 38.330, lng: 126.380, imgX: 29.25, imgY: 49.08 },
+            { id: 8,  name: "長湍串",           region: "Hwanghae Province",            country: "North Korea",            context: "Overnight stop; kitchen caught fire",    lat: 38.500, lng: 126.050 },
+            { id: 9,  name: "鳳山（含溝·草阜·草丘）", region: "Hwanghae Province",      country: "North Korea",            context: "Multiple overnight sequences",           lat: 38.680, lng: 125.900, imgX: 22.81, imgY: 46.06 },
+            { id: 10, name: "黃州",             region: "Hwanghae Province",            country: "North Korea",            context: "Magistrate Yi Jo-sang sent relief horses",lat: 38.620, lng: 125.780, imgX: 23.29, imgY: 44.25 },
+            { id: 11, name: "中和邑",           region: "Pyeongan Province (South)",    country: "North Korea",            context: "Overnight stop; post horses exchanged",  lat: 38.920, lng: 125.760, imgX: 23.61, imgY: 42.65 },
+            { id: 12, name: "平壤·梨山",         region: "Pyeongan Province (South)",    country: "North Korea",            context: "Overnight stop en route",                lat: 39.030, lng: 125.750, imgX: 23.13, imgY: 40.69 },
+            { id: 13, name: "永柔縣（綠沙村）",   region: "Pyeongan Province (South)",    country: "North Korea",            context: "Longest stay for the Crown Prince",      lat: 39.280, lng: 125.600, imgX: 20.75, imgY: 37.82 },
+            { id: 14, name: "安州（長坪·橫瀝）", region: "Pyeongan Province (South)",    country: "North Korea",            context: "Conference held with Lord Ma",           lat: 39.620, lng: 125.590, imgX: 22.66, imgY: 34.70 },
+            { id: 15, name: "肅川·碧柯汀",       region: "Pyeongan Province (North)",    country: "North Korea",            context: "Field encampment",                       lat: 39.400, lng: 125.720, imgX: 22.42, imgY: 37.13 },
+            { id: 16, name: "嘉山·長串",         region: "Pyeongan Province (North)",    country: "North Korea",            context: "Field encampment",                       lat: 39.750, lng: 125.850 },
+            { id: 17, name: "納淸亭",           region: "Pyeongan Province (North)",    country: "North Korea",            context: "Landmark passed (near Chaesan)",         lat: 39.900, lng: 125.700 },
+            { id: 18, name: "定州（鑑岩·玉汝洞）", region: "Pyeongan Province (North)",  country: "North Korea",            context: "Field encampment",                       lat: 39.860, lng: 125.320, imgX: 16.61, imgY: 34.70 },
+            { id: 19, name: "宜川·林群",         region: "Pyeongan Province (North)",    country: "North Korea",            context: "Landmark passed en route",               lat: 40.000, lng: 125.050, imgX: 12.56, imgY: 34.50 },
+            { id: 20, name: "鐵山·板橋",         region: "Pyeongan Province (North)",    country: "North Korea",            context: "Field encampment",                       lat: 39.980, lng: 124.880, imgX: 9.46, imgY: 35.23 },
+            { id: 21, name: "牛鬙磁",           region: "Pyeongan Province (North)",    country: "North Korea",            context: "Landmark passed (near Cheolsan)",        lat: 40.080, lng: 124.600 },
+            { id: 22, name: "義州（古津江邊·古城倉）", region: "Pyeongan Province (North)", country: "North Korea",          context: "Final stop before crossing Yalu River",  lat: 40.105, lng: 124.390, imgX: 5.33, imgY: 30.70 },
             // China section
-            { id: 23, name: "九連城",           region: "清朝盛京（遼東）", country: "中國遼寧省丹東市", context: "越江後首個止宿地",     lat: 40.120, lng: 124.380 },
-            { id: 24, name: "湯遠堡",           region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "途中要地",             lat: 40.350, lng: 124.200 },
-            { id: 25, name: "湯站",             region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 40.500, lng: 124.050 },
-            { id: 26, name: "乾川",             region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 40.650, lng: 124.050 },
-            { id: 27, name: "獾項川",           region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 40.850, lng: 123.900 },
-            { id: 28, name: "連山館",           region: "清朝盛京（遼東）", country: "中國遼寧省連山關", context: "途中標地",             lat: 41.080, lng: 123.750 },
-            { id: 29, name: "甜水站",           region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "途中止宿",             lat: 41.200, lng: 123.300 },
-            { id: 30, name: "冷井",             region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 41.350, lng: 123.150 },
-            { id: 31, name: "燭流鋪",           region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 41.500, lng: 122.900 },
-            { id: 32, name: "白塔坪",           region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 41.620, lng: 123.100 },
-            { id: 33, name: "瀋陽",             region: "清朝盛京（首府）", country: "中國遼寧省瀋陽市", context: "世子留居之城",         lat: 41.806, lng: 123.432 },
+            { id: 23, name: "九連城",           region: "Qing Shengjing (Liaodong)",    country: "China (Dandong, Liaoning)", context: "First stop after crossing the river", lat: 40.120, lng: 124.380 },
+            { id: 24, name: "湯遠堡",           region: "Qing Shengjing (Liaodong)",    country: "China (Liaoning)",       context: "Key waypoint en route",                  lat: 40.350, lng: 124.200 },
+            { id: 25, name: "湯站",             region: "Qing Shengjing (Liaodong)",    country: "China (Liaoning)",       context: "Field encampment",                       lat: 40.500, lng: 124.050 },
+            { id: 26, name: "乾川",             region: "Qing Shengjing (Liaodong)",    country: "China (Liaoning)",       context: "Field encampment",                       lat: 40.650, lng: 124.050 },
+            { id: 27, name: "獾項川",           region: "Qing Shengjing (Liaodong)",    country: "China (Liaoning)",       context: "Field encampment",                       lat: 40.850, lng: 123.900 },
+            { id: 28, name: "連山館",           region: "Qing Shengjing (Liaodong)",    country: "China (Lianshanguan)",   context: "Landmark passed en route",               lat: 41.080, lng: 123.750 },
+            { id: 29, name: "甜水站",           region: "Qing Shengjing (Liaodong)",    country: "China (Liaoning)",       context: "Overnight stop en route",                lat: 41.200, lng: 123.300 },
+            { id: 30, name: "冷井",             region: "Qing Shengjing (Liaodong)",    country: "China (Liaoning)",       context: "Field encampment",                       lat: 41.350, lng: 123.150 },
+            { id: 31, name: "燭流鋪",           region: "Qing Shengjing (Liaodong)",    country: "China (Liaoning)",       context: "Field encampment",                       lat: 41.500, lng: 122.900 },
+            { id: 32, name: "白塔坪",           region: "Qing Shengjing (Liaodong)",    country: "China (Liaoning)",       context: "Field encampment",                       lat: 41.620, lng: 123.100 },
+            { id: 33, name: "瀋陽",             region: "Qing Shengjing (Capital)",     country: "China (Shenyang, Liaoning)", context: "Final destination; Crown Prince's residence", lat: 41.806, lng: 123.432 },
         ];
 
         // ── Initialize Leaflet map ──
@@ -447,10 +446,10 @@
 
             const popupHtml = `
                 <div class="popup-content">
-                    <div class="popup-num">第 ${stop.id} 站</div>
+                    <div class="popup-num">Stop ${stop.id}</div>
                     <h4>${stop.name}</h4>
                     <div class="popup-meta">🗺 ${stop.region}</div>
-                    <div class="popup-meta">📍 今屬：${stop.country}</div>
+                    <div class="popup-meta">📍 Mod. location: ${stop.country}</div>
                     <div class="popup-context">📜 ${stop.context}</div>
                 </div>`;
 
@@ -471,7 +470,7 @@
                 dividerAdded = true;
                 const div = document.createElement('div');
                 div.className = 'section-divider';
-                div.textContent = '── 渡鴨綠江入清境 ──';
+                div.textContent = '── Crossing the Yalu River into Qing ──';
                 listEl.appendChild(div);
             }
 
