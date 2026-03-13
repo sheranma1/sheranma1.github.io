@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《瀋陽日記》行路圖 — Shuyi Ma</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        /* Override body max-width for map page */
+        body {
+            max-width: 1100px;
+            padding: 20px 30px;
+        }
+
+        .page-intro {
+            background: rgba(44, 62, 80, 0.06);
+            border-left: 4px solid #2c3e50;
+            padding: 16px 20px;
+            margin-bottom: 28px;
+            font-size: 18px;
+            line-height: 1.7;
+            border-radius: 0 6px 6px 0;
+        }
+
+        /* Map + sidebar layout */
+        .map-container {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            margin-bottom: 36px;
+        }
+
+        #map {
+            flex: 1 1 0;
+            height: 620px;
+            border: 2px solid #c9b99a;
+            border-radius: 8px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.13);
+            min-width: 0;
+        }
+
+        /* Sidebar list */
+        .sidebar {
+            width: 270px;
+            flex-shrink: 0;
+            height: 620px;
+            overflow-y: auto;
+            border: 1px solid #d5c9b5;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.85);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .sidebar h3 {
+            font-size: 16px;
+            padding: 12px 14px 8px;
+            color: #2c3e50;
+            border-bottom: 1px solid #e0d8cc;
+            position: sticky;
+            top: 0;
+            background: rgba(245, 242, 235, 0.97);
+            z-index: 10;
+            letter-spacing: 0.5px;
+        }
+
+        .stop-item {
+            padding: 8px 14px;
+            border-bottom: 1px solid #ede8df;
+            cursor: pointer;
+            transition: background 0.18s;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .stop-item:hover {
+            background: rgba(243, 156, 18, 0.12);
+        }
+
+        .stop-item.active {
+            background: rgba(44, 62, 80, 0.1);
+        }
+
+        .stop-num {
+            font-size: 11px;
+            font-weight: bold;
+            color: #888;
+            min-width: 20px;
+            padding-top: 3px;
+        }
+
+        .stop-name {
+            font-size: 14px;
+            color: #2c3e50;
+            line-height: 1.4;
+        }
+
+        .stop-region {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.3;
+        }
+
+        .section-divider {
+            padding: 6px 14px;
+            background: #2c3e50;
+            color: #ecf0f1;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        /* Legend */
+        .map-legend {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 15px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Historical map section */
+        .historical-map-section {
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid #ddd;
+        }
+
+        .historical-map-section h2 {
+            margin-top: 0;
+        }
+
+        .hist-map-wrapper {
+            display: flex;
+            gap: 28px;
+            align-items: flex-start;
+            margin-top: 16px;
+        }
+
+        .hist-map-img {
+            width: 320px;
+            flex-shrink: 0;
+            border: 2px solid #c9b99a;
+            border-radius: 6px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .hist-map-desc {
+            font-size: 16px;
+            line-height: 1.75;
+            color: #444;
+        }
+
+        /* Leaflet popup customization */
+        .custom-popup .leaflet-popup-content-wrapper {
+            background: rgba(249, 246, 240, 0.97);
+            border: 1px solid #c9b99a;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+        }
+
+        .popup-content h4 {
+            font-size: 16px;
+            color: #2c3e50;
+            margin-bottom: 4px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 4px;
+        }
+
+        .popup-content .popup-num {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .popup-content .popup-meta {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 4px;
+        }
+
+        .popup-content .popup-context {
+            font-size: 13px;
+            color: #7a3b00;
+            font-style: italic;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid #eee;
+        }
+
+        @media (max-width: 800px) {
+            .map-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: 220px;
+            }
+            #map {
+                height: 400px;
+            }
+            .hist-map-wrapper {
+                flex-direction: column;
+            }
+            .hist-map-img {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="index.html">About Me</a>
+        <a href="publications.html">Publications</a>
+        <a href="projects.html">Projects</a>
+        <a href="resources.html">Resources</a>
+        <a href="blog.html">Blog</a>
+    </nav>
+
+    <h1>《瀋陽日記》行路圖</h1>
+    <p style="color:#888;font-size:16px;margin-bottom:12px;">Interactive Route Map · 朝鮮→瀋陽 · 1637</p>
+
+    <div class="page-intro">
+        <strong>《瀋陽日記》</strong>是朝鮮世子昭顯世子及其隨行人員在丙子胡亂（1636–37）後被押送至清朝瀋陽為人質期間所留下的行程記錄。此地圖依日記所載，標註自漢城（首爾）至瀋陽沿途33處地點，跨越朝鮮八道及清朝盛京（今遼寧省）。
+    </div>
+
+    <div class="map-legend">
+        <div class="legend-item">
+            <div class="legend-dot" style="background:#c0392b;"></div>
+            <span>朝鮮境內（京畿道、黃海道、平安道）</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background:#2471a3;"></div>
+            <span>清朝境內（盛京遼東）</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background:#f39c12; width:16px; height:16px; border-radius:3px;"></div>
+            <span>渡江點（鴨綠江）</span>
+        </div>
+    </div>
+
+    <div class="map-container">
+        <div id="map"></div>
+        <div class="sidebar">
+            <h3>📍 行程地點列表</h3>
+            <div id="stop-list"></div>
+        </div>
+    </div>
+
+    <!-- Historical map section -->
+    <div class="historical-map-section">
+        <h2>底圖參考：17世紀朝鮮地圖</h2>
+        <div class="hist-map-wrapper">
+            <img id="hist-map-img" class="hist-map-img" src="joseon_map.jpg"
+                alt="17世紀朝鮮半島地圖"
+                onerror="this.style.display='none';document.getElementById('hist-map-placeholder').style.display='block'">
+            <div id="hist-map-placeholder" style="display:none; width:320px; height:400px; border:2px dashed #c9b99a; border-radius:6px; display:flex; align-items:center; justify-content:center; background:rgba(245,242,235,0.7); color:#aaa; font-size:14px; text-align:center; padding:20px; flex-shrink:0;">
+                請將17世紀朝鮮地圖圖片<br>命名為 <strong>joseon_map.jpg</strong><br>放入網站根目錄
+            </div>
+            <div class="hist-map-desc">
+                <p>此地圖為17世紀朝鮮時代所繪製的朝鮮半島全圖，以漢文標注各道及地名，是研究朝鮮後期地理的重要史料。地圖採傳統東亞輿圖的繪製方式，北方位於上方，詳細標注了主要山川、道路及行政區劃。</p>
+                <p>《瀋陽日記》所記行程沿京畿道北上，經黃海道、平安道，最終渡鴨綠江進入清朝盛京境內。沿途地點大多可在此圖上找到對應標記。</p>
+                <p style="font-size:14px; color:#888; margin-top:12px;">〔地圖來源待標注〕</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Shuyi Ma
+    </footer>
+
+    <script>
+        // ── Data: 33 stops from the Shenyang Diary ──
+        const stops = [
+            // Korea section
+            { id: 1,  name: "南漢城",           region: "京畿道（廣州）",    country: "韓國",            context: "勤兵被掠之處",         lat: 37.480, lng: 127.179 },
+            { id: 2,  name: "高陽郡",           region: "京畿道",           country: "韓國",            context: "世子行次止宿",         lat: 37.658, lng: 126.832 },
+            { id: 3,  name: "城外·梨川",         region: "京畿道",           country: "韓國",            context: "抵受有旨之處",         lat: 37.790, lng: 126.855 },
+            { id: 4,  name: "積城·尺瀑",         region: "京畿道",           country: "韓國",            context: "渡涉之地",             lat: 37.867, lng: 126.700 },
+            { id: 5,  name: "長湍（板浮村·板門）", region: "京畿道",           country: "韓國（DMZ附近）", context: "止宿之所",             lat: 37.940, lng: 126.670 },
+            { id: 6,  name: "松都（開城府）",     region: "京畿道",           country: "韓國",            context: "兼補徵收糧米之地",     lat: 37.970, lng: 126.560 },
+            { id: 7,  name: "平山·船岩村",       region: "黃海道",           country: "北韓",            context: "世子行次止宿",         lat: 38.330, lng: 126.380 },
+            { id: 8,  name: "長湍串",           region: "黃海道",           country: "北韓",            context: "止宿，廚房失火之處",   lat: 38.500, lng: 126.050 },
+            { id: 9,  name: "鳳山（含溝·草阜·草丘）", region: "黃海道",      country: "北韓",            context: "多次止宿留駐",         lat: 38.680, lng: 125.900 },
+            { id: 10, name: "黃州",             region: "黃海道",           country: "北韓",            context: "判官李朝商遣援馬匹",   lat: 38.620, lng: 125.780 },
+            { id: 11, name: "中和邑",           region: "平安道（南）",     country: "北韓",            context: "止宿，驛馬替換之地",   lat: 38.920, lng: 125.760 },
+            { id: 12, name: "平壤·梨山",         region: "平安道（南）",     country: "北韓",            context: "途中止宿",             lat: 39.030, lng: 125.750 },
+            { id: 13, name: "永柔縣（綠沙村）",   region: "平安道（南）",     country: "北韓",            context: "世子留駐最久之所",     lat: 39.280, lng: 125.600 },
+            { id: 14, name: "安州（長坪·橫瀝）", region: "平安道（南）",     country: "北韓",            context: "止宿，與馬大人相議之地", lat: 39.620, lng: 125.590 },
+            { id: 15, name: "肅川·碧柯汀",       region: "平安道（北）",     country: "北韓",            context: "野次止宿",             lat: 39.400, lng: 125.720 },
+            { id: 16, name: "嘉山·長串",         region: "平安道（北）",     country: "北韓",            context: "野次止宿",             lat: 39.750, lng: 125.850 },
+            { id: 17, name: "納淸亭",           region: "平安道（北）",     country: "北韓",            context: "途中標地（寨山近處）", lat: 39.900, lng: 125.700 },
+            { id: 18, name: "定州（鑑岩·玉汝洞）", region: "平安道（北）",   country: "北韓",            context: "野次止宿",             lat: 39.860, lng: 125.320 },
+            { id: 19, name: "宜川·林群",         region: "平安道（北）",     country: "北韓",            context: "途中標地",             lat: 40.000, lng: 125.050 },
+            { id: 20, name: "鐵山·板橋",         region: "平安道（北）",     country: "北韓",            context: "野次止宿",             lat: 39.980, lng: 124.880 },
+            { id: 21, name: "牛鬙磁",           region: "平安道（北）",     country: "北韓",            context: "途中標地（鐵山近處）", lat: 40.080, lng: 124.600 },
+            { id: 22, name: "義州（古津江邊·古城倉）", region: "平安道（北）", country: "北韓",           context: "渡江前止宿",           lat: 40.105, lng: 124.390 },
+            // Yalu River crossing
+            // China section
+            { id: 23, name: "九連城",           region: "清朝盛京（遼東）", country: "中國遼寧省丹東市", context: "越江後首個止宿地",     lat: 40.120, lng: 124.380 },
+            { id: 24, name: "湯遠堡",           region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "途中要地",             lat: 40.350, lng: 124.200 },
+            { id: 25, name: "湯站",             region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 40.500, lng: 124.050 },
+            { id: 26, name: "乾川",             region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 40.650, lng: 124.050 },
+            { id: 27, name: "獾項川",           region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 40.850, lng: 123.900 },
+            { id: 28, name: "連山館",           region: "清朝盛京（遼東）", country: "中國遼寧省連山關", context: "途中標地",             lat: 41.080, lng: 123.750 },
+            { id: 29, name: "甜水站",           region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "途中止宿",             lat: 41.200, lng: 123.300 },
+            { id: 30, name: "冷井",             region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 41.350, lng: 123.150 },
+            { id: 31, name: "燭流鋪",           region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 41.500, lng: 122.900 },
+            { id: 32, name: "白塔坪",           region: "清朝盛京（遼東）", country: "中國遼寧省",       context: "野次止宿",             lat: 41.620, lng: 123.100 },
+            { id: 33, name: "瀋陽",             region: "清朝盛京（首府）", country: "中國遼寧省瀋陽市", context: "世子留居之城",         lat: 41.806, lng: 123.432 },
+        ];
+
+        // ── Initialize Leaflet map ──
+        const map = L.map('map', {
+            center: [39.5, 125.5],
+            zoom: 6,
+            zoomControl: true,
+        });
+
+        // Base tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            maxZoom: 18,
+        }).addTo(map);
+
+        // ── Color helpers ──
+        function markerColor(stop) {
+            if (stop.id === 22 || stop.id === 23) return '#f39c12'; // crossing area
+            if (stop.id <= 22) return '#c0392b'; // Korea
+            return '#2471a3'; // China
+        }
+
+        function createCircleIcon(color, num) {
+            return L.divIcon({
+                className: '',
+                html: `<div style="
+                    width:26px; height:26px; border-radius:50%;
+                    background:${color}; border:2px solid white;
+                    box-shadow:0 2px 6px rgba(0,0,0,0.35);
+                    display:flex; align-items:center; justify-content:center;
+                    color:white; font-size:11px; font-weight:bold;
+                    font-family:Georgia,serif;
+                ">${num}</div>`,
+                iconSize: [26, 26],
+                iconAnchor: [13, 13],
+                popupAnchor: [0, -16],
+            });
+        }
+
+        // ── Route polyline (Korea section + China section) ──
+        const koreaCoords = stops.filter(s => s.id <= 22).map(s => [s.lat, s.lng]);
+        const chinaCoords = stops.filter(s => s.id >= 22).map(s => [s.lat, s.lng]);
+
+        L.polyline(koreaCoords, {
+            color: '#c0392b',
+            weight: 3,
+            opacity: 0.75,
+            dashArray: '6,4',
+        }).addTo(map);
+
+        L.polyline(chinaCoords, {
+            color: '#2471a3',
+            weight: 3,
+            opacity: 0.75,
+            dashArray: '6,4',
+        }).addTo(map);
+
+        // ── Markers ──
+        const leafletMarkers = [];
+
+        stops.forEach((stop, idx) => {
+            const color = markerColor(stop);
+            const icon = createCircleIcon(color, stop.id);
+
+            const popupHtml = `
+                <div class="popup-content">
+                    <div class="popup-num">第 ${stop.id} 站</div>
+                    <h4>${stop.name}</h4>
+                    <div class="popup-meta">🗺 ${stop.region}</div>
+                    <div class="popup-meta">📍 今屬：${stop.country}</div>
+                    <div class="popup-context">📜 ${stop.context}</div>
+                </div>`;
+
+            const marker = L.marker([stop.lat, stop.lng], { icon })
+                .addTo(map)
+                .bindPopup(popupHtml, { className: 'custom-popup', maxWidth: 240 });
+
+            leafletMarkers.push(marker);
+        });
+
+        // ── Sidebar stop list ──
+        const listEl = document.getElementById('stop-list');
+        let dividerAdded = false;
+
+        stops.forEach((stop, idx) => {
+            // Section divider before stop 23 (China)
+            if (stop.id === 23 && !dividerAdded) {
+                dividerAdded = true;
+                const div = document.createElement('div');
+                div.className = 'section-divider';
+                div.textContent = '── 渡鴨綠江入清境 ──';
+                listEl.appendChild(div);
+            }
+
+            const item = document.createElement('div');
+            item.className = 'stop-item';
+            item.id = `stop-item-${stop.id}`;
+            item.innerHTML = `
+                <div class="stop-num">${stop.id}</div>
+                <div>
+                    <div class="stop-name">${stop.name}</div>
+                    <div class="stop-region">${stop.region}</div>
+                </div>`;
+
+            item.addEventListener('click', () => {
+                // Pan map to marker
+                map.flyTo([stop.lat, stop.lng], 9, { duration: 1 });
+                leafletMarkers[idx].openPopup();
+                // Highlight
+                document.querySelectorAll('.stop-item').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+            });
+
+            listEl.appendChild(item);
+        });
+
+        // When popup opens, highlight sidebar item
+        stops.forEach((stop, idx) => {
+            leafletMarkers[idx].on('popupopen', () => {
+                document.querySelectorAll('.stop-item').forEach(el => el.classList.remove('active'));
+                const sideItem = document.getElementById(`stop-item-${stop.id}`);
+                if (sideItem) {
+                    sideItem.classList.add('active');
+                    sideItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
