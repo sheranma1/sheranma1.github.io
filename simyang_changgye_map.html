@@ -370,6 +370,10 @@
             <div class="legend-dot" style="background:#f39c12; width:16px; height:16px; border-radius:3px;"></div>
             <span>Yalu River Crossing</span>
         </div>
+        <div class="legend-item">
+            <div style="width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 14px solid #c0392b; margin-right: 2px;"></div>
+            <span>Historical Landmark (Not part of Crown Prince's route)</span>
+        </div>
     </div>
 
     <div class="map-container">
@@ -406,40 +410,40 @@
         // ── Data: 33 stops from the Simyang Changgye ──
         const stops = [
             // Korea section
-            { id: 1, name: "南漢城", region: "Gyeonggi Province (Gwangju)", country: "South Korea", context: "Where escorting soldiers were captured，臣等以路中適値<span class='custom-tooltip-trigger'>李時白<span class='custom-tooltip-text'>Yi Si-baek (1581-1660) was a mid-Joseon minister. In 1636, King Injo appointed him Vice Minister of War and Commander of Namhansanseong Defense. He defended the western wall during the Qing invasion (Byeongja Horan). Later, as Minister of War, he sent his legitimate son to Shengjing as a hostage but secretly replaced him with an illegitimate son. Discovered by the Qing in 1640, he was exiled before being released the next year.</span></span>奴子男伊稱名人,初二日被擄於南漢城下。", lat: 37.480, lng: 127.179, imgX: 37.18, imgY: 58.97 },
-            { id: 2, name: "高陽郡", region: "Gyeonggi Province", country: "South Korea", context: "Overnight stop for the Crown Prince，王世子行次初八日高陽郡別堂止宿。", lat: 37.658, lng: 126.832, imgX: 34.59, imgY: 56.08 },
-            { id: 3, name: "城外·梨川", region: "Gyeonggi Province", country: "South Korea", context: "Where royal orders were received，有旨初九日臣等在坡州梨川邊祗受爲白有在果；初九日過坡州十里許梨川邊止宿。", lat: 37.790, lng: 126.855 },
-            { id: 4, name: "積城·尺灘", region: "Gyeonggi Province", country: "South Korea", context: "River crossing point，由積城地尺灘，則灘水甚淺，無事渡涉。", lat: 37.867, lng: 126.700, imgX: 35.81, imgY: 53.41 },
-            { id: 5, name: "長湍（板浮村·板門）", region: "Gyeonggi Province", country: "South Korea (near DMZ)", context: "Overnight stop", lat: 37.940, lng: 126.670, imgX: 33.30, imgY: 52.94 },
-            { id: 6, name: "松都（開城府）", region: "Gyeonggi Province", country: "North Korea", context: "Stop for collecting grain provisions", lat: 37.970, lng: 126.560, imgX: 30.92, imgY: 52.89 },
-            { id: 7, name: "平山·船岩村", region: "Hwanghae Province", country: "North Korea", context: "Overnight stop for the Crown Prince", lat: 38.330, lng: 126.380, imgX: 29.25, imgY: 49.08 },
-            { id: 8, name: "長湍串", region: "Hwanghae Province", country: "North Korea", context: "Overnight stop; kitchen caught fire", lat: 38.500, lng: 126.050 },
-            { id: 9, name: "鳳山（含溝·草阜·草丘）", region: "Hwanghae Province", country: "North Korea", context: "Multiple overnight sequences", lat: 38.680, lng: 125.900, imgX: 22.81, imgY: 46.06 },
-            { id: 10, name: "黃州", region: "Hwanghae Province", country: "North Korea", context: "Magistrate Yi Jo-sang sent relief horses", lat: 38.620, lng: 125.780, imgX: 23.29, imgY: 44.25 },
-            { id: 11, name: "中和邑", region: "Pyeongan Province (South)", country: "North Korea", context: "Overnight stop; post horses exchanged", lat: 38.920, lng: 125.760, imgX: 23.61, imgY: 42.65 },
-            { id: 12, name: "平壤·梨山", region: "Pyeongan Province (South)", country: "North Korea", context: "Overnight stop en route", lat: 39.030, lng: 125.750, imgX: 23.13, imgY: 40.69 },
-            { id: 13, name: "永柔縣（綠沙村）", region: "Pyeongan Province (South)", country: "North Korea", context: "Longest stay for the Crown Prince", lat: 39.280, lng: 125.600, imgX: 20.75, imgY: 37.82 },
-            { id: 14, name: "安州（長坪·橫瀝）", region: "Pyeongan Province (South)", country: "North Korea", context: "Conference held with Lord Ma", lat: 39.620, lng: 125.590, imgX: 22.66, imgY: 34.70 },
-            { id: 15, name: "肅川·碧柯汀", region: "Pyeongan Province (North)", country: "North Korea", context: "Field encampment", lat: 39.400, lng: 125.720, imgX: 22.42, imgY: 37.13 },
-            { id: 16, name: "嘉山·長串", region: "Pyeongan Province (North)", country: "North Korea", context: "Field encampment", lat: 39.750, lng: 125.850 },
-            { id: 17, name: "納淸亭", region: "Pyeongan Province (North)", country: "North Korea", context: "Landmark passed (near Chaesan)", lat: 39.900, lng: 125.700 },
-            { id: 18, name: "定州（鑑岩·玉汝洞）", region: "Pyeongan Province (North)", country: "North Korea", context: "Field encampment", lat: 39.860, lng: 125.320, imgX: 16.61, imgY: 34.70 },
-            { id: 19, name: "宜川·林群", region: "Pyeongan Province (North)", country: "North Korea", context: "Landmark passed en route", lat: 40.000, lng: 125.050, imgX: 12.56, imgY: 34.50 },
-            { id: 20, name: "鐵山·板橋", region: "Pyeongan Province (North)", country: "North Korea", context: "Field encampment", lat: 39.980, lng: 124.880, imgX: 9.46, imgY: 35.23 },
-            { id: 21, name: "牛鬙磁", region: "Pyeongan Province (North)", country: "North Korea", context: "Landmark passed (near Cheolsan)", lat: 40.080, lng: 124.600 },
-            { id: 22, name: "義州（古津江邊·古城倉）", region: "Pyeongan Province (North)", country: "North Korea", context: "Final stop before crossing Yalu River", lat: 40.105, lng: 124.390, imgX: 5.33, imgY: 30.70 },
+            { id: "ref", name: "南漢城", region: "Gyeonggi Province (Gwangju)", country: "South Korea", context: "King Injo fled here during the Qing invasion. On the 2nd day of the 1st month (after peace was agreed), Joseon soldiers were still being captured here. <span class='custom-tooltip-trigger'>Yi Si-baek<span class='custom-tooltip-text'>Yi Si-baek (1581-1660) was a mid-Joseon minister. In 1636, King Injo appointed him Vice Minister of War and Commander of Namhansanseong Defense. He defended the western wall during the Qing invasion (Byeongja Horan). Later, as Minister of War, he sent his legitimate son to Shengjing as a hostage but secretly replaced him with an illegitimate son. Discovered by the Qing in 1640, he was exiled before being released the next year.</span></span>'s servant, Nam-i, testified to being captured under its walls.", lat: 37.480, lng: 127.179, imgX: 37.18, imgY: 58.97, type: "triangle" },
+            { id: 1, name: "高陽郡", region: "Gyeonggi Province", country: "South Korea", context: "Overnight stop for the Crown Prince，王世子行次初八日高陽郡別堂止宿。", lat: 37.658, lng: 126.832, imgX: 34.59, imgY: 56.08 },
+            { id: 2, name: "城外·梨川", region: "Gyeonggi Province", country: "South Korea", context: "Where royal orders were received，有旨初九日臣等在坡州梨川邊祗受爲白有在果；初九日過坡州十里許梨川邊止宿。", lat: 37.790, lng: 126.855 },
+            { id: 3, name: "積城·尺灘", region: "Gyeonggi Province", country: "South Korea", context: "River crossing point，由積城地尺灘，則灘水甚淺，無事渡涉。", lat: 37.867, lng: 126.700, imgX: 35.81, imgY: 53.41 },
+            { id: 4, name: "長湍（板浮村·板門）", region: "Gyeonggi Province", country: "South Korea (near DMZ)", context: "Overnight stop", lat: 37.940, lng: 126.670, imgX: 33.30, imgY: 52.94 },
+            { id: 5, name: "松都（開城府）", region: "Gyeonggi Province", country: "North Korea", context: "Stop for collecting grain provisions", lat: 37.970, lng: 126.560, imgX: 30.92, imgY: 52.89 },
+            { id: 6, name: "平山·船岩村", region: "Hwanghae Province", country: "North Korea", context: "Overnight stop for the Crown Prince", lat: 38.330, lng: 126.380, imgX: 29.25, imgY: 49.08 },
+            { id: 7, name: "長湍串", region: "Hwanghae Province", country: "North Korea", context: "Overnight stop; kitchen caught fire", lat: 38.500, lng: 126.050 },
+            { id: 8, name: "鳳山（含溝·草阜·草丘）", region: "Hwanghae Province", country: "North Korea", context: "Multiple overnight sequences", lat: 38.680, lng: 125.900, imgX: 22.81, imgY: 46.06 },
+            { id: 9, name: "黃州", region: "Hwanghae Province", country: "North Korea", context: "Magistrate Yi Jo-sang sent relief horses", lat: 38.620, lng: 125.780, imgX: 23.29, imgY: 44.25 },
+            { id: 10, name: "中和邑", region: "Pyeongan Province (South)", country: "North Korea", context: "Overnight stop; post horses exchanged", lat: 38.920, lng: 125.760, imgX: 23.61, imgY: 42.65 },
+            { id: 11, name: "平壤·梨山", region: "Pyeongan Province (South)", country: "North Korea", context: "Overnight stop en route", lat: 39.030, lng: 125.750, imgX: 23.13, imgY: 40.69 },
+            { id: 12, name: "永柔縣（綠沙村）", region: "Pyeongan Province (South)", country: "North Korea", context: "Longest stay for the Crown Prince", lat: 39.280, lng: 125.600, imgX: 20.75, imgY: 37.82 },
+            { id: 13, name: "安州（長坪·橫瀝）", region: "Pyeongan Province (South)", country: "North Korea", context: "Conference held with Lord Ma", lat: 39.620, lng: 125.590, imgX: 22.66, imgY: 34.70 },
+            { id: 14, name: "肅川·碧柯汀", region: "Pyeongan Province (North)", country: "North Korea", context: "Field encampment", lat: 39.400, lng: 125.720, imgX: 22.42, imgY: 37.13 },
+            { id: 15, name: "嘉山·長串", region: "Pyeongan Province (North)", country: "North Korea", context: "Field encampment", lat: 39.750, lng: 125.850 },
+            { id: 16, name: "納淸亭", region: "Pyeongan Province (North)", country: "North Korea", context: "Landmark passed (near Chaesan)", lat: 39.900, lng: 125.700 },
+            { id: 17, name: "定州（鑑岩·玉汝洞）", region: "Pyeongan Province (North)", country: "North Korea", context: "Field encampment", lat: 39.860, lng: 125.320, imgX: 16.61, imgY: 34.70 },
+            { id: 18, name: "宜川·林群", region: "Pyeongan Province (North)", country: "North Korea", context: "Landmark passed en route", lat: 40.000, lng: 125.050, imgX: 12.56, imgY: 34.50 },
+            { id: 19, name: "鐵山·板橋", region: "Pyeongan Province (North)", country: "North Korea", context: "Field encampment", lat: 39.980, lng: 124.880, imgX: 9.46, imgY: 35.23 },
+            { id: 20, name: "牛鬙磁", region: "Pyeongan Province (North)", country: "North Korea", context: "Landmark passed (near Cheolsan)", lat: 40.080, lng: 124.600 },
+            { id: 21, name: "義州（古津江邊·古城倉）", region: "Pyeongan Province (North)", country: "North Korea", context: "Final stop before crossing Yalu River", lat: 40.105, lng: 124.390, imgX: 5.33, imgY: 30.70 },
             // China section
-            { id: 23, name: "九連城", region: "Qing Shengjing (Liaodong)", country: "China (Dandong, Liaoning)", context: "First stop after crossing the river", lat: 40.120, lng: 124.380 },
-            { id: 24, name: "湯遠堡", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Key waypoint en route", lat: 40.350, lng: 124.200 },
-            { id: 25, name: "湯站", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 40.500, lng: 124.050 },
-            { id: 26, name: "乾川", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 40.650, lng: 124.050 },
-            { id: 27, name: "獾項川", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 40.850, lng: 123.900 },
-            { id: 28, name: "連山館", region: "Qing Shengjing (Liaodong)", country: "China (Lianshanguan)", context: "Landmark passed en route", lat: 41.080, lng: 123.750 },
-            { id: 29, name: "甜水站", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Overnight stop en route", lat: 41.200, lng: 123.300 },
-            { id: 30, name: "冷井", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 41.350, lng: 123.150 },
-            { id: 31, name: "燭流鋪", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 41.500, lng: 122.900 },
-            { id: 32, name: "白塔坪", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 41.620, lng: 123.100 },
-            { id: 33, name: "瀋陽", region: "Qing Shengjing (Capital)", country: "China (Shenyang, Liaoning)", context: "Final destination; Crown Prince's residence", lat: 41.806, lng: 123.432 },
+            { id: 22, name: "九連城", region: "Qing Shengjing (Liaodong)", country: "China (Dandong, Liaoning)", context: "First stop after crossing the river", lat: 40.120, lng: 124.380 },
+            { id: 23, name: "湯遠堡", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Key waypoint en route", lat: 40.350, lng: 124.200 },
+            { id: 24, name: "湯站", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 40.500, lng: 124.050 },
+            { id: 25, name: "乾川", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 40.650, lng: 124.050 },
+            { id: 26, name: "獾項川", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 40.850, lng: 123.900 },
+            { id: 27, name: "連山館", region: "Qing Shengjing (Liaodong)", country: "China (Lianshanguan)", context: "Landmark passed en route", lat: 41.080, lng: 123.750 },
+            { id: 28, name: "甜水站", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Overnight stop en route", lat: 41.200, lng: 123.300 },
+            { id: 29, name: "冷井", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 41.350, lng: 123.150 },
+            { id: 30, name: "燭流鋪", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 41.500, lng: 122.900 },
+            { id: 31, name: "白塔坪", region: "Qing Shengjing (Liaodong)", country: "China (Liaoning)", context: "Field encampment", lat: 41.620, lng: 123.100 },
+            { id: 32, name: "瀋陽", region: "Qing Shengjing (Capital)", country: "China (Shenyang, Liaoning)", context: "Final destination; Crown Prince's residence", lat: 41.806, lng: 123.432 },
         ];
 
         // ── Initialize Leaflet map ──
@@ -457,9 +461,25 @@
 
         // ── Color helpers ──
         function markerColor(stop) {
-            if (stop.id === 22 || stop.id === 23) return '#f39c12'; // crossing area
-            if (stop.id <= 22) return '#c0392b'; // Korea
+            if (stop.id === 21 || stop.id === 22) return '#f39c12'; // crossing area
+            if (stop.id === "ref" || stop.id <= 21) return '#c0392b'; // Korea
             return '#2471a3'; // China
+        }
+
+        function createTriangleIcon(color) {
+            return L.divIcon({
+                className: '',
+                html: `<div style="
+                    width:0; height:0; 
+                    border-left: 14px solid transparent; 
+                    border-right: 14px solid transparent; 
+                    border-bottom: 24px solid ${color};
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+                "></div>`,
+                iconSize: [28, 24],
+                iconAnchor: [14, 12],
+                popupAnchor: [0, -12],
+            });
         }
 
         function createCircleIcon(color, num) {
@@ -480,8 +500,9 @@
         }
 
         // ── Route polyline (Korea section + China section) ──
-        const koreaCoords = stops.filter(s => s.id <= 22).map(s => [s.lat, s.lng]);
-        const chinaCoords = stops.filter(s => s.id >= 22).map(s => [s.lat, s.lng]);
+        const routeStops = stops.filter(s => typeof s.id === 'number');
+        const koreaCoords = routeStops.filter(s => s.id <= 21).map(s => [s.lat, s.lng]);
+        const chinaCoords = routeStops.filter(s => s.id >= 21).map(s => [s.lat, s.lng]);
 
         L.polyline(koreaCoords, {
             color: '#c0392b',
@@ -502,11 +523,16 @@
 
         stops.forEach((stop, idx) => {
             const color = markerColor(stop);
-            const icon = createCircleIcon(color, stop.id);
+            let icon;
+            if (stop.type === "triangle") {
+                icon = createTriangleIcon(color);
+            } else {
+                icon = createCircleIcon(color, stop.id);
+            }
 
             const popupHtml = `
                 <div class="popup-content">
-                    <div class="popup-num">Stop ${stop.id}</div>
+                    <div class="popup-num">${stop.id === "ref" ? "Historical Landmark" : "Stop " + stop.id}</div>
                     <h4>${stop.name}</h4>
                     <div class="popup-meta">🗺 ${stop.region}</div>
                     <div class="popup-meta">📍 Mod. location: ${stop.country}</div>
@@ -525,8 +551,8 @@
         let dividerAdded = false;
 
         stops.forEach((stop, idx) => {
-            // Section divider before stop 23 (China)
-            if (stop.id === 23 && !dividerAdded) {
+            // Section divider before stop 22 (China)
+            if (stop.id === 22 && !dividerAdded) {
                 dividerAdded = true;
                 const div = document.createElement('div');
                 div.className = 'section-divider';
@@ -538,7 +564,7 @@
             item.className = 'stop-item';
             item.id = `stop-item-${stop.id}`;
             item.innerHTML = `
-                <div class="stop-num">${stop.id}</div>
+                <div class="stop-num">${stop.id === "ref" ? "★" : stop.id}</div>
                 <div>
                     <div class="stop-name">${stop.name}</div>
                     <div class="stop-region">${stop.region}</div>
@@ -587,7 +613,7 @@
                 e.stopPropagation(); // prevent lightbox
                 document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
                 map.flyTo([stop.lat, stop.lng], 9, { duration: 1 });
-                leafletMarkers[stop.id - 1].openPopup();
+                leafletMarkers[idx].openPopup();
 
                 // Highlight side list
                 document.querySelectorAll('.stop-item').forEach(el => el.classList.remove('active'));
