@@ -615,7 +615,11 @@
                 e.stopPropagation(); // prevent lightbox
                 document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
                 map.flyTo([stop.lat, stop.lng], 9, { duration: 1 });
-                leafletMarkers[idx].openPopup();
+                
+                const originalIdx = stops.indexOf(stop);
+                if (originalIdx !== -1 && leafletMarkers[originalIdx]) {
+                    leafletMarkers[originalIdx].openPopup();
+                }
 
                 // Highlight side list
                 document.querySelectorAll('.stop-item').forEach(el => el.classList.remove('active'));
