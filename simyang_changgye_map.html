@@ -613,12 +613,22 @@
             // Link to modern map marker
             pin.addEventListener('click', (e) => {
                 e.stopPropagation(); // prevent lightbox
-                document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
+                
+                // Jump to the top map container
+                document.getElementById('map').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+
+                // Coordinate map movement and popup
                 map.flyTo([stop.lat, stop.lng], 9, { duration: 1 });
                 
                 const originalIdx = stops.indexOf(stop);
                 if (originalIdx !== -1 && leafletMarkers[originalIdx]) {
-                    leafletMarkers[originalIdx].openPopup();
+                    // Slight delay to ensure the popup opens cleanly after the scroll starts
+                    setTimeout(() => {
+                        leafletMarkers[originalIdx].openPopup();
+                    }, 300);
                 }
 
                 // Highlight side list
