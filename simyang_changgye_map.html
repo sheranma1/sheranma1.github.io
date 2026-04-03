@@ -44,6 +44,15 @@
             border-radius: 8px;
             box-shadow: 0 4px 18px rgba(0, 0, 0, 0.13);
             min-width: 0;
+            position: relative;
+        }
+
+        /* Fullscreen styles for Leaflet map */
+        #map:fullscreen {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            border-radius: 0;
         }
 
         /* Sidebar list */
@@ -168,6 +177,40 @@
 
         .hist-map-viewport:active {
             cursor: grabbing;
+        }
+
+        /* Fullscreen styles for historical map */
+        .hist-map-viewport:fullscreen {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            border-radius: 0;
+            background: #000;
+        }
+
+        /* Fullscreen Toggle Buttons */
+        .fs-toggle-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            background: rgba(44, 62, 80, 0.85);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .fs-toggle-btn:hover {
+            background: rgba(243, 156, 18, 0.9);
         }
 
         .hist-map-container {
@@ -379,7 +422,9 @@
     </div>
 
     <div class="map-container">
-        <div id="map"></div>
+        <div id="map">
+            <button class="fs-toggle-btn" id="btn-fs-main" title="Toggle Fullscreen">⛶</button>
+        </div>
         <div class="sidebar">
             <h3>📍 Route Stops</h3>
             <div id="stop-list"></div>
@@ -391,6 +436,7 @@
         <h2>Spots on 18th-Century Chosŏn Map</h2>
 
         <div class="hist-map-viewport" id="hist-map-viewport">
+            <button class="fs-toggle-btn" id="btn-fs-hist" title="Toggle Fullscreen">⛶</button>
             <div class="hist-map-container" id="hist-map-container">
                 <img id="hist-map-img" class="hist-map-img" src="joseon_map.jpg"
                     alt="17th Century Map of the Korean Peninsula">
@@ -704,6 +750,37 @@
             updateHistTransform();
         });
 
+        // ── Fullscreen Controls ──
+        function setupFS(btnId, targetId, onEnter) {
+            const btn = document.getElementById(btnId);
+            const target = document.getElementById(targetId);
+            
+            btn.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    target.requestFullscreen().catch(err => {
+                        console.error(`Error: ${err.message}`);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+            
+            if (onEnter) {
+                document.addEventListener('fullscreenchange', () => {
+                    if (document.fullscreenElement === target) {
+                        setTimeout(onEnter, 100);
+                    }
+                });
+            }
+        }
+
+        setupFS('btn-fs-main', 'map', () => map.invalidateSize());
+        setupFS('btn-fs-hist', 'hist-map-viewport', () => {
+            // Re-center historical map in fullscreen
+            const vWidth = viewport.clientWidth;
+            histX = (vWidth - 800 * histScale) / 2;
+            updateHistTransform();
+        });
     </script>
 </body>
 

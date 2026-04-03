@@ -67,6 +67,20 @@
             z-index: 20;
         }
 
+        /* Fullscreen styles */
+        .map-viewport:fullscreen {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            border-radius: 0;
+            background: #000;
+        }
+
+        .map-viewport:fullscreen .zoom-controls {
+            top: 20px;
+            right: 20px;
+        }
+
         .zoom-btn {
             width: 34px;
             height: 34px;
@@ -172,6 +186,7 @@
 
         <!-- Zoom controls -->
         <div class="zoom-controls">
+            <button class="zoom-btn" id="toggleFullscreen" title="Toggle Fullscreen">⛶</button>
             <button class="zoom-btn" id="zoomIn" title="Zoom in">+</button>
             <button class="zoom-btn" id="zoomOut" title="Zoom out">−</button>
             <button class="zoom-btn zoom-reset-btn" id="zoomReset" title="Reset view">⟳</button>
@@ -313,6 +328,22 @@
         });
 
         document.getElementById('zoomReset').addEventListener('click', centerImage);
+
+        // ── Fullscreen toggle ──
+        document.getElementById('toggleFullscreen').addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                viewport.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        // Re-center on fullscreen change
+        document.addEventListener('fullscreenchange', () => {
+            setTimeout(centerImage, 100);
+        });
     </script>
 </body>
 
