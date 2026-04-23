@@ -467,6 +467,22 @@
                 </div>
             </div>
 
+            <div class="sidebar-section-label">主題 (Themes)</div>
+            <div class="theme-grid">
+                <button class="pill active" data-theme="all" style="--c:#2c3e50">全部 (All)</button>
+                <button class="pill" data-theme="禮制" style="--c:#7d6608">禮制 (Rites)</button>
+                <button class="pill" data-theme="論議" style="--c:#566573">論議 (Debate)</button>
+                <button class="pill" data-theme="外交" style="--c:#1a5276">外交 (Diplomacy)</button>
+                <button class="pill" data-theme="服制" style="--c:#6c3483">服制 (Mourning)</button>
+                <button class="pill" data-theme="胡亂" style="--c:#922b21">胡亂 (Invasion)</button>
+                <button class="pill" data-theme="入質" style="--c:#0e6655">入質 (Hostage)</button>
+                <button class="pill" data-theme="在瀋" style="--c:#17a589">在瀋 (Shenyang)</button>
+                <button class="pill" data-theme="薨逝" style="--c:#4a235a">薨逝 (Death)</button>
+                <button class="pill" data-theme="身後事" style="--c:#424949">身後事 (Posthumous)</button>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
             <div class="sidebar-section-label">時期 (Periods)</div>
             <ul class="period-nav-list">
                 <li><button class="active" data-period="all" style="--pc:#2c3e50">
@@ -509,21 +525,6 @@
                     <span class="nav-event">傳記摘要</span>
                 </button></li>
             </ul>
-
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section-label">主題</div>
-            <div class="theme-grid">
-                <button class="pill active" data-theme="all" style="--c:#2c3e50">全部 (All)</button>
-                <button class="pill" data-theme="禮制" style="--c:#7d6608">禮制 (Rites)</button>
-                <button class="pill" data-theme="論議" style="--c:#566573">論議 (Debate)</button>
-                <button class="pill" data-theme="外交" style="--c:#1a5276">外交 (Diplomacy)</button>
-                <button class="pill" data-theme="服制" style="--c:#6c3483">服制 (Mourning)</button>
-                <button class="pill" data-theme="胡亂" style="--c:#922b21">胡亂 (Invasion)</button>
-                <button class="pill" data-theme="入質" style="--c:#0e6655">入質 (Hostage)</button>
-                <button class="pill" data-theme="在瀋" style="--c:#17a589">在瀋 (Shenyang)</button>
-                <button class="pill" data-theme="薨逝" style="--c:#4a235a">薨逝 (Death)</button>
-                <button class="pill" data-theme="身後事" style="--c:#424949">身後事 (Posthumous)</button>
-            </div>
         </aside>
 
         <!-- ══ MAIN CONTENT ══════════════════════ -->
@@ -1001,35 +1002,74 @@
         let activeTheme = 'all';
         let searchQuery = '';
 
+        // Store original content for highlighting
+        const entryData = [];
+        document.querySelectorAll('.sillok-entry').forEach(entry => {
+            const textEl = entry.querySelector('.entry-text');
+            const noteEl = entry.querySelector('.entry-note');
+            entryData.push({
+                element: entry,
+                textEl: textEl,
+                noteEl: noteEl,
+                originalText: textEl ? textEl.innerHTML : '',
+                originalNote: noteEl ? noteEl.innerHTML : '',
+                themes: (entry.dataset.themes || '').split(' '),
+                section: entry.closest('.period-section')
+            });
+        });
+
+        function getHighlightedHTML(html, query) {
+            if (!query) return html;
+            // Avoid highlighting inside tags or script
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return html.replace(regex, '<mark>$1</mark>');
+        }
+
         function update() {
             let totalVisible = 0;
             const query = searchQuery.toLowerCase();
 
-            document.querySelectorAll('.period-section').forEach(section => {
-                const periodMatch = activePeriod === 'all' || section.dataset.period === activePeriod;
-                let sectionVisible = 0;
-                
-                section.querySelectorAll('.sillok-entry').forEach(entry => {
-                    const themes = (entry.dataset.themes || '').split(' ');
-                    const themeMatch = activeTheme === 'all' || themes.includes(activeTheme);
-                    
-                    // Search logic
-                    const contentText = entry.innerText.toLowerCase();
-                    const searchMatch = query === '' || contentText.includes(query);
+            // Clear sections first
+            const sections = document.querySelectorAll('.period-section');
+            const sectionVisCount = new Map();
+            sections.forEach(s => sectionVisCount.set(s, 0));
 
-                    const show = periodMatch && themeMatch && searchMatch;
-                    entry.classList.toggle('hidden', !show);
-                    if (show) sectionVisible++;
-                });
-                // show/hide section + its following separator
-                const show = periodMatch && sectionVisible > 0;
+            entryData.forEach(data => {
+                const periodMatch = activePeriod === 'all' || data.section.dataset.period === activePeriod;
+                const themeMatch = activeTheme === 'all' || data.themes.includes(activeTheme);
+                
+                // Search logic (match against raw text)
+                const fullText = (data.originalText + ' ' + data.originalNote).toLowerCase();
+                const searchMatch = query === '' || fullText.includes(query);
+
+                const show = periodMatch && themeMatch && searchMatch;
+                data.element.classList.toggle('hidden', !show);
+
+                if (show) {
+                    sectionVisCount.set(data.section, sectionVisCount.get(data.section) + 1);
+                    totalVisible++;
+                    // Apply highlighting
+                    if (data.textEl) data.textEl.innerHTML = getHighlightedHTML(data.originalText, searchQuery);
+                    if (data.noteEl) data.noteEl.innerHTML = getHighlightedHTML(data.originalNote, searchQuery);
+                } else {
+                    // Restore original
+                    if (data.textEl) data.textEl.innerHTML = data.originalText;
+                    if (data.noteEl) data.noteEl.innerHTML = data.originalNote;
+                }
+            });
+
+            sections.forEach(section => {
+                const count = sectionVisCount.get(section);
+                const periodMatch = activePeriod === 'all' || section.dataset.period === activePeriod;
+                const show = periodMatch && count > 0;
                 section.style.display = show ? '' : 'none';
+                
                 const sep = section.nextElementSibling;
                 if (sep && sep.classList.contains('section-sep')) {
                     sep.style.display = show ? '' : 'none';
                 }
-                totalVisible += sectionVisible;
             });
+
             document.getElementById('no-results').style.display = totalVisible === 0 ? 'block' : 'none';
         }
 
