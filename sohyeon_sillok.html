@@ -475,6 +475,64 @@
             font-family: Georgia, 'Times New Roman', serif;
         }
 
+        /* Pagination Styles */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 1px dashed #cfc4a4;
+        }
+
+        .page-nav-btn {
+            background: #fff;
+            border: 1px solid #cfc4a4;
+            color: #2c3e50;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .page-nav-btn:hover:not(:disabled) {
+            background: #fdfaf3;
+            border-color: #a4916a;
+        }
+        .page-nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 5px;
+        }
+
+        .page-num-btn {
+            background: #fff;
+            border: 1px solid #cfc4a4;
+            color: #2c3e50;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .page-num-btn:hover {
+            background: #fdfaf3;
+        }
+        .page-num-btn.active {
+            background: #2c3e50;
+            color: #fff;
+            border-color: #2c3e50;
+        }
+
         /* No results */
         .no-results {
             display: none;
@@ -557,10 +615,10 @@
 
             <div class="sidebar-section-label">時期 (Periods)</div>
             <ul class="period-nav-list">
-                <li><button class="active" data-period="all" style="--pc:#2c3e50">
+                <li><button data-period="all" style="--pc:#2c3e50">
                     <span class="nav-year">全部時期</span>
                 </button></li>
-                <li><button data-period="1625" style="--pc:#c9a227">
+                <li><button class="active" data-period="1625" style="--pc:#c9a227">
                     <span class="nav-year">1625</span>
                     <span class="nav-event">冊封</span>
                 </button></li>
@@ -1189,6 +1247,13 @@
                     <div class="entry-note">Queen Han bore three sons — 昭顯世子 (died young), the present King [Hyojong], and 麟坪大君. Sohyeon went to Shenyang in 丁丑 [1637], later transferred to Beijing, returned in the spring of 乙酉 [1645], and soon died of illness. He had three sons and three daughters; two sons died young.</div>
                 </div>
             </div>
+            <div class="pagination-container" id="pagination-container">
+                <button class="page-nav-btn" id="prev-page" disabled>◀ 上一頁</button>
+                <div class="page-numbers" id="page-numbers">
+                    <!-- filled by js -->
+                </div>
+                <button class="page-nav-btn" id="next-page">下一頁 ▶</button>
+            </div>
 
             <div class="source-footer">
                 <p>Sources: 朝鮮王朝實錄·仁祖大王實錄 (卷之八·十·十一·十二·十五·十六·二十三·二十四·二十五; 附錄), via
@@ -1204,7 +1269,8 @@
     <footer style="text-align:center;font-size:14px;color:#aaa;padding:20px 0 30px;">&copy; 2026 Shuyi Ma</footer>
 
     <script>
-        let activePeriod = 'all';
+        const periods = ['1625', '1626-1628', '1627', '1637', '1638', '1645', '1646', '1647', '附錄'];
+        let activePeriod = '1625';
         let activeTheme = 'all';
         let searchQuery = '';
 
@@ -1230,10 +1296,72 @@
             const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
             return html.replace(regex, '<mark>$1</mark>');
         }
+        
+        const paginationContainer = document.getElementById('pagination-container');
+        const pageNumbersEl = document.getElementById('page-numbers');
+        const prevBtn = document.getElementById('prev-page');
+        const nextBtn = document.getElementById('next-page');
+
+        function renderPagination() {
+            if (!pageNumbersEl) return;
+            pageNumbersEl.innerHTML = '';
+            periods.forEach((period, index) => {
+                const btn = document.createElement('button');
+                btn.className = `page-num-btn ${period === activePeriod ? 'active' : ''}`;
+                btn.textContent = index + 1;
+                btn.title = period;
+                btn.addEventListener('click', () => {
+                    activePeriod = period;
+                    update();
+                    updateSidebarActive();
+                    document.querySelector('.main-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+                pageNumbersEl.appendChild(btn);
+            });
+            
+            const currentIndex = periods.indexOf(activePeriod);
+            if (prevBtn) prevBtn.disabled = currentIndex <= 0;
+            if (nextBtn) nextBtn.disabled = currentIndex >= periods.length - 1;
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                const currentIndex = periods.indexOf(activePeriod);
+                if (currentIndex > 0) {
+                    activePeriod = periods[currentIndex - 1];
+                    update();
+                    updateSidebarActive();
+                    document.querySelector('.main-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                const currentIndex = periods.indexOf(activePeriod);
+                if (currentIndex >= 0 && currentIndex < periods.length - 1) {
+                    activePeriod = periods[currentIndex + 1];
+                    update();
+                    updateSidebarActive();
+                    document.querySelector('.main-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        }
+        
+        function updateSidebarActive() {
+            document.querySelectorAll('.period-nav-list button').forEach(b => {
+                b.classList.toggle('active', b.dataset.period === activePeriod);
+            });
+        }
 
         function update() {
             let totalVisible = 0;
             const query = searchQuery.toLowerCase();
+            const isSearching = query !== '';
+            
+            const showPagination = !isSearching && activePeriod !== 'all';
+            if (paginationContainer) paginationContainer.style.display = showPagination ? 'flex' : 'none';
+            if (showPagination) renderPagination();
 
             // Clear sections first
             const sections = document.querySelectorAll('.period-section');
@@ -1241,7 +1369,7 @@
             sections.forEach(s => sectionVisCount.set(s, 0));
 
             entryData.forEach(data => {
-                const periodMatch = activePeriod === 'all' || data.section.dataset.period === activePeriod;
+                const periodMatch = isSearching || activePeriod === 'all' || data.section.dataset.period === activePeriod;
                 const themeMatch = activeTheme === 'all' || data.themes.includes(activeTheme);
                 
                 // Search logic (match against raw text)
@@ -1266,7 +1394,7 @@
 
             sections.forEach(section => {
                 const count = sectionVisCount.get(section);
-                const periodMatch = activePeriod === 'all' || section.dataset.period === activePeriod;
+                const periodMatch = isSearching || activePeriod === 'all' || section.dataset.period === activePeriod;
                 const show = periodMatch && count > 0;
                 section.style.display = show ? '' : 'none';
                 
@@ -1279,13 +1407,15 @@
             document.getElementById('no-results').style.display = totalVisible === 0 ? 'block' : 'none';
         }
 
+        // Initialize display
+        update();
+
         // Period nav (sidebar)
         document.querySelectorAll('.period-nav-list button').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.period-nav-list button').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
                 activePeriod = btn.dataset.period;
                 update();
+                updateSidebarActive();
                 document.querySelector('.main-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
