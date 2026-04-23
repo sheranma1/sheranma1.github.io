@@ -24,132 +24,95 @@
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Fix global nav for full-width to match style.css */
+        /* OVERRIDE style.css constraints */
+        body {
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: var(--bg-color) !important;
+            font-family: 'Inter', sans-serif !important;
+            line-height: 1.6 !important;
+            color: var(--text-main) !important;
+            box-shadow: none !important;
+            animation: none !important;
+            display: block !important;
+        }
+
+        /* Fix global nav for full-width */
         nav {
-            background-color: #2c3e50 !important;
-            padding: 15px 20px !important;
             margin: 0 !important;
             width: 100% !important;
-            text-align: center !important;
+            background-color: #2c3e50 !important;
+            padding: 15px 20px !important;
             position: relative;
             z-index: 2000;
         }
-        nav a {
-            color: #ecf0f1 !important;
-            text-decoration: none !important;
-            margin: 0 50px !important;
-            font-size: 22px !important;
-            display: inline-block !important;
-            transition: all 0.3s ease !important;
-            font-family: 'Inter', sans-serif !important;
-        }
-        nav a:hover {
-            color: #f39c12 !important;
-            transform: translateY(-2px) !important;
-        }
+        nav a { font-size: 18px !important; margin: 0 25px !important; }
 
-        .page-layout { display: flex; min-height: calc(100vh - 60px); position: relative; }
+        .page-layout { display: flex; min-height: calc(100vh - 60px); }
 
-        /* Sidebar Styling (Simplified) */
+        /* Sidebar Styling */
         .sidebar {
-            width: 320px;
+            width: 360px;
             flex-shrink: 0;
             background: var(--sidebar-bg);
             backdrop-filter: blur(12px);
             border-right: 1px solid var(--border-color);
             position: sticky;
             top: 0;
-            height: 100vh;
+            height: calc(100vh - 0px);
             overflow-y: auto;
             padding: 35px 0;
             z-index: 1000;
             transition: var(--transition);
         }
-        .sidebar.collapsed { width: 60px; }
+        .sidebar.collapsed { width: 80px; }
 
         .sidebar-zh-title { font-family: 'Noto Serif TC', serif; font-size: 28px; color: var(--text-main); padding: 0 30px; margin-bottom: 8px; }
         .sidebar-sub { padding: 0 30px; color: var(--accent-gold); font-size: 13px; text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 35px; }
         
         .sidebar-toggle {
-            position: absolute; right: 15px; top: 30px; background: #fff; border: 1px solid var(--border-color); 
-            cursor: pointer; color: var(--text-main); width: 30px; height: 30px; border-radius: 50%;
+            position: absolute; right: 20px; top: 30px; background: #fff; border: 1px solid var(--border-color); 
+            cursor: pointer; color: var(--text-main); width: 34px; height: 34px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             transition: var(--transition); z-index: 1100;
         }
-        .sidebar.collapsed .sidebar-toggle { transform: rotate(180deg); right: 15px; }
+        .sidebar.collapsed .sidebar-toggle { transform: rotate(180deg); right: 23px; }
 
         .search-container { padding: 0 30px 30px; }
         .search-input {
             width: 100%; padding: 12px 18px 12px 40px; border-radius: 25px; border: 1px solid var(--border-color);
-            background: white; font-size: 14px; transition: var(--transition);
+            background: white; font-size: 15px; transition: var(--transition);
         }
 
         .sidebar-section-label { padding: 0 30px 12px; font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; }
 
-        .theme-grid { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 30px; margin-bottom: 30px; }
+        .theme-grid { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 30px; margin-bottom: 30px; }
         .pill {
-            padding: 5px 12px; border-radius: 20px; border: 2px solid var(--c); background: transparent; color: var(--c);
-            font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--transition);
+            padding: 6px 14px; border-radius: 20px; border: 2px solid var(--c); background: transparent; color: var(--c);
+            font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition);
         }
         .pill.active { background: var(--c); color: white; }
+
+        .period-nav-list { list-style: none; padding: 0; margin-bottom: 40px; }
+        .period-nav-list li button {
+            width: 100%; padding: 14px 30px; border: none; background: transparent; text-align: left; cursor: pointer;
+            transition: var(--transition); border-left: 5px solid transparent;
+        }
+        .period-nav-list li button.active { background: rgba(201, 162, 39, 0.1); border-left-color: var(--pc); }
+        .nav-year { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; display: block; }
+        .nav-event { font-size: 13px; color: var(--text-muted); }
 
         .sidebar.collapsed .sidebar-zh-title, 
         .sidebar.collapsed .sidebar-sub,
         .sidebar.collapsed .search-container,
         .sidebar.collapsed .sidebar-section-label,
-        .sidebar.collapsed .theme-grid { display: none; }
-
-        /* Floating Timeline on the Right */
-        .timeline-nav {
-            position: fixed;
-            right: 40px;
-            top: 100px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .timeline-line {
-            position: absolute;
-            top: 0; bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, transparent, var(--border-color), transparent);
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: -1;
-        }
-
-        .period-nav-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 25px; }
-        .period-nav-list li { position: relative; }
-        .period-nav-list button {
-            background: #fff;
-            border: 2px solid var(--border-color);
-            width: 54px; height: 54px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            overflow: visible;
-        }
-        .period-nav-list button:hover { transform: scale(1.1); border-color: var(--pc); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
-        .period-nav-list button.active { background: var(--pc); border-color: var(--pc); color: white; transform: scale(1.15); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-        
-        .period-nav-list .nav-year { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; }
-        .period-nav-list .nav-event { 
-            position: absolute; right: 65px; top: 50%; transform: translateY(-50%);
-            white-space: nowrap; font-size: 12px; color: var(--text-muted); font-weight: 600;
-            background: var(--sidebar-bg); padding: 4px 12px; border-radius: 15px; border: 1px solid var(--border-color);
-            opacity: 0; pointer-events: none; transition: var(--transition);
-        }
-        .period-nav-list button:hover .nav-event, .period-nav-list button.active .nav-event { opacity: 1; right: 70px; }
+        .sidebar.collapsed .theme-grid,
+        .sidebar.collapsed .nav-year,
+        .sidebar.collapsed .nav-event { display: none; }
 
         /* Main Area */
-        .main-area { flex: 1; padding: 60px 140px 60px 60px; max-width: 100%; margin: 0; min-width: 0; background: white; }
+        .main-area { flex: 1; padding: 60px 40px; max-width: 100%; margin: 0; min-width: 0; background: white; }
         
         .period-year-large { font-family: 'Playfair Display', serif; font-size: 72px; color: var(--period-color); line-height: 1; margin-bottom: 15px; }
         .period-event-name { font-size: 32px; font-weight: 700; color: var(--text-main); }
@@ -196,6 +159,7 @@
 <a href="blog.html">Blog</a>
 </nav>
 <div class="page-layout">
+<!-- ══ SIDEBAR ══════════════════════════ -->
 <aside class="sidebar" id="sidebar">
 <button class="sidebar-toggle" id="toggle-btn" title="Toggle Sidebar">
 <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -211,7 +175,7 @@
 </div>
 </div>
 <div class="sidebar-section-label">主題 (Themes)</div>
-<div class="theme-grid" id="theme-filters">
+<div class="theme-grid">
 <button class="pill active" data-theme="all" style="--c:#2c3e50">全部 (All)</button>
 <button class="pill" data-theme="禮制" style="--c:#7d6608">禮制 (Rites)</button>
 <button class="pill" data-theme="論議" style="--c:#566573">論議 (Debate)</button>
@@ -243,25 +207,50 @@
 <button class="pill" data-person="金自點" style="--c:#b03a2e">金自點</button>
 <button class="pill" data-person="李曙" style="--c:#117a65">李曙</button>
 </div>
-</aside>
-
-<!-- ══ FLOATING TIMELINE ════════════════════ -->
-<nav class="timeline-nav">
-<div class="timeline-line"></div>
+<div class="sidebar-divider"></div>
+<div class="sidebar-section-label">時期 (Periods)</div>
 <ul class="period-nav-list">
-<li><button data-period="all" style="--pc:#2c3e50"><span class="nav-year">All</span><span class="nav-event">全部時期</span></button></li>
-<li><button class="active" data-period="1625" style="--pc:#c9a227"><span class="nav-year">1625</span><span class="nav-event">冊封</span></button></li>
-<li><button data-period="1626" style="--pc:#ca6f1e"><span class="nav-year">1626</span><span class="nav-event">迎接詔使</span></button></li>
-<li><button data-period="1627" style="--pc:#c0392b"><span class="nav-year">1627</span><span class="nav-event">胡亂 · 嘉禮</span></button></li>
-<li><button data-period="1628" style="--pc:#d35400"><span class="nav-year">1628</span><span class="nav-event">丁卯後遺事</span></button></li>
-<li><button data-period="1637" style="--pc:#922b21"><span class="nav-year">1637</span><span class="nav-event">丙子胡亂 · 入質</span></button></li>
-<li><button data-period="1638" style="--pc:#17a589"><span class="nav-year">1638</span><span class="nav-event">在瀋陽</span></button></li>
-<li><button data-period="1645" style="--pc:#6c3483"><span class="nav-year">1645</span><span class="nav-event">歸國 · 薨逝</span></button></li>
-<li><button data-period="1646" style="--pc:#7b241c"><span class="nav-year">1646</span><span class="nav-event">姜嬪之獄</span></button></li>
-<li><button data-period="1647" style="--pc:#2c3e50"><span class="nav-year">1647</span><span class="nav-event">三子流配</span></button></li>
-<li><button data-period="附錄" style="--pc:#7f8c8d"><span class="nav-year">附錄</span><span class="nav-event">傳記摘要</span></button></li>
+<li><button data-period="all" style="--pc:#2c3e50">
+<span class="nav-year">全部時期</span>
+</button></li><li><button class="active" data-period="1625" style="--pc:#c9a227">
+<span class="nav-year">1625</span>
+<span class="nav-event">冊封</span>
+</button></li><li><button data-period="1626" style="--pc:#ca6f1e">
+<span class="nav-year">1626</span>
+<span class="nav-event">迎接詔使</span>
+</button></li><li><button data-period="1627" style="--pc:#c0392b">
+<span class="nav-year">1627</span>
+<span class="nav-event">胡亂 · 嘉禮</span>
+</button></li><li><button data-period="1628" style="--pc:#d35400">
+<span class="nav-year">1628</span>
+<span class="nav-event">丁卯後遺事</span>
+</button></li>
+<li><button data-period="1637" style="--pc:#922b21">
+<span class="nav-year">1637</span>
+<span class="nav-event">丙子胡亂 · 入質</span>
+</button></li>
+<li><button data-period="1638" style="--pc:#17a589">
+<span class="nav-year">1638</span>
+<span class="nav-event">在瀋陽</span>
+</button></li>
+<li><button data-period="1645" style="--pc:#6c3483">
+<span class="nav-year">1645</span>
+<span class="nav-event">歸國 · 薨逝</span>
+</button></li>
+<li><button data-period="1646" style="--pc:#7b241c">
+<span class="nav-year">1646</span>
+<span class="nav-event">姜嬪之獄</span>
+</button></li>
+<li><button data-period="1647" style="--pc:#2c3e50">
+<span class="nav-year">1647</span>
+<span class="nav-event">三子流配</span>
+</button></li>
+<li><button data-period="附錄" style="--pc:#7f8c8d">
+<span class="nav-year">附錄</span>
+<span class="nav-event">傳記摘要</span>
+</button></li>
 </ul>
-</nav>
+</aside>
 <!-- ══ MAIN CONTENT ══════════════════════ -->
 <main class="main-area">
 <div class="page-header">
