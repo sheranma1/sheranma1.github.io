@@ -1470,6 +1470,13 @@
             });
 
             document.getElementById('no-results').style.display = totalVisible === 0 ? 'block' : 'none';
+
+            // Refresh Leaflet map if it becomes visible
+            if (!window._bunjyoMap) {
+                setTimeout(() => initBunjyoMap(), 200);
+            } else {
+                setTimeout(() => window._bunjyoMap.invalidateSize(), 200);
+            }
         }
 
         // Initialize display
@@ -1508,7 +1515,7 @@
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
         });
-        // ── Bunjyo Map (Leaflet) ──────────────────
+        // ── Bunjyo Map (Leaflet) — Lazy Init ──────────────────
         const bunjyoLocations = [
             {
                 name: '漢城 (Hanseong)',
@@ -1533,39 +1540,33 @@
             }
         ];
 
-        const bunjyoMapEl = document.getElementById('bunjyo-map');
-        if (bunjyoMapEl) {
-            const bunjyoMap = L.map('bunjyo-map', {
+        function initBunjyoMap() {
+            if (window._bunjyoMap) return; // already initialized
+            const el = document.getElementById('bunjyo-map');
+            if (!el || el.offsetParent === null) return; // still hidden
+
+            const bMap = L.map('bunjyo-map', {
                 center: [36.8, 126.8],
                 zoom: 7,
                 zoomControl: true,
                 scrollWheelZoom: false
             });
+            window._bunjyoMap = bMap;
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
                 maxZoom: 18,
-            }).addTo(bunjyoMap);
+            }).addTo(bMap);
 
-            // Draw route lines
-            const routeCoords = [
-                [37.5665, 126.9780], // Hanseong
-                [37.7467, 126.4878], // Ganghwa
-            ];
-            const southRoute = [
-                [37.5665, 126.9780], // Hanseong
-                [35.8242, 127.1480], // Jeonju
-            ];
-
-            L.polyline(routeCoords, {
+            // Route lines
+            L.polyline([[37.5665, 126.9780], [37.7467, 126.4878]], {
                 color: '#c0392b', weight: 2.5, opacity: 0.6, dashArray: '8,6'
-            }).addTo(bunjyoMap);
-
-            L.polyline(southRoute, {
+            }).addTo(bMap);
+            L.polyline([[37.5665, 126.9780], [35.8242, 127.1480]], {
                 color: '#e67e22', weight: 2.5, opacity: 0.6, dashArray: '8,6'
-            }).addTo(bunjyoMap);
+            }).addTo(bMap);
 
-            // Create markers
+            // Markers
             bunjyoLocations.forEach(loc => {
                 const icon = L.divIcon({
                     className: '',
@@ -1581,16 +1582,14 @@
                     popupAnchor: [0, -14],
                 });
 
-                const popupHtml = `
-                    <div class="bunjyo-popup">
-                        <h4>${loc.name}</h4>
-                        <div class="popup-meta">${loc.desc}</div>
-                        <div style="font-size:12px;color:#555;margin-top:6px;border-top:1px solid #eee;padding-top:6px;">${loc.detail}</div>
-                    </div>`;
-
                 L.marker([loc.lat, loc.lng], { icon })
-                    .addTo(bunjyoMap)
-                    .bindPopup(popupHtml, { maxWidth: 260 });
+                    .addTo(bMap)
+                    .bindPopup(`
+                        <div class="bunjyo-popup">
+                            <h4>${loc.name}</h4>
+                            <div class="popup-meta">${loc.desc}</div>
+                            <div style="font-size:12px;color:#555;margin-top:6px;border-top:1px solid #eee;padding-top:6px;">${loc.detail}</div>
+                        </div>`, { maxWidth: 260 });
             });
 
             // Fullscreen toggle
@@ -1605,14 +1604,13 @@
                     }
                 });
                 document.addEventListener('fullscreenchange', () => {
-                    if (document.fullscreenElement === bunjyoWrapper) {
-                        setTimeout(() => bunjyoMap.invalidateSize(), 100);
-                    } else {
-                        setTimeout(() => bunjyoMap.invalidateSize(), 100);
-                    }
+                    setTimeout(() => bMap.invalidateSize(), 100);
                 });
             }
         }
+
+        // Try to init on page load (in case 1627 is visible)
+        initBunjyoMap();
     </script>
 </body>
 </html>
