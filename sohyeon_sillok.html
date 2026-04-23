@@ -409,6 +409,12 @@
             border-top: 1px solid #ede7da;
             padding-top: 12px;
         }
+        
+        .entry-note::before {
+            content: "[AI Summary] ";
+            font-weight: bold;
+            color: #c9b99a;
+        }
 
         /* Translation Toggle Styles */
         .translation-toggle {
@@ -427,6 +433,14 @@
             display: inline-block;
             transition: color 0.2s;
             list-style: none; /* Hide default arrow in some browsers */
+        }
+        
+        .translation-toggle summary::after {
+            content: " (Powered by Gemini 3.1 Pro AI)";
+            font-size: 13px;
+            font-weight: normal;
+            color: #888;
+            margin-left: 6px;
         }
         
         .translation-toggle summary::-webkit-details-marker {
@@ -595,7 +609,11 @@
 
             <div class="intro-box">
                 <p>昭顯世子（1612–1645），名□，字成之，朝鮮第十六代王仁祖之長子，元妃韓氏所出。仁祖三年（1625）冊立為王世子，時年十四歲。仁祖十五年（1637）丙子胡亂後，作為人質赴清朝瀋陽，滯留長達八年。仁祖二十三年（1645）春歸國，數月後薨逝於昌慶宮，年三十四，謚曰昭顯。</p>
-                <p style="font-size:13px;color:#bbb;margin-bottom:0;">In the Sillok, the Crown Prince is referred to as 王世子 or 世子 during his lifetime. The posthumous title 昭顯 was conferred in the fifth month of 仁祖 23年 (1645).</p>
+                <p style="font-size:13px;color:#bbb;margin-bottom:10px;">In the Sillok, the Crown Prince is referred to as 王世子 or 世子 during his lifetime. The posthumous title 昭顯 was conferred in the fifth month of 仁祖 23年 (1645).</p>
+                <div style="font-size:13px;color:#856404;background-color:#fff3cd;padding:10px 14px;border-radius:6px;border:1px solid #ffeeba;">
+                    <strong>🤖 關於白話文翻譯與英文摘要的說明 (AI-Generated Content Notice)</strong><br>
+                    為了方便閱讀，本頁面中所有的<strong>白話文翻譯</strong>與<strong>英文 Summary</strong> 均由 <strong>Gemini 3.1 Pro AI 模型</strong> 總結與翻譯生成。古文原文則完全摘自《朝鮮王朝實錄》，未經修改。
+                </div>
             </div>
 
             <div class="no-results" id="no-results">目前篩選條件下無符合條目。</div>
