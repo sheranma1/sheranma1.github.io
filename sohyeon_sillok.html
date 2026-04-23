@@ -10,605 +10,93 @@
 <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<style>
-        /* Inline Bunjyo Map */
-        .bunjyo-map-wrapper {
-            margin-top: 15px;
-            border: 1px solid #cfc4a4;
-            border-radius: 6px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet"/>
+    <style>
+        :root {
+            --bg-color: #fdfaf3;
+            --sidebar-bg: rgba(248, 246, 236, 0.95);
+            --accent-gold: #c9a227;
+            --accent-red: #922b21;
+            --text-main: #2c3e50;
+            --text-muted: #7f8c8d;
+            --border-color: #cfc4a4;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        #bunjyo-map {
-            width: 100%;
-            height: 280px;
-            z-index: 1;
-        }
-        .bunjyo-map-fs-btn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 30px;
-            height: 30px;
-            background: rgba(44, 62, 80, 0.85);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        }
-        .bunjyo-map-fs-btn:hover {
-            background: rgba(243, 156, 18, 0.9);
-        }
-        .bunjyo-map-wrapper:fullscreen #bunjyo-map {
-            height: 100vh;
-        }
-        .bunjyo-popup h4 {
-            font-size: 15px;
-            color: #2c3e50;
-            margin: 0 0 4px 0;
-        }
-        .bunjyo-popup .popup-meta {
-            font-size: 12px;
-            color: #666;
-        }
-        /* ── Body override for wide layout ───── */
+
         body {
-            max-width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            background-color: transparent !important;
-            box-shadow: none !important;
-            animation: none !important;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Full width nav override */
-        nav {
-            margin: 0 !important;
-            width: 100% !important;
-            box-sizing: border-box;
-        }
+        .page-layout { display: flex; min-height: 100vh; }
 
-        /* ── Page layout ─────────────────────── */
-        .page-layout {
-            display: flex;
-            align-items: flex-start;
-            gap: 0;
-            margin-top: 0;
-        }
-
-        /* ══════════════════════════════════════
-           SIDEBAR
-        ══════════════════════════════════════ */
+        /* Sidebar Styling */
         .sidebar {
             width: 320px;
             flex-shrink: 0;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             height: 100vh;
             overflow-y: auto;
-            overflow-x: hidden;
-            background: rgba(244, 241, 230, 0.98);
-            border-right: 1px solid #cfc4a4;
-            padding: 20px 0 40px;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
-            scrollbar-width: thin;
-            scrollbar-color: #c9b99a transparent;
-            z-index: 100;
+            padding: 30px 0;
+            z-index: 1000;
+            transition: var(--transition);
         }
+        .sidebar.collapsed { width: 80px; }
 
-        .sidebar.collapsed {
-            width: 70px;
-        }
-
-        /* Sidebar toggle button */
+        .sidebar-zh-title { font-family: 'Noto Serif TC', serif; font-size: 24px; color: var(--text-main); padding: 0 25px; margin-bottom: 5px; }
+        .sidebar-sub { padding: 0 25px; color: var(--accent-gold); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
+        
         .sidebar-toggle {
-            position: absolute;
-            right: 10px;
-            top: 20px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #2c3e50;
-            padding: 8px;
-            border-radius: 50%;
-            transition: background 0.2s, transform 0.4s;
-            z-index: 110;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: absolute; right: 15px; top: 25px; background: none; border: none; cursor: pointer; color: var(--text-main);
+            transition: var(--transition);
         }
+        .sidebar.collapsed .sidebar-toggle { transform: rotate(180deg); right: 50%; translate: 50% 0; }
 
-        .sidebar-toggle:hover {
-            background: rgba(44, 62, 80, 0.08);
-        }
-
-        .sidebar.collapsed .sidebar-toggle {
-            right: 50%;
-            transform: translateX(50%) rotate(180deg);
-        }
-
-        /* Decorative watermark character */
-        .sidebar::before {
-            content: '錄';
-            position: absolute;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 140px;
-            color: rgba(44,62,80,0.04);
-            pointer-events: none;
-            line-height: 1;
-            user-select: none;
-        }
-
-        .sidebar-title-block {
-            padding: 0 20px 22px;
-            border-bottom: 1px solid #cfc4a4;
-            margin-bottom: 20px;
-        }
-
-        .sidebar-zh-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #2c3e50;
-            letter-spacing: 0.05em;
-            line-height: 1.3;
-        }
-
-        .sidebar-sub {
-            font-size: 11px;
-            color: #a89878;
-            margin-top: 6px;
-            letter-spacing: 0.04em;
-            line-height: 1.5;
-        }
-
-        .sidebar-section-label {
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #b0a080;
-            padding: 0 20px 10px;
-        }
-
-        /* Period nav items */
-        .period-nav-list {
-            list-style: none;
-            margin: 0 0 22px;
-            padding: 0;
-        }
-
-        .period-nav-list li button {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            padding: 9px 20px 9px 17px;
-            border: none;
-            border-left: 3px solid transparent;
-            background: transparent;
-            cursor: pointer;
-            text-align: left;
-            font-family: Georgia, serif;
-            transition: background 0.15s, border-color 0.15s;
-        }
-
-        .period-nav-list li button:hover {
-            background: rgba(44,62,80,0.06);
-        }
-
-        .period-nav-list li button.active {
-            background: rgba(44,62,80,0.09);
-            border-left-color: var(--pc, #2c3e50);
-        }
-
-        .nav-year {
-            font-size: 14px;
-            font-weight: bold;
-            color: #2c3e50;
-            line-height: 1.2;
-            white-space: nowrap;
-        }
-
-        .nav-event {
-            font-size: 11px;
-            color: #9a8c70;
-            margin-top: 2px;
-            white-space: nowrap;
-        }
-
-        /* Hide text when collapsed */
-        .sidebar.collapsed .sidebar-title-block,
-        .sidebar.collapsed .sidebar-section-label,
-        .sidebar.collapsed .nav-year,
-        .sidebar.collapsed .nav-event,
-        .sidebar.collapsed .theme-grid,
-        .sidebar.collapsed .sidebar-divider {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.2s;
-        }
-
-        .sidebar.collapsed .sidebar-zh-title {
-            display: none;
-        }
-
-        /* Search Bar Styles */
-        .search-container {
-            padding: 0 16px 20px;
-            margin-top: 10px;
-            transition: opacity 0.2s;
-        }
-
-        .sidebar.collapsed .search-container {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .search-input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
+        .search-container { padding: 0 25px 25px; }
         .search-input {
-            width: 100%;
-            padding: 10px 12px 10px 35px;
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid #cfc4a4;
-            border-radius: 20px;
-            font-size: 13px;
-            outline: none;
-            transition: all 0.2s;
-            font-family: inherit;
+            width: 100%; padding: 12px 15px 12px 40px; border-radius: 25px; border: 1px solid var(--border-color);
+            background: white; font-size: 14px; transition: var(--transition);
         }
+        .search-input:focus { border-color: var(--accent-gold); box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.1); }
 
-        .search-input:focus {
-            background: #fff;
-            border-color: #2c3e50;
-            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.05);
-        }
+        .sidebar-section-label { padding: 0 25px 10px; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        .search-icon {
-            position: absolute;
-            left: 12px;
-            color: #a89878;
-        }
-
-        .sidebar-divider {
-            height: 1px;
-            background: #cfc4a4;
-            margin: 0 20px 18px;
-        }
-
-        /* Theme pills grid */
-        .theme-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            padding: 0 16px;
-        }
-
+        .theme-grid { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 25px; margin-bottom: 25px; }
         .pill {
-            padding: 6px 14px;
-            border-radius: 14px;
-            border: 1.5px solid var(--c, #888);
-            background: transparent;
-            color: var(--c, #888);
-            cursor: pointer;
-            font-size: 14px;
-            font-family: Georgia, serif;
-            transition: all 0.15s;
+            padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--c); background: transparent; color: var(--c);
+            font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition);
         }
+        .pill.active { background: var(--c); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        .pill:hover { background: color-mix(in srgb, var(--c, #888) 12%, transparent); }
-
-        .pill.active {
-            background: var(--c, #888);
-            color: #fff;
+        .period-nav-list { list-style: none; padding: 0; margin-bottom: 30px; }
+        .period-nav-list li button {
+            width: 100%; padding: 12px 25px; border: none; background: transparent; text-align: left; cursor: pointer;
+            transition: var(--transition); border-left: 4px solid transparent;
         }
+        .period-nav-list li button.active { background: rgba(201, 162, 39, 0.08); border-left-color: var(--pc); }
+        .nav-year { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; display: block; }
+        .nav-event { font-size: 11px; color: var(--text-muted); }
 
-        /* ══════════════════════════════════════
-           MAIN CONTENT
-        ══════════════════════════════════════ */
-        .main-area {
-            flex: 1;
-            min-width: 0;
-            padding: 36px 48px 60px;
-            background: rgba(255,255,255,0.72);
-            border-right: 1px solid #e4ddd0;
-        }
+        /* Main Area */
+        .main-area { flex: 1; padding: 60px 80px; max-width: 1000px; margin: 0 auto; min-width: 0; }
+        
+        .period-section { animation: fadeIn 0.6s ease-out; margin-bottom: 60px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Page header */
-        .page-header {
-            margin-bottom: 28px;
-            padding-bottom: 22px;
-            border-bottom: 1px solid #e4ddd0;
-        }
+        .period-year-large { font-family: 'Playfair Display', serif; font-size: 64px; color: var(--period-color); line-height: 1; margin-bottom: 10px; opacity: 0.9; }
+        .period-event-name { font-size: 28px; font-weight: 700; color: var(--text-main); margin-bottom: 10px; }
+        .period-subtitle { font-size: 15px; color: var(--text-muted); font-style: italic; margin-bottom: 40px; }
 
-        .page-header h1 {
-            margin-bottom: 4px;
-        }
-
-        .page-subtitle {
-            color: #aaa;
-            font-size: 14px;
-            font-style: italic;
-        }
-
-        /* Intro box */
-        .intro-box {
-            background: rgba(44,62,80,0.03);
-            border-radius: 8px;
-            padding: 24px 30px;
-            margin-bottom: 40px;
-            border: 1px solid #d8cfbb;
-            font-size: 20px;
-            line-height: 1.9;
-        }
-
-        .intro-box p { margin-bottom: 8px; }
-        .intro-box p:last-child { margin-bottom: 0; }
-
-        /* Period sections */
-        .period-section {
-            margin: 42px 0;
-            padding-left: 22px;
-            border-left: 4px solid var(--period-color, #b5a07a);
-        }
-
-        .period-section-header {
-            margin-bottom: 14px;
-        }
-
-        .period-year-large {
-            font-size: 38px;
-            font-weight: bold;
-            color: var(--period-color, #2c3e50);
-            line-height: 1;
-            letter-spacing: -0.01em;
-        }
-
-        .period-event-name {
-            font-size: 17px;
-            color: #2c3e50;
-            font-weight: bold;
-            margin-top: 2px;
-        }
-
-        .period-vol-label {
-            font-size: 12px;
-            color: #bbb;
-            margin-top: 3px;
-        }
-
-        .period-subtitle {
-            font-size: 13.5px;
-            color: #999;
-            font-style: italic;
-            margin-top: 6px;
-            line-height: 1.5;
-        }
-
-        /* Entry cards */
         .sillok-entry {
-            margin: 14px 0;
-            background: rgba(255,255,255,0.7);
-            border-radius: 8px;
-            padding: 16px 20px 14px;
-            border: 1px solid #e4ddd0;
-            border-left: 3px solid var(--entry-color, #c9b99a);
-            transition: box-shadow 0.18s;
-        }
-
-        .sillok-entry:hover {
-            box-shadow: 0 3px 16px rgba(0,0,0,0.07);
-        }
-
-        .sillok-entry.hidden { display: none; }
-
-        .entry-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 9px;
-            gap: 10px;
-        }
-
-        .entry-date {
-            font-size: 13px;
-            color: #9a8c76;
-            flex: 1;
-            line-height: 1.4;
-        }
-
-        .entry-tags {
-            display: flex;
-            gap: 4px;
-            flex-shrink: 0;
-        }
-
-        .tag {
-            font-size: 10.5px;
-            padding: 2px 7px;
-            border-radius: 8px;
-            background: color-mix(in srgb, var(--c, #888) 13%, transparent);
-            color: var(--c, #666);
-            border: 1px solid color-mix(in srgb, var(--c, #888) 30%, transparent);
-        }
-
-        .entry-text {
-            font-size: 24px;
-            line-height: 1.8;
-            color: #1a2a3a;
-            font-family: "Noto Serif SC", "Songti SC", serif;
-        }
-
-        .entry-note {
-            font-size: 15px;
-            color: #7a6c55;
-            margin-top: 15px;
-            font-style: italic;
-            line-height: 1.7;
-            border-top: 1px solid #ede7da;
-            padding-top: 12px;
-        }
-        
-        .entry-note::before {
-            content: "[AI Summary] ";
-            font-weight: bold;
-            color: #c9b99a;
-        }
-
-        /* Translation Toggle Styles */
-        .translation-toggle {
-            margin-top: 15px;
-            font-size: 15px;
-            border-top: 1px dashed #ede7da;
-            padding-top: 10px;
-        }
-
-        .translation-toggle summary {
-            cursor: pointer;
-            color: #2c3e50;
-            font-weight: bold;
-            outline: none;
-            user-select: none;
-            display: inline-block;
-            transition: color 0.2s;
-            list-style: none; /* Hide default arrow in some browsers */
-        }
-        
-        .translation-toggle summary::after {
-            content: " (Powered by Gemini 3.1 Pro AI)";
-            font-size: 13px;
-            font-weight: normal;
-            color: #888;
-            margin-left: 6px;
-        }
-        
-        .translation-toggle summary::-webkit-details-marker {
-            display: none; /* Hide default arrow in webkit */
-        }
-
-        .translation-toggle summary::before {
-            content: "▶";
-            display: inline-block;
-            margin-right: 6px;
-            font-size: 12px;
-            color: #7a6c55;
-            transition: transform 0.2s;
-        }
-
-        .translation-toggle[open] summary::before {
-            transform: rotate(90deg);
-        }
-
-        .translation-toggle summary:hover {
-            color: #e67e22;
-        }
-
-        .translation-text {
-            margin-top: 10px;
-            padding: 12px 18px;
-            background-color: #faf9f6;
-            border-left: 3px solid #cfc4a4;
-            color: #444;
-            line-height: 1.7;
-            border-radius: 0 4px 4px 0;
-            font-family: Georgia, 'Times New Roman', serif;
-        }
-
-        /* Pagination Styles */
-        .pagination-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 40px;
-            padding-top: 25px;
-            border-top: 1px dashed #cfc4a4;
-        }
-
-        .page-nav-btn {
-            background: #fff;
-            border: 1px solid #cfc4a4;
-            color: #2c3e50;
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.2s;
-        }
-        .page-nav-btn:hover:not(:disabled) {
-            background: #fdfaf3;
-            border-color: #a4916a;
-        }
-        .page-nav-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .page-numbers {
-            display: flex;
-            gap: 5px;
-        }
-
-        .page-num-btn {
-            background: #fff;
-            border: 1px solid #cfc4a4;
-            color: #2c3e50;
-            width: 32px;
-            height: 32px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-        .page-num-btn:hover {
-            background: #fdfaf3;
-        }
-        .page-num-btn.active {
-            background: #2c3e50;
-            color: #fff;
-            border-color: #2c3e50;
-        }
-
-        /* No results */
-        .no-results {
-            display: none;
-            text-align: center;
-            padding: 60px 20px;
-            color: #ccc;
-            font-style: italic;
-            font-size: 16px;
-        }
-
-        /* Section separator ornament */
-        .section-sep {
-            text-align: center;
-            color: #cfc4a4;
-            font-size: 16px;
-            margin: 36px 0 0;
-            letter-spacing: 0.3em;
-            user-select: none;
-        }
-
-        /* Source footer */
-        .source-footer {
-            margin-top: 50px;
             padding: 14px 20px;
             background: rgba(44,62,80,0.03);
             border-radius: 8px;
@@ -794,10 +282,10 @@
 <div class="entry-date">仁祖三年 正月 丁丑日 · 賀冊禮成</div>
 <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
 </div>
-<div class="entry-text">丁丑上御隆政殿，受群臣賀，蓋賀王世子冊禮成也。左議政尹昉等率百官進箋，卽日宣教大赦。上下教曰：“世子師傅吳允謙、鄭曄、鄭經世及百官加親授。李廷龜族屬中六品遷轉。”廷龜已至輔國階，故有是命。師傅，元子時師傅也。</div>
+<div class="entry-text">丁丑上御隆政殿，受群臣賀，蓋賀王世子冊禮成也。左議政尹昉等率百官進箋，卽日宣教大赦。上下教曰："世子師傅吳允謙、鄭曄、鄭經世及百官加親授。李廷龜族屬中六品遷轉。"廷龜已至輔國階，故有是命。師傅，元子時師傅也。</div>
 <details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class="translation-text">丁丑日，君王駕臨隆政殿，接受群臣的祝賀，這是為了祝賀王世子的冊封典禮完成。左議政尹昉等人率領百官呈上賀箋，當天頒布教旨大赦天下。君王下達教旨說：“世子的師傅吳允謙、鄭曄、鄭經世以及百官，都給予親自授職的恩典。李廷龜的家族親屬中，六品官員予以升遷。”李廷龜已經達到了輔國的品階，所以有這樣的命令。這裡的師傅，是指世子還是元子時期的師傅。</div>
+<div class="translation-text">丁丑日，君王駕臨隆政殿，接受群臣的祝賀，這是為了祝賀王世子的冊封典禮完成。左議政尹昉等人率領百官呈上賀箋，當天頒布教旨大赦天下。君王下達教旨說："世子的師傅吳允謙、鄭曄、鄭經世以及百官，都給予親自授職的恩典。李廷龜的家族親屬中，六品官員予以升遷。"李廷龜已經達到了輔國的品階，所以有這樣的命令。這裡的師傅，是指世子還是元子時期的師傅。</div>
 </details>
 <div class="entry-note">The King received congratulations for the completion of the Crown Prince's investiture ceremony.</div>
 </div>
@@ -806,8 +294,8 @@
 <div class="entry-date">仁祖三年 正月 乙未日 · 憲府及持平金堉啓</div>
 <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
 </div>
-<div class="entry-text">憲府啓曰：“春坊之官，極一時之選，居講筵者，固無踰於鄭百昌。今世子富於春秋，師道在嚴，前日筵臣之陳啓者，有意存焉，請遞鄭百昌兼輔德之任。”答曰：“鄭百昌固不合於講官。爾等所謂有意存焉者，是誠何心也？予不識爾等之意，故不卽允從，大抵臺官，不當如是碌碌也。”
-○乙未持平金堉啓曰：“昨論鄭百昌之事者，非有他意，只為百昌親暱於世子，而世子富於春秋，殿下之所以教導者，當示以至公無私之道。豈無他人，而使百昌兼任，使世子習知親私之可親、疏遠之可疏哉？且親私則不嚴，疏遠則生敬，開講之際，損益可知也。不然則以百昌名望，出入三司，踐歷華貫，其誰曰不可於此也。頃日筵臣之陳啓者，亦有見乎此，其意實在防微之遠慮，而未浹數旬，旋入講院。故臣發言於僚席，請遞其任，而措語之際，未能明白。殿下之不卽允從，出於不識其意而然也。反示未安之意，折之以碌碌之教者何哉？殿下之輕蔑臺臣，厭聞忠言，不啻詑詑之色，雖有古之遺直，孰肯為殿下盡言哉？緣臣措語之失，致有聖德之累，臣之罪戾，誠出自作，決不可仍冒，請罷斥臣職。”大司憲洪瑞鳳、掌令尹衡彥·李如璜亦以此引避，玉堂處置請出。</div>
+<div class="entry-text">憲府啓曰："春坊之官，極一時之選，居講筵者，固無踰於鄭百昌。今世子富於春秋，師道在嚴，前日筵臣之陳啓者，有意存焉，請遞鄭百昌兼輔德之任。"答曰："鄭百昌固不合於講官。爾等所謂有意存焉者，是誠何心也？予不識爾等之意，故不卽允從，大抵臺官，不當如是碌碌也。"
+○乙未持平金堉啓曰："昨論鄭百昌之事者，非有他意，只為百昌親暱於世子，而世子富於春秋，殿下之所以教導者，當示以至公無私之道。豈無他人，而使百昌兼任，使世子習知親私之可親、疏遠之可疏哉？且親私則不嚴，疏遠則生敬，開講之際，損益可知也。不然則以百昌名望，出入三司，踐歷華貫，其誰曰不可於此也。頃日筵臣之陳啓者，亦有見乎此，其意實在防微之遠慮，而未浹數旬，旋入講院。故臣發言於僚席，請遞其任，而措語之際，未能明白。殿下之不卽允從，出於不識其意而然也。反示未安之意，折之以碌碌之教者何哉？殿下之輕蔑臺臣，厭聞忠言，不啻詑詑之色，雖有古之遺直，孰肯為殿下盡言哉？緣臣措語之失，致有聖德之累，臣之罪戾，誠出自作，決不可仍冒，請罷斥臣職。"大司憲洪瑞鳳、掌令尹衡彥·李如璜亦以此引避，玉堂處置請出。</div>
 <details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
 <div class="translation-text">司憲府上奏請求免去鄭百昌兼任輔德的職務。君王拒絕並指責言官平庸無能。持平金堉進一步進言，強調教導世子應大公無私，避免過於親近。大司憲洪瑞鳳等人也紛紛請求辭職。</div>
@@ -819,7 +307,7 @@
 <div class="entry-date">仁祖三年 正月 丁未日 · 禮曹 啓</div>
 <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
 </div>
-<div class="entry-text">丁未禮曹啓曰：“王世子冊封事，當據例奏請，別遣使臣，或順付於謝恩使、或冬至·聖節使，議大臣以定何如？”答曰：“世子冊封，據例奏請，未為不可。但兩天使纔過，而繼有詔使之行，則赤立之民，決難支堪，徐待後日，更觀民力而處之可也。”</div>
+<div class="entry-text">丁未禮曹啓曰："王世子冊封事，當據例奏請，別遣使臣，或順付於謝恩使、或冬至·聖節使，議大臣以定何如？"答曰："世子冊封，據例奏請，未為不可。但兩天使纔過，而繼有詔使之行，則赤立之民，決難支堪，徐待後日，更觀民力而處之可也。"</div>
 <details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
 <div class="translation-text">禮曹建議派使臣去大明奏請冊封世子。君王因擔心連年接待使臣會加重百姓負擔而推遲。</div>
@@ -831,7 +319,7 @@
 <div class="entry-date">仁祖三年 · 領事 尹昉 啓</div>
 <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span><span class="tag" style="--c:#1a5276">外交</span></div>
 </div>
-<div class="entry-text">領事尹昉曰：“臣再侍王世子於冊禮之後，則世子岐嶷夙成，講學之際，深解旨義，誠一國臣民之慶、祖宗社稷之福也。冊封奏請，不可遲緩，臣等欲付謝恩使之行，自上以民弊為慮，不卽允從。臣等之意，不如從速奏聞。”上曰：“此非急急之事，今番接待詔使，亦恐民力之難堪。況年年酬應詔使，則何以為國乎？姑待後日。”</div>
+<div class="entry-text">領事尹昉曰："臣再侍王世子於冊禮之後，則世子岐嶷夙成，講學之際，深解旨義，誠一國臣民之慶、祖宗社稷之福也。冊封奏請，不可遲緩，臣等欲付謝恩使之行，自上以民弊為慮，不卽允從。臣等之意，不如從速奏聞。"上曰："此非急急之事，今番接待詔使，亦恐民力之難堪。況年年酬應詔使，則何以為國乎？姑待後日。"</div>
 <details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
 <div class="translation-text">尹昉稱讚世子聰穎，建議儘快向大明奏報。君王再次強調民力難堪，決定緩辦。</div>
@@ -874,294 +362,294 @@
 </details>
 <div class="entry-note">The Crown Prince warmly greeted his tutor Li Wonyik upon the latter's return to service, and Li Wonyik urged diligent study.</div>
 </div>
-</div><div class="section-sep" style="display: none;">· · ·</div><div class=”period-section” data-period=”1626” style=”--period-color:#ca6f1e; display: none;”>
-<div class=”period-section-header”>
-<div class=”period-year-large”>1626</div>
-<div class=”period-event-name”>服制 · 保傅 · 明使</div>
-<div class=”period-vol-label”>仁祖四年</div>
-<div class=”period-subtitle”>Mourning attire debates, Crown Prince’s education, and Ming envoy reception</div>
+</div><div class="section-sep" style="display: none;">· · ·</div><div class="period-section" data-period="1626" style="--period-color:#ca6f1e; display: none;">
+<div class="period-section-header">
+<div class="period-year-large">1626</div>
+<div class="period-event-name">服制 · 保傅 · 明使</div>
+<div class="period-vol-label">仁祖四年</div>
+<div class="period-subtitle">Mourning attire debates, Crown Prince's education, and Ming envoy reception</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”論議” style=”--entry-color:#566573”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 卷十一 戊戌日 · 侍講院 啓 (停講後開筵)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#566573”>論議</span></div>
+<div class="sillok-entry" data-persons="" data-themes="論議" style="--entry-color:#566573">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 卷十一 戊戌日 · 侍講院 啓 (停講後開筵)</div>
+<div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
 </div>
-<div class=”entry-text”>戊戌侍講院啓曰：”王世子以侍病，自歲前停講，終值大慼，迄未開筵。沖年講學，寸陰可惜，而廢講之久，殆至三箇月，事極可悶。揆以《禮經》，未葬讀喪禮之義，則卒哭前專廢講業，似未妥當。會講、朝講，雖不可爲，常時開筵，不可久停，而前受《大學》、《小學》，實與《禮經》無異。來月爲始，開筵何如？師傅之意如此，敢啓。”從之。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">戊戌侍講院啓曰："王世子以侍病，自歲前停講，終值大慼，迄未開筵。沖年講學，寸陰可惜，而廢講之久，殆至三箇月，事極可悶。揆以《禮經》，未葬讀喪禮之義，則卒哭前專廢講業，似未妥當。會講、朝講，雖不可爲，常時開筵，不可久停，而前受《大學》、《小學》，實與《禮經》無異。來月爲始，開筵何如？師傅之意如此，敢啓。"從之。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>侍講院啓奏，世子因侍疾停講，至今已近三月未開講筵，沖年講學寸陰可惜。依《禮經》未葬之義，卒哭前廢講似未妥當，請於來月恢復開筵。君王從之。</div>
+<div class="translation-text">侍講院啓奏，世子因侍疾停講，至今已近三月未開講筵，沖年講學寸陰可惜。依《禮經》未葬之義，卒哭前廢講似未妥當，請於來月恢復開筵。君王從之。</div>
 </details>
-<div class=”entry-note”>The Royal Tutorial Office requested resumption of lectures for the Prince, arguing that the three-month suspension during mourning was excessive given his young age and scholarly needs.</div>
+<div class="entry-note">The Royal Tutorial Office requested resumption of lectures for the Prince, arguing that the three-month suspension during mourning was excessive given his young age and scholarly needs.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”服制” style=”--entry-color:#6c3483”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 庚子日 · 下教 (世子服色)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#6c3483”>服制</span></div>
+<div class="sillok-entry" data-persons="" data-themes="服制" style="--entry-color:#6c3483">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 庚子日 · 下教 (世子服色)</div>
+<div class="entry-tags"><span class="tag" style="--c:#6c3483">服制</span></div>
 </div>
-<div class=”entry-text”>庚子下教曰：”世子服色，卒哭前以白袍磨鍊，今以淺淡服磨鍊，何前後不同如是耶？内官以下及講官變服，亦無是理，此單子還爲出給，使之改磨鍊。”</div>
-<details class=”translation-toggle”>
+<div class="entry-text">庚子下教曰："世子服色，卒哭前以白袍磨鍊，今以淺淡服磨鍊，何前後不同如是耶？内官以下及講官變服，亦無是理，此單子還爲出給，使之改磨鍊。"</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>庚子日下教，批評世子服色前後不一：卒哭前定為白袍，現改為淺淡服，命將文書發回重新釐定。</div>
+<div class="translation-text">庚子日下教，批評世子服色前後不一：卒哭前定為白袍，現改為淺淡服，命將文書發回重新釐定。</div>
 </details>
-<div class=”entry-note”>The King rebuked inconsistent rulings on the Crown Prince’s mourning attire, ordering the documents reissued with uniform instructions.</div>
+<div class="entry-note">The King rebuked inconsistent rulings on the Crown Prince's mourning attire, ordering the documents reissued with uniform instructions.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”服制” style=”--entry-color:#6c3483”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 · 禮曹 啓 (世子服色議)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#6c3483”>服制</span></div>
+<div class="sillok-entry" data-persons="" data-themes="服制" style="--entry-color:#6c3483">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 · 禮曹 啓 (世子服色議)</div>
+<div class="entry-tags"><span class="tag" style="--c:#6c3483">服制</span></div>
 </div>
-<div class=”entry-text”>禮曹啓曰：”王世子之服，初喪雖以不杖期磨鍊，而《五禮儀》服制條：’殿下及王世子，無期年服’云。此蓋《禮經》所謂期喪絶於諸侯之意，而王世子名位已定，喪制降殺之節，當與殿下一體故也。殿下之期服，則自三年降，雖不可又降，王世子之服，則似當有降。臣等久欲仰稟定奪，而成服之後，不敢追請矣。殿下之服杖期，實非正禮，而迫於至情，寧失於厚。王世子之服，擬此不降，亦或一道，故欲於卒哭後，變除之節啓請，次次稍降服色矣。王世子卒哭前進見時，雖以白衣、黑角帶，而書筵之服，則當初不爲磨鍊。王世子書筵，卽自上視事也。自上卒哭前視事，服旣以白袍，則王世子書筵之服，當降爲淺淡服矣。至於内官以下之服，大殿、中宮殿内官以下，則雖當從服，王世子所屬内官以下，則初喪遑遑中，泛然一樣磨鍊，而卒哭後，當啓請變降，故今於書筵時，王世子旣服淺淡服，陪從之官，當從王世子之服，故如是磨鍊矣。然臣等不敢擅便，議大臣定奪何如？”答曰：”《五禮儀》爲外祖父母、王妃父母之喪，有擧哀、進衰服之文。以此觀之，則其不載變禮明矣。予本無知識，未知啓辭之意，出於何經，以淺見論之，則世子之服，似當有降之説，似乎無據矣。今此書筵，實涉未安，而出於不得已也。期服，服之重者，卒哭前服淺淡服，不亦未安乎？若以白袍爲不可，則姑停書筵可矣。”</div>
-<details class=”translation-toggle”>
+<div class="entry-text">禮曹啓曰："王世子之服，初喪雖以不杖期磨鍊，而《五禮儀》服制條：'殿下及王世子，無期年服'云。此蓋《禮經》所謂期喪絶於諸侯之意，而王世子名位已定，喪制降殺之節，當與殿下一體故也。殿下之期服，則自三年降，雖不可又降，王世子之服，則似當有降。臣等久欲仰稟定奪，而成服之後，不敢追請矣。殿下之服杖期，實非正禮，而迫於至情，寧失於厚。王世子之服，擬此不降，亦或一道，故欲於卒哭後，變除之節啓請，次次稍降服色矣。王世子卒哭前進見時，雖以白衣、黑角帶，而書筵之服，則當初不爲磨鍊。王世子書筵，卽自上視事也。自上卒哭前視事，服旣以白袍，則王世子書筵之服，當降爲淺淡服矣。至於内官以下之服，大殿、中宮殿内官以下，則雖當從服，王世子所屬内官以下，則初喪遑遑中，泛然一樣磨鍊，而卒哭後，當啓請變降，故今於書筵時，王世子旣服淺淡服，陪從之官，當從王世子之服，故如是磨鍊矣。然臣等不敢擅便，議大臣定奪何如？"答曰："《五禮儀》爲外祖父母、王妃父母之喪，有擧哀、進衰服之文。以此觀之，則其不載變禮明矣。予本無知識，未知啓辭之意，出於何經，以淺見論之，則世子之服，似當有降之説，似乎無據矣。今此書筵，實涉未安，而出於不得已也。期服，服之重者，卒哭前服淺淡服，不亦未安乎？若以白袍爲不可，則姑停書筵可矣。"</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>禮曹就王世子喪服問題詳加議論，援引《五禮儀》「殿下及王世子無期年服」之文，認為世子之服應有所降殺。君王則認為期服較重，卒哭前即服淺淡服似有未安，若不可用白袍，則姑停書筵。</div>
+<div class="translation-text">禮曹就王世子喪服問題詳加議論，援引《五禮儀》「殿下及王世子無期年服」之文，認為世子之服應有所降殺。君王則認為期服較重，卒哭前即服淺淡服似有未安，若不可用白袍，則姑停書筵。</div>
 </details>
-<div class=”entry-note”>An extensive exchange on the proper mourning attire for the Crown Prince during tutorial sessions, with the Ministry of Rites citing Korean and Ming precedents for a lighter grade.</div>
+<div class="entry-note">An extensive exchange on the proper mourning attire for the Crown Prince during tutorial sessions, with the Ministry of Rites citing Korean and Ming precedents for a lighter grade.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”服制” style=”--entry-color:#6c3483”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 卷十二 · 大臣 回覆 (書筵服色)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#6c3483”>服制</span></div>
+<div class="sillok-entry" data-persons="" data-themes="服制" style="--entry-color:#6c3483">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 卷十二 · 大臣 回覆 (書筵服色)</div>
+<div class="entry-tags"><span class="tag" style="--c:#6c3483">服制</span></div>
 </div>
-<div class=”entry-text”>至於書筵服色，欲以淺淡者，《五禮儀》：”殿下及王世子爲外祖父母服，麤布帶五日而除，王世子以下之喪，只擧哀而無服。”此卽《禮經》所謂諸侯絶期之意，而王世子名位一樣故也。帝王服制，本與士大夫不同。况莫重者，三年之喪，而殿下猶且爲宗統，而降服，則王世子之服，亦安得不降於變除之節乎？王世子之期服，與殿下之期服，自有輕重。殿下卒哭前視事，旣以白袍，則王世子書筵、視事，當用淺淡服，卒哭後服色，亦當次次稍降。適因下問，敢陳曲折，非敢以己意斷定，而措語未瑩，不能達意。伏承聖教，惶隕戰灼。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">至於書筵服色，欲以淺淡者，《五禮儀》："殿下及王世子爲外祖父母服，麤布帶五日而除，王世子以下之喪，只擧哀而無服。"此卽《禮經》所謂諸侯絶期之意，而王世子名位一樣故也。帝王服制，本與士大夫不同。况莫重者，三年之喪，而殿下猶且爲宗統，而降服，則王世子之服，亦安得不降於變除之節乎？王世子之期服，與殿下之期服，自有輕重。殿下卒哭前視事，旣以白袍，則王世子書筵、視事，當用淺淡服，卒哭後服色，亦當次次稍降。適因下問，敢陳曲折，非敢以己意斷定，而措語未瑩，不能達意。伏承聖教，惶隕戰灼。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>大臣援引《五禮儀》，指出帝王服制與士大夫不同，諸侯絶期乃禮經本義，世子之期服與殿下自有輕重，應用淺淡服，卒哭後次第稍降。</div>
+<div class="translation-text">大臣援引《五禮儀》，指出帝王服制與士大夫不同，諸侯絶期乃禮經本義，世子之期服與殿下自有輕重，應用淺淡服，卒哭後次第稍降。</div>
 </details>
-<div class=”entry-note”>A minister elaborated the rationale for lighter mourning attire for the Crown Prince, citing imperial precedent and the hierarchy of mourning grades.</div>
+<div class="entry-note">A minister elaborated the rationale for lighter mourning attire for the Crown Prince, citing imperial precedent and the hierarchy of mourning grades.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”服制” style=”--entry-color:#6c3483”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 辛亥日 · 諫院 啓 (書筵服色)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#6c3483”>服制</span></div>
+<div class="sillok-entry" data-persons="" data-themes="服制" style="--entry-color:#6c3483">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 辛亥日 · 諫院 啓 (書筵服色)</div>
+<div class="entry-tags"><span class="tag" style="--c:#6c3483">服制</span></div>
 </div>
-<div class=”entry-text”>辛亥諫院啓曰：”王世子書筵服色，該曹以淺淡服稟定，而自上以爲不可，至降嚴教，臣等未曉聖意之所在也。世子本服，只是期喪。常時士大夫之期服者，惟在喪次時，着衰服，宴居出入，則布帶素衣，至於公會，則純用吉服。况帝王家持服之制，自與臣庶不同，而世子之開筵臨講，猶殿下之視事也。殿下視事之服，尚用白袍，則世子書筵服色，自當與進見時有間。然則該曹所定淺淡服，有或過而無或不及也。沖年講學，一日爲急，請依該曹所定，以淺淡服，從速開筵，卒哭後更令該曹，次第磨鍊。”答曰：”世子之服，雖是期喪，方在喪側，用淺淡服，似乎未安矣。”連啓，乃從之。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">辛亥諫院啓曰："王世子書筵服色，該曹以淺淡服稟定，而自上以爲不可，至降嚴教，臣等未曉聖意之所在也。世子本服，只是期喪。常時士大夫之期服者，惟在喪次時，着衰服，宴居出入，則布帶素衣，至於公會，則純用吉服。况帝王家持服之制，自與臣庶不同，而世子之開筵臨講，猶殿下之視事也。殿下視事之服，尚用白袍，則世子書筵服色，自當與進見時有間。然則該曹所定淺淡服，有或過而無或不及也。沖年講學，一日爲急，請依該曹所定，以淺淡服，從速開筵，卒哭後更令該曹，次第磨鍊。"答曰："世子之服，雖是期喪，方在喪側，用淺淡服，似乎未安矣。"連啓，乃從之。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>諫院再度啓奏書筵服色問題，指出帝王持服之制不同於臣庶，世子開筵如同殿下視事，應穿淺淡服。君王起初以未安為由拒絕，但在連啓後從之。</div>
+<div class="translation-text">諫院再度啓奏書筵服色問題，指出帝王持服之制不同於臣庶，世子開筵如同殿下視事，應穿淺淡服。君王起初以未安為由拒絕，但在連啓後從之。</div>
 </details>
-<div class=”entry-note”>The Office of Remonstrance repeatedly petitioned for the Crown Prince to wear lighter attire at tutorials; the King initially refused but ultimately acquiesced.</div>
+<div class="entry-note">The Office of Remonstrance repeatedly petitioned for the Crown Prince to wear lighter attire at tutorials; the King initially refused but ultimately acquiesced.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”外交” style=”--entry-color:#1a5276”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 甲子日 · 禮曹 啓 (天使入京接見)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#1a5276”>外交</span></div>
+<div class="sillok-entry" data-persons="" data-themes="外交" style="--entry-color:#1a5276">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 甲子日 · 禮曹 啓 (天使入京接見)</div>
+<div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
 </div>
-<div class=”entry-text”>甲子禮曹啓曰：”天使入京，則王世子似當有接見之禮，儀注節目，令該曹講定矣。王世子受册命於天朝之後，則迎詔及宴享，俱當出參，又當有别行請宴之禮矣。今則時未受册於天朝，似難依例接見，但天使若或聞知而請見，則不可不見，冠服及服色，議大臣，預爲講定宜當。”答曰：”知道。”</div>
-<details class=”translation-toggle”>
+<div class="entry-text">甲子禮曹啓曰："天使入京，則王世子似當有接見之禮，儀注節目，令該曹講定矣。王世子受册命於天朝之後，則迎詔及宴享，俱當出參，又當有别行請宴之禮矣。今則時未受册於天朝，似難依例接見，但天使若或聞知而請見，則不可不見，冠服及服色，議大臣，預爲講定宜當。"答曰："知道。"</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>禮曹奏報，大明天使入京，需預先議定世子接見之禮。世子尚未受天朝冊命，依例難以正式接見，但若天使請見，仍不可不見，請預先議定冠服。君王知道。</div>
+<div class="translation-text">禮曹奏報，大明天使入京，需預先議定世子接見之禮。世子尚未受天朝冊命，依例難以正式接見，但若天使請見，仍不可不見，請預先議定冠服。君王知道。</div>
 </details>
-<div class=”entry-note”>The Ministry of Rites raised the procedural question of whether the Crown Prince, not yet officially invested by the Ming court, should formally receive the Ming envoy.</div>
+<div class="entry-note">The Ministry of Rites raised the procedural question of whether the Crown Prince, not yet officially invested by the Ming court, should formally receive the Ming envoy.</div>
 </div>
-<div class=”sillok-entry” data-persons=”金瑬” data-themes=”外交” style=”--entry-color:#1a5276”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 · 遠接使 金瑬 馳啓</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#1a5276”>外交</span></div>
+<div class="sillok-entry" data-persons="金瑬" data-themes="外交" style="--entry-color:#1a5276">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 · 遠接使 金瑬 馳啓</div>
+<div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
 </div>
-<div class=”entry-text”>遠接使金瑬馳啓曰：”譯官張禮忠隨問安使見正使，則自上禮單，只點受黃毛筆十枚，餘皆還給，副使亦然。正使則容貌、辭氣，極其端的，副使肥胖嚴峻，性頗苛細云。正使問曰：’國王拜帖，何用藍籤？’禮忠答曰：’國王於本年正月，丁生母憂矣。’正使曰：’是則爾國私喪。今此詔敕，乃聖天子莫大之慶，何其不知禮，如是之甚也？此後藍籤帖子，俺斷不受，爾等可傳語遠接陪臣，後勿如是。’禮忠等答曰：’小邦粗知禮義，國王迎詔敕時，例用吉服，而與老爺相會之時，則方在哀疚之中，當用素服。拜帖用藍籤，亦其禮也。’正使答曰：’俺以不受藍籤之意，說與爾們，明日不須更言’云。”政院請改用紅籤，從之。○夜，坤方、東方，有氣如火光。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">遠接使金瑬馳啓曰："譯官張禮忠隨問安使見正使，則自上禮單，只點受黃毛筆十枚，餘皆還給，副使亦然。正使則容貌、辭氣，極其端的，副使肥胖嚴峻，性頗苛細云。正使問曰：'國王拜帖，何用藍籤？'禮忠答曰：'國王於本年正月，丁生母憂矣。'正使曰：'是則爾國私喪。今此詔敕，乃聖天子莫大之慶，何其不知禮，如是之甚也？此後藍籤帖子，俺斷不受，爾等可傳語遠接陪臣，後勿如是。'禮忠等答曰：'小邦粗知禮義，國王迎詔敕時，例用吉服，而與老爺相會之時，則方在哀疚之中，當用素服。拜帖用藍籤，亦其禮也。'正使答曰：'俺以不受藍籤之意，說與爾們，明日不須更言'云。"政院請改用紅籤，從之。○夜，坤方、東方，有氣如火光。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>遠接使金瑬報告，明朝使臣就朝鮮國王用藍籤拜帖一事表示不滿，認為詔敕乃聖天子莫大之慶，不應用喪禮籤色。朝鮮方面解釋係在哀疚中使用素服禮。政院請改用紅籤，從之。</div>
+<div class="translation-text">遠接使金瑬報告，明朝使臣就朝鮮國王用藍籤拜帖一事表示不滿，認為詔敕乃聖天子莫大之慶，不應用喪禮籤色。朝鮮方面解釋係在哀疚中使用素服禮。政院請改用紅籤，從之。</div>
 </details>
-<div class=”entry-note”>The Ming envoy objected to the blue-bordered mourning documents used by the Korean King, arguing it was improper given the celebratory occasion of an imperial edict.</div>
+<div class="entry-note">The Ming envoy objected to the blue-bordered mourning documents used by the Korean King, arguing it was improper given the celebratory occasion of an imperial edict.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”禮制” style=”--entry-color:#7d6608”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 丁卯日 · 上幸 魂宮 (世子亞獻)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#7d6608”>禮制</span></div>
+<div class="sillok-entry" data-persons="" data-themes="禮制" style="--entry-color:#7d6608">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 丁卯日 · 上幸 魂宮 (世子亞獻)</div>
+<div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
 </div>
-<div class=”entry-text”>丁卯上幸魂宮，行别祭。上行初獻，世子行亞獻。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">丁卯上幸魂宮，行别祭。上行初獻，世子行亞獻。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>丁卯日，君王前往魂宮，行別祭之禮。君王行初獻，世子行亞獻。</div>
+<div class="translation-text">丁卯日，君王前往魂宮，行別祭之禮。君王行初獻，世子行亞獻。</div>
 </details>
-<div class=”entry-note”>The King and Crown Prince jointly performed a special memorial rite at the spirit hall, with the Prince taking the role of second offerer.</div>
+<div class="entry-note">The King and Crown Prince jointly performed a special memorial rite at the spirit hall, with the Prince taking the role of second offerer.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”服制” style=”--entry-color:#6c3483”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 · 禮曹 啓 (卒哭後服色)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#6c3483”>服制</span></div>
+<div class="sillok-entry" data-persons="" data-themes="服制" style="--entry-color:#6c3483">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 · 禮曹 啓 (卒哭後服色)</div>
+<div class="entry-tags"><span class="tag" style="--c:#6c3483">服制</span></div>
 </div>
-<div class=”entry-text”>禮曹啓曰：”卒哭後，王世子進見大妃殿時及書筵時，以無揚赤色黑衣啓下。天使入京日，自上出宮時，王世子當有袛送、袛迎節次。出宮時自上若白袍，則世子當爲淺淡服矣；迎詔還宮時，自上吉服，則世子亦當吉服袛迎。以此磨鍊何如？”從之。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">禮曹啓曰："卒哭後，王世子進見大妃殿時及書筵時，以無揚赤色黑衣啓下。天使入京日，自上出宮時，王世子當有袛送、袛迎節次。出宮時自上若白袍，則世子當爲淺淡服矣；迎詔還宮時，自上吉服，則世子亦當吉服袛迎。以此磨鍊何如？"從之。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>禮曹議定，卒哭後世子進見大妃殿及書筵時，穿無揚赤色黑衣。天使入京當日，出宮時世子穿淺淡服，迎詔還宮時則著吉服。君王從之。</div>
+<div class="translation-text">禮曹議定，卒哭後世子進見大妃殿及書筵時，穿無揚赤色黑衣。天使入京當日，出宮時世子穿淺淡服，迎詔還宮時則著吉服。君王從之。</div>
 </details>
-<div class=”entry-note”>The Ministry of Rites finalized the Crown Prince’s attire for different occasions — lighter mourning for tutorials, formal dress for receiving the Ming envoy.</div>
+<div class="entry-note">The Ministry of Rites finalized the Crown Prince's attire for different occasions — lighter mourning for tutorials, formal dress for receiving the Ming envoy.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”禮制” style=”--entry-color:#7d6608”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 · 禮曹 啓 (正位三年)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#7d6608”>禮制</span></div>
+<div class="sillok-entry" data-persons="" data-themes="禮制" style="--entry-color:#7d6608">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 · 禮曹 啓 (正位三年)</div>
+<div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
 </div>
-<div class=”entry-text”>庚午禮曹啓曰：”王世子正位東宮，今已三年，尚未受冊命於天朝。臣曹據例啓請，而適值兩瑞之行，公私物力掃盡，聖上軫念民生，遂從姑待後年之議，以至於今。竊念莫大應行之典，因此稽遲，豈非未安之甚乎？詔使若問：’既已冊封，而何不奏請？’云，則可以物力為辭乎？今於謝恩使之行，送請封奏文，則此是例典，必無持難之事，請令大臣定奪。”答曰：”啓辭甚是。但如此蕩竭之時，詔使連三年出來，則民力極難支堪。更待後日奏請，勿為重困吾民。”</div>
-<details class=”translation-toggle”>
+<div class="entry-text">庚午禮曹啓曰："王世子正位東宮，今已三年，尚未受冊命於天朝。臣曹據例啓請，而適值兩瑞之行，公私物力掃盡，聖上軫念民生，遂從姑待後年之議，以至於今。竊念莫大應行之典，因此稽遲，豈非未安之甚乎？詔使若問：'既已冊封，而何不奏請？'云，則可以物力為辭乎？今於謝恩使之行，送請封奏文，則此是例典，必無持難之事，請令大臣定奪。"答曰："啓辭甚是。但如此蕩竭之時，詔使連三年出來，則民力極難支堪。更待後日奏請，勿為重困吾民。"</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>禮曹奏請向大明申請冊封世子，指出世子已正位三年，尚未受天朝冊命。君王因民生艱難、使臣往來頻繁而再次推遲。</div>
+<div class="translation-text">禮曹奏請向大明申請冊封世子，指出世子已正位三年，尚未受天朝冊命。君王因民生艱難、使臣往來頻繁而再次推遲。</div>
 </details>
-<div class=”entry-note”>The Ministry of Rites urged requesting formal Ming recognition for the Prince, but Injo again refused to avoid the financial burden of hosting envoys.</div>
+<div class="entry-note">The Ministry of Rites urged requesting formal Ming recognition for the Prince, but Injo again refused to avoid the financial burden of hosting envoys.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”論議” style=”--entry-color:#566573”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 · 憲府、諫院 合啓 (奏請)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#566573”>論議</span></div>
+<div class="sillok-entry" data-persons="" data-themes="論議" style="--entry-color:#566573">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 · 憲府、諫院 合啓 (奏請)</div>
+<div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
 </div>
-<div class=”entry-text”>○憲府、諫院合啓曰：”自古有天下國家者，必首建儲貳者，乃所以固本繫望，而基不拔之勢也。世子受冊經年，名位已定，而久稽封典之降，人心鬱抑，願望益切。殿下雖軫念赤子之重困，欲待後日，而為宗廟、社稷之計，寧可以民弊，而少緩大事乎？頃日有司之請，實出於群情之所同然，請依該曹陳啓，速為奏請，以慰臣民之望。”答曰：”有民然後，有國家。百姓離散，誰與為國乎？奏請雖重，民力亦不可不顧。爾等退而思之，勿為更煩。”</div>
-<details class=”translation-toggle”>
+<div class="entry-text">○憲府、諫院合啓曰："自古有天下國家者，必首建儲貳者，乃所以固本繫望，而基不拔之勢也。世子受冊經年，名位已定，而久稽封典之降，人心鬱抑，願望益切。殿下雖軫念赤子之重困，欲待後日，而為宗廟、社稷之計，寧可以民弊，而少緩大事乎？頃日有司之請，實出於群情之所同然，請依該曹陳啓，速為奏請，以慰臣民之望。"答曰："有民然後，有國家。百姓離散，誰與為國乎？奏請雖重，民力亦不可不顧。爾等退而思之，勿為更煩。"</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>司憲府和司諫院聯合上奏，強調冊封世子是國本大事，不能因民弊而延誤。君王回答說有百姓才有國家，堅持先顧民力。</div>
+<div class="translation-text">司憲府和司諫院聯合上奏，強調冊封世子是國本大事，不能因民弊而延誤。君王回答說有百姓才有國家，堅持先顧民力。</div>
 </details>
-<div class=”entry-note”>The Censorate jointly argued that the Prince’s formal investiture was a national priority, but Injo maintained that the people’s survival came first.</div>
+<div class="entry-note">The Censorate jointly argued that the Prince's formal investiture was a national priority, but Injo maintained that the people's survival came first.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”外交” style=”--entry-color:#1a5276”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 四月 · 迎接都監 啓</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#1a5276”>外交</span></div>
+<div class="sillok-entry" data-persons="" data-themes="外交" style="--entry-color:#1a5276">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 四月 · 迎接都監 啓</div>
+<div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
 </div>
-<div class=”entry-text”>迎接都監啓曰：”世子接見當否，問于館伴、大臣以啓事，傳教矣。天使要見王世子，在道中亦屢言之。今日詣闕時，欲仍與王世子相會，臣令譯官，告之以’國王前同會則坐次非便。老爺若欲見之，世子當於閑日來拜’云，則天使曰：’俺之欲往見，禮也；世子之來拜，亦禮也’云。其意蓋欲世子來拜也。以此觀之則要見，非文具也，其欲先為往見，乃文具之言也。世子若送拜帖請拜，則彼必喜之矣。”答曰：”依啓。”</div>
-<details class=”translation-toggle”>
+<div class="entry-text">迎接都監啓曰："世子接見當否，問于館伴、大臣以啓事，傳教矣。天使要見王世子，在道中亦屢言之。今日詣闕時，欲仍與王世子相會，臣令譯官，告之以'國王前同會則坐次非便。老爺若欲見之，世子當於閑日來拜'云，則天使曰：'俺之欲往見，禮也；世子之來拜，亦禮也'云。其意蓋欲世子來拜也。以此觀之則要見，非文具也，其欲先為往見，乃文具之言也。世子若送拜帖請拜，則彼必喜之矣。"答曰："依啓。"</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>迎接都監報告，大明使臣想要見王世子。使臣認為世子來拜訪是合禮的。君王同意世子送拜帖請求拜見。</div>
+<div class="translation-text">迎接都監報告，大明使臣想要見王世子。使臣認為世子來拜訪是合禮的。君王同意世子送拜帖請求拜見。</div>
 </details>
-<div class=”entry-note”>The Ming envoy requested to meet the Crown Prince, leading to discussions on diplomatic protocol and the Prince’s formal greeting.</div>
+<div class="entry-note">The Ming envoy requested to meet the Crown Prince, leading to discussions on diplomatic protocol and the Prince's formal greeting.</div>
 </div>
-<div class=”sillok-entry” data-persons=”尹昉 申欽” data-themes=”禮制” style=”--entry-color:#7d6608”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 四月 · 禮曹 啓 (冠服議)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#7d6608”>禮制</span></div>
+<div class="sillok-entry" data-persons="尹昉 申欽" data-themes="禮制" style="--entry-color:#7d6608">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 四月 · 禮曹 啓 (冠服議)</div>
+<div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
 </div>
-<div class=”entry-text”>禮曹啓曰：”王世子接見詔使時冠服，議于大臣，則左議政尹昉、右議政申欽以為：’該曹啓辭，詳盡無餘。臣等亦記丙午年天使時，該曹以翼善冠、衮龍袍啓請，而先王以未冊封之故，初以為疑，卒從大臣之議，依該曹啓辭為之矣。若着帽子，則下同臣僚，似未妥當。今亦遵行丙午之例何如？’”答曰：”知道。依丁酉年例，着帽子相見，似為合宜，更議以啓。”大臣以為：”依上教施行，亦似無妨。”從之。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">禮曹啓曰："王世子接見詔使時冠服，議于大臣，則左議政尹昉、右議政申欽以為：'該曹啓辭，詳盡無餘。臣等亦記丙午年天使時，該曹以翼善冠、衮龍袍啓請，而先王以未冊封之故，初以為疑，卒從大臣之議，依該曹啓辭為之矣。若着帽子，則下同臣僚，似未妥當。今亦遵行丙午之例何如？'"答曰："知道。依丁酉年例，着帽子相見，似為合宜，更議以啓。"大臣以為："依上教施行，亦似無妨。"從之。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>討論王世子接見大明詔使時應穿的冠服。大臣建議穿翼善冠和衮龍袍，但君王決定依丁酉年例，戴帽子相見。</div>
+<div class="translation-text">討論王世子接見大明詔使時應穿的冠服。大臣建議穿翼善冠和衮龍袍，但君王決定依丁酉年例，戴帽子相見。</div>
 </details>
-<div class=”entry-note”>Debate on the Crown Prince’s attire for meeting Ming envoys, balancing formal status with established precedents.</div>
+<div class="entry-note">Debate on the Crown Prince's attire for meeting Ming envoys, balancing formal status with established precedents.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”禮制” style=”--entry-color:#7d6608”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 · 世子傅 啓 (冠服議)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#7d6608”>禮制</span></div>
+<div class="sillok-entry" data-persons="" data-themes="禮制" style="--entry-color:#7d6608">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 · 世子傅 啓 (冠服議)</div>
+<div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
 </div>
-<div class=”entry-text”>諫院請從該曹之議，不許。○世子傅使侍講院啓曰：”世子時未受册，命着翼善冠，於華使所見處，雖或未安，而至於黑角帶、無紋袍，則本非世子品服。今依此施行，則不但與宮官卑秩，混同無别。今以世子有服之故，而遽着不當服之服，接待王人，事體未安，天使亦必疑訝其非禮，着有紋袍及烏角帶，允爲合宜。”答曰：”依啓。着有紋袍，則用犀帶似可，更議以定。”復啓曰：”臣意亦以爲，依上教，用犀帶允當，而但旣用犀帶，則不可無襆子，以備儀章。龍襆雖不可用，大君所着麒麟，用之爲當，而麒麟未及措備，則一品所用白澤、仙鶴中，隨所得用之之意，敢啓。”答曰：”用白澤普子，可也。”</div>
-<details class=”translation-toggle”>
+<div class="entry-text">諫院請從該曹之議，不許。○世子傅使侍講院啓曰："世子時未受册，命着翼善冠，於華使所見處，雖或未安，而至於黑角帶、無紋袍，則本非世子品服。今依此施行，則不但與宮官卑秩，混同無别。今以世子有服之故，而遽着不當服之服，接待王人，事體未安，天使亦必疑訝其非禮，着有紋袍及烏角帶，允爲合宜。"答曰："依啓。着有紋袍，則用犀帶似可，更議以定。"復啓曰："臣意亦以爲，依上教，用犀帶允當，而但旣用犀帶，則不可無襆子，以備儀章。龍襆雖不可用，大君所着麒麟，用之爲當，而麒麟未及措備，則一品所用白澤、仙鶴中，隨所得用之之意，敢啓。"答曰："用白澤普子，可也。"</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>世子傅啓奏，因世子尚未受天朝冊命，著翼善冠或有未安，但無紋袍、黑角帶本非世子品服，接待明使時事體未安，建議著有紋袍及烏角帶。君王同意並議定用犀帶及白澤普子。</div>
+<div class="translation-text">世子傅啓奏，因世子尚未受天朝冊命，著翼善冠或有未安，但無紋袍、黑角帶本非世子品服，接待明使時事體未安，建議著有紋袍及烏角帶。君王同意並議定用犀帶及白澤普子。</div>
 </details>
-<div class=”entry-note”>The Crown Prince’s tutor argued that the Prince should wear appropriate rank insignia when receiving the Ming envoy, even without formal Ming investiture.</div>
+<div class="entry-note">The Crown Prince's tutor argued that the Prince should wear appropriate rank insignia when receiving the Ming envoy, even without formal Ming investiture.</div>
 </div>
-<div class=”sillok-entry” data-persons=”金瑬 李廷龜” data-themes=”外交” style=”--entry-color:#1a5276”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 四月 · 詔使 詣 成均館</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#1a5276”>外交</span></div>
+<div class="sillok-entry" data-persons="金瑬 李廷龜" data-themes="外交" style="--entry-color:#1a5276">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 四月 · 詔使 詣 成均館</div>
+<div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
 </div>
-<div class=”entry-text”>○詔使詣成均館，拜文廟後，上殿周覽，仍步往明倫堂。館伴李廷龜、遠接使金瑬，行再拜禮，各就坐。儒生入庭行禮，詔使起立，拱手答揖。詔使謂譯官曰：”貴國文廟之制，一如中朝，多士濟濟，可見禮義之風。但俺等二人當分庭行禮，而俱設拜席於東庭，此與天朝有異”云。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">○詔使詣成均館，拜文廟後，上殿周覽，仍步往明倫堂。館伴李廷龜、遠接使金瑬，行再拜禮，各就坐。儒生入庭行禮，詔使起立，拱手答揖。詔使謂譯官曰："貴國文廟之制，一如中朝，多士濟濟，可見禮義之風。但俺等二人當分庭行禮，而俱設拜席於東庭，此與天朝有異"云。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>大明使臣訪問成均館，拜祭文廟，並在明倫堂與陪同官員會面。使臣稱讚韓國的禮儀之風與中原一致。</div>
+<div class="translation-text">大明使臣訪問成均館，拜祭文廟，並在明倫堂與陪同官員會面。使臣稱讚韓國的禮儀之風與中原一致。</div>
 </details>
-<div class=”entry-note”>Ming envoys visited Sungkyunkwan (the National Academy), praising the Confucian rituals and the scholarly atmosphere.</div>
+<div class="entry-note">Ming envoys visited Sungkyunkwan (the National Academy), praising the Confucian rituals and the scholarly atmosphere.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”禮制” style=”--entry-color:#7d6608”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖四年 四月 · 賜 陪從官</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#7d6608”>禮制</span></div>
+<div class="sillok-entry" data-persons="" data-themes="禮制" style="--entry-color:#7d6608">
+<div class="entry-meta">
+<div class="entry-date">仁祖四年 四月 · 賜 陪從官</div>
+<div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
 </div>
-<div class=”entry-text”>上賜世子接見天使時陪從官，輔德豹皮一領，弼善以下各鹿皮一領。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">上賜世子接見天使時陪從官，輔德豹皮一領，弼善以下各鹿皮一領。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>君王賞賜在世子接見大明使臣時陪從的官員，分別賜予豹皮和鹿皮。</div>
+<div class="translation-text">君王賞賜在世子接見大明使臣時陪從的官員，分別賜予豹皮和鹿皮。</div>
 </details>
-<div class=”entry-note”>The King granted rewards of leopard and deer skins to the officials who accompanied the Prince during the diplomatic reception.</div>
-</div></div><div class=”section-sep” style=”display: none;”>· · ·</div><div class=”period-section” data-period=”1627” style=”--period-color:#c0392b; display: none;”>
-<div class=”period-section-header”>
-<div class=”period-year-large”>1627</div>
-<div class=”period-event-name”>胡亂 · 嘉禮 · 舉哀</div>
-<div class=”period-vol-label”>仁祖五年</div>
-<div class=”period-subtitle”>Jeongmyo Horan, Crown Prince’s wedding, and mourning for the Ming Emperor</div>
+<div class="entry-note">The King granted rewards of leopard and deer skins to the officials who accompanied the Prince during the diplomatic reception.</div>
+</div></div><div class="section-sep" style="display: none;">· · ·</div><div class="period-section" data-period="1627" style="--period-color:#c0392b; display: none;">
+<div class="period-section-header">
+<div class="period-year-large">1627</div>
+<div class="period-event-name">胡亂 · 嘉禮 · 舉哀</div>
+<div class="period-vol-label">仁祖五年</div>
+<div class="period-subtitle">Jeongmyo Horan, Crown Prince's wedding, and mourning for the Ming Emperor</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”服制 禮制” style=”--entry-color:#6c3483”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖五年 庚午日 · 禮曹 啓 (祥祭後還宮服色)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#6c3483”>服制</span><span class=”tag” style=”--c:#7d6608”>禮制</span></div>
+<div class="sillok-entry" data-persons="" data-themes="服制 禮制" style="--entry-color:#6c3483">
+<div class="entry-meta">
+<div class="entry-date">仁祖五年 庚午日 · 禮曹 啓 (祥祭後還宮服色)</div>
+<div class="entry-tags"><span class="tag" style="--c:#6c3483">服制</span><span class="tag" style="--c:#7d6608">禮制</span></div>
 </div>
-<div class=”entry-text”>庚午禮曹請於十四日祥祭後還宮時，殿下黲袍、世子吉服、近侍及隨駕百官則黑團領、侍衛將士以下則時服，大殿輿輦、傘扇，裹以青色，上曰：”世子以吉服隨駕及輿輦等物，裹以青色，殊未妥當，更爲議定。”回啓曰：”禮文云：’小祥日應服期者，服吉服。’王世子期服已盡，禮當吉服。但古者祥祭，卜日而行。今用初忌，忌日服吉服，亦似未安。還宮時，則以揚赤色黑衣隨駕，自翌日服吉服似當。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">庚午禮曹請於十四日祥祭後還宮時，殿下黲袍、世子吉服、近侍及隨駕百官則黑團領、侍衛將士以下則時服，大殿輿輦、傘扇，裹以青色，上曰："世子以吉服隨駕及輿輦等物，裹以青色，殊未妥當，更爲議定。"回啓曰："禮文云：'小祥日應服期者，服吉服。'王世子期服已盡，禮當吉服。但古者祥祭，卜日而行。今用初忌，忌日服吉服，亦似未安。還宮時，則以揚赤色黑衣隨駕，自翌日服吉服似當。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>禮曹請於十四日祥祭後還宮時，世子著吉服隨駕。君王認為輿輦裹青色不妥。回啓稱，世子期服已盡，禮當吉服，但忌日服吉服亦未安，還宮時以揚赤色黑衣隨駕，翌日再服吉服。</div>
+<div class="translation-text">禮曹請於十四日祥祭後還宮時，世子著吉服隨駕。君王認為輿輦裹青色不妥。回啓稱，世子期服已盡，禮當吉服，但忌日服吉服亦未安，還宮時以揚赤色黑衣隨駕，翌日再服吉服。</div>
 </details>
-<div class=”entry-note”>Discussion on the Crown Prince’s transition from mourning attire to regular dress following the first anniversary memorial rite (Sangjae).</div>
+<div class="entry-note">Discussion on the Crown Prince's transition from mourning attire to regular dress following the first anniversary memorial rite (Sangjae).</div>
 </div>
-<div class=”sillok-entry” data-persons=”尹昉 李貴 金瑬 崔鳴吉” data-themes=”胡亂” style=”--entry-color:#c0392b”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖五年 正月 丙戌日 · 引見大臣 (賊迫安州)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#c0392b”>胡亂</span></div>
+<div class="sillok-entry" data-persons="尹昉 李貴 金瑬 崔鳴吉" data-themes="胡亂" style="--entry-color:#c0392b">
+<div class="entry-meta">
+<div class="entry-date">仁祖五年 正月 丙戌日 · 引見大臣 (賊迫安州)</div>
+<div class="entry-tags"><span class="tag" style="--c:#c0392b">胡亂</span></div>
 </div>
-<div class=”entry-text”>丙戌引見大臣、備局堂上、兩司長官。尹昉曰：”賊已迫安州。自上雖未輕動，而内殿則不可不早自出避。”上曰：”慈殿則明日，當先幸江都。”吳允謙曰：”李曙旣入南漢則臨津無軍可守。外議皆以爲：’申景禛當把守臨津’，而亦以爲：’都監之軍，不可不扈衛’，何以定計？”金瑬曰：”李元翼則以爲：’輦下親兵，不可分送防灘，莫如以水原軍，送于臨津’，云。”上曰：”予意亦然。”允謙曰：”自上以南漢爲重，而李曙總戎畿甸，與其退入南漢，莫如進守臨津也。”上曰：”李曙修築南漢，其意有在。今不可爲彼此不及之論。”李貴曰：”臣本不避嫌。李時白，卽臣之子也。三千之軍，鍊習已久，若令臨陣，必不旋踵，而今送於臨津乏餉之地，徒死何益？若令勤王，扈衛必固。”瑬曰：”寇已深矣。長江之險，棄而不守，謀國之道，豈宜如此？”上曰：”兵勢孤單，以此留難，而都監水原軍兵中，當調送。”瑬曰：”聖算已定，不敢更議，而大駕一入江都之後，則南漢形勢，不如秃峴。何可捨便近之秃峴，而以南漢爲重乎？”鳴吉曰：”宜令李時白，往守臨津，事急則入守坡州山城，以忠清道軍，俾守秃峴。”上曰：”都監軍則可專屬扈衛。”昉曰：”總戎軍兵，亦可抽送臨津。”貴曰：”水原之軍，請置之輦下扈衛。”上曰：”李時白之軍，頗爲鍊習，亦可領入江都。今之事勢，但當專力江都、南漢而已。且宜分付都監，令諸軍妻子，并入江都。”上又曰：”今日告祭于廟、社，明日奉移。”金自點曰：”内殿行次，事勢甚急。金慶徵多有風力，願與同事。”上許之。上又曰：”今日卜相。右相則廟‧社主、慈殿，陪行。”</div>
-<details class=”translation-toggle”>
+<div class="entry-text">丙戌引見大臣、備局堂上、兩司長官。尹昉曰："賊已迫安州。自上雖未輕動，而内殿則不可不早自出避。"上曰："慈殿則明日，當先幸江都。"吳允謙曰："李曙旣入南漢則臨津無軍可守。外議皆以爲：'申景禛當把守臨津'，而亦以爲：'都監之軍，不可不扈衛'，何以定計？"金瑬曰："李元翼則以爲：'輦下親兵，不可分送防灘，莫如以水原軍，送于臨津'，云。"上曰："予意亦然。"允謙曰："自上以南漢爲重，而李曙總戎畿甸，與其退入南漢，莫如進守臨津也。"上曰："李曙修築南漢，其意有在。今不可爲彼此不及之論。"李貴曰："臣本不避嫌。李時白，卽臣之子也。三千之軍，鍊習已久，若令臨陣，必不旋踵，而今送於臨津乏餉之地，徒死何益？若令勤王，扈衛必固。"瑬曰："寇已深矣。長江之險，棄而不守，謀國之道，豈宜如此？"上曰："兵勢孤單，以此留難，而都監水原軍兵中，當調送。"瑬曰："聖算已定，不敢更議，而大駕一入江都之後，則南漢形勢，不如秃峴。何可捨便近之秃峴，而以南漢爲重乎？"鳴吉曰："宜令李時白，往守臨津，事急則入守坡州山城，以忠清道軍，俾守秃峴。"上曰："都監軍則可專屬扈衛。"昉曰："總戎軍兵，亦可抽送臨津。"貴曰："水原之軍，請置之輦下扈衛。"上曰："李時白之軍，頗爲鍊習，亦可領入江都。今之事勢，但當專力江都、南漢而已。且宜分付都監，令諸軍妻子，并入江都。"上又曰："今日告祭于廟、社，明日奉移。"金自點曰："内殿行次，事勢甚急。金慶徵多有風力，願與同事。"上許之。上又曰："今日卜相。右相則廟‧社主、慈殿，陪行。"</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>丙戌日，後金軍已迫近安州，君王召見大臣緊急議事。就臨津防守、南漢山城利弊展開激烈討論，最終決定今日告祭廟社，明日奉移大妃先幸江都。</div>
+<div class="translation-text">丙戌日，後金軍已迫近安州，君王召見大臣緊急議事。就臨津防守、南漢山城利弊展開激烈討論，最終決定今日告祭廟社，明日奉移大妃先幸江都。</div>
 </details>
-<div class=”entry-note”>As Manchu forces approached Anju, the King convened an emergency council debating whether to defend the Imjin River, hold Namhansanseong, or retreat to Ganghwado.</div>
+<div class="entry-note">As Manchu forces approached Anju, the King convened an emergency council debating whether to defend the Imjin River, hold Namhansanseong, or retreat to Ganghwado.</div>
 </div>
-<div class=”sillok-entry” data-persons=”李元翼 尹昉 李貴 李廷龜” data-themes=”胡亂” style=”--entry-color:#c0392b”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖五年 正月 · 丙戌 引見 (義州陷落)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#c0392b”>胡亂</span></div>
+<div class="sillok-entry" data-persons="李元翼 尹昉 李貴 李廷龜" data-themes="胡亂" style="--entry-color:#c0392b">
+<div class="entry-meta">
+<div class="entry-date">仁祖五年 正月 · 丙戌 引見 (義州陷落)</div>
+<div class="entry-tags"><span class="tag" style="--c:#c0392b">胡亂</span></div>
 </div>
-<div class=”entry-text”>尹昉曰：”在喪人請起復。”上曰：”可矣。”李廷龜曰：”請收用罷散武弁。”上曰：”雖在竄黜之人，如其可用，用之。”小宦以西來狀啓進，上曰：”噫！義州已陷矣。”李貴曰：”事已急矣，宜有分朝之舉。但守江都，終何所賴？”昉曰：”李元翼奉世子南下，收拾人心可乎？”上曰：”世子年幼，不可遠去矣。”</div>
-<details class=”translation-toggle”>
+<div class="entry-text">尹昉曰："在喪人請起復。"上曰："可矣。"李廷龜曰："請收用罷散武弁。"上曰："雖在竄黜之人，如其可用，用之。"小宦以西來狀啓進，上曰："噫！義州已陷矣。"李貴曰："事已急矣，宜有分朝之舉。但守江都，終何所賴？"昉曰："李元翼奉世子南下，收拾人心可乎？"上曰："世子年幼，不可遠去矣。"</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>義州陷落的消息傳來，李貴建議世子分朝。尹昉建議由李元翼陪同世子南下收攬人心，但君王仍擔心世子年幼。</div>
+<div class="translation-text">義州陷落的消息傳來，李貴建議世子分朝。尹昉建議由李元翼陪同世子南下收攬人心，但君王仍擔心世子年幼。</div>
 </details>
-<div class=”entry-note”>With news of Uiju’s fall, the court urgency for the Divided Court grew, though Injo remained protective of the young Prince.</div>
+<div class="entry-note">With news of Uiju's fall, the court urgency for the Divided Court grew, though Injo remained protective of the young Prince.</div>
 </div>
-<div class=”sillok-entry” data-persons=”” data-themes=”胡亂” style=”--entry-color:#c0392b”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖五年 正月 · 兩司 合啓 (分朝)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#c0392b”>胡亂</span></div>
+<div class="sillok-entry" data-persons="" data-themes="胡亂" style="--entry-color:#c0392b">
+<div class="entry-meta">
+<div class="entry-date">仁祖五年 正月 · 兩司 合啓 (分朝)</div>
+<div class="entry-tags"><span class="tag" style="--c:#c0392b">胡亂</span></div>
 </div>
-<div class=”entry-text”>兩司合啓曰：”分朝之舉，自漢、唐以來，亦有行之者。況江都僻在海島，大駕一入之後，朝家之命令不行，各道之漕運不通，則豈不大可憂哉？世子雖在沖年，平日臣庶，已有愛戴之心。臨亂監撫，必有延頸之望，請依古事，亟命分朝，屬諸元老大臣，內外控制，以為恢復之計。”答曰：”從當議處。”又啓曰：”臨津把截之計，尚未堅定，只以若干之兵，候望而已。都城無所恃，長江無所賴，此無異於以國與敵也。三南軍兵，不日將至，定將把守，猶可及也。請亟令廟堂，極擇大將，急急把截。”上令備局議定，備局請以忠清兵使柳琳定為大將，上從之。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">兩司合啓曰："分朝之舉，自漢、唐以來，亦有行之者。況江都僻在海島，大駕一入之後，朝家之命令不行，各道之漕運不通，則豈不大可憂哉？世子雖在沖年，平日臣庶，已有愛戴之心。臨亂監撫，必有延頸之望，請依古事，亟命分朝，屬諸元老大臣，內外控制，以為恢復之計。"答曰："從當議處。"又啓曰："臨津把截之計，尚未堅定，只以若干之兵，候望而已。都城無所恃，長江無所賴，此無異於以國與敵也。三南軍兵，不日將至，定將把守，猶可及也。請亟令廟堂，極擇大將，急急把截。"上令備局議定，備局請以忠清兵使柳琳定為大將，上從之。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>兩司再次請求世子分朝監國。同時建議加強臨津江的防禦，以柳琳為大將守衛。</div>
+<div class="translation-text">兩司再次請求世子分朝監國。同時建議加強臨津江的防禦，以柳琳為大將守衛。</div>
 </details>
-<div class=”entry-note”>Officials urged the Prince to lead the Divided Court to ensure command and supply lines remained open during the war.</div>
+<div class="entry-note">Officials urged the Prince to lead the Divided Court to ensure command and supply lines remained open during the war.</div>
 </div>
-<div class=”sillok-entry” data-persons=”尹昉 申欽 李元翼” data-themes=”胡亂” style=”--entry-color:#c0392b”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖五年 正月 · 分朝論議 (申欽 · 尹昉 · 元翼)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#c0392b”>胡亂</span></div>
+<div class="sillok-entry" data-persons="尹昉 申欽 李元翼" data-themes="胡亂" style="--entry-color:#c0392b">
+<div class="entry-meta">
+<div class="entry-date">仁祖五年 正月 · 分朝論議 (申欽 · 尹昉 · 元翼)</div>
+<div class="entry-tags"><span class="tag" style="--c:#c0392b">胡亂</span></div>
 </div>
-<div class=”entry-text”>申欽曰：”元翼之言是矣。”尹昉曰：”世子雖幼沖，若向南方，則人心有所依賴矣。”上曰：”世子年幼，以此持難。大臣一人，可往南方，收拾人心。”</div>
-<details class=”translation-toggle”>
+<div class="entry-text">申欽曰："元翼之言是矣。"尹昉曰："世子雖幼沖，若向南方，則人心有所依賴矣。"上曰："世子年幼，以此持難。大臣一人，可往南方，收拾人心。"</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>丁卯胡亂爆發，朝廷討論是否讓世子南下分朝。大臣認為世子南下能穩定民心，但君王擔憂世子年幼。</div>
+<div class="translation-text">丁卯胡亂爆發，朝廷討論是否讓世子南下分朝。大臣認為世子南下能穩定民心，但君王擔憂世子年幼。</div>
 </details>
-<div class=”entry-note”>The court debated dividing the royal government (Bunjo) and sending the Prince south to rally public support.</div>
+<div class="entry-note">The court debated dividing the royal government (Bunjo) and sending the Prince south to rally public support.</div>
 </div>
-<div class=”sillok-entry” data-persons=”尹昉 崔鳴吉 李植” data-themes=”胡亂” style=”--entry-color:#c0392b”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖五年 正月 · 引見大臣 (分朝行期 · 回書)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#c0392b”>胡亂</span></div>
+<div class="sillok-entry" data-persons="尹昉 崔鳴吉 李植" data-themes="胡亂" style="--entry-color:#c0392b">
+<div class="entry-meta">
+<div class="entry-date">仁祖五年 正月 · 引見大臣 (分朝行期 · 回書)</div>
+<div class="entry-tags"><span class="tag" style="--c:#c0392b">胡亂</span></div>
 </div>
-<div class=”entry-text”>上引見大臣、備局、兩司長官。尹昉曰：”旣已分朝，世子行期，可以速定。”上曰：”欲一時發行。”上又曰：”回書，旣已裁送耶？”昉曰：”臺論不止，時未舉行。”崔鳴吉曰：”答書，宜稱以朝鮮國，踏印以送。”金藎國曰：”渠旣以國王前爲書，不可不以國書答送。”上曰：”姜絪宜送于平壤，與雴、璛同事。”李植曰：”速定一將，領率輕兵，進救平壤，似不可已。毛將存沒，雖未聞知，其不與奴通明矣。”上曰：”將此事情，奏聞天朝，請南軍及火器，如壬辰則何如？”植曰：”勢似不及，而告急一節，不可不爲也。”上曰：”然。”</div>
-<details class=”translation-toggle”>
+<div class="entry-text">上引見大臣、備局、兩司長官。尹昉曰："旣已分朝，世子行期，可以速定。"上曰："欲一時發行。"上又曰："回書，旣已裁送耶？"昉曰："臺論不止，時未舉行。"崔鳴吉曰："答書，宜稱以朝鮮國，踏印以送。"金藎國曰："渠旣以國王前爲書，不可不以國書答送。"上曰："姜絪宜送于平壤，與雴、璛同事。"李植曰："速定一將，領率輕兵，進救平壤，似不可已。毛將存沒，雖未聞知，其不與奴通明矣。"上曰："將此事情，奏聞天朝，請南軍及火器，如壬辰則何如？"植曰："勢似不及，而告急一節，不可不爲也。"上曰："然。"</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>君王召見大臣討論分朝行期及與後金的回書。討論是否向大明求援，李植認為雖然可能來不及，但仍應告急。</div>
+<div class="translation-text">君王召見大臣討論分朝行期及與後金的回書。討論是否向大明求援，李植認為雖然可能來不及，但仍應告急。</div>
 </details>
-<div class=”entry-note”>The King and ministers finalized plans for the Prince’s departure and discussed diplomatic responses to the invaders and the Ming court.</div>
+<div class="entry-note">The King and ministers finalized plans for the Prince's departure and discussed diplomatic responses to the invaders and the Ming court.</div>
 </div>
-<div class=”sillok-entry” data-persons=”李元翼 鄭經世 李命俊” data-themes=”胡亂” style=”--entry-color:#c0392b”>
-<div class=”entry-meta”>
-<div class=”entry-date”>仁祖五年 正月 · 引見備局兩司 (分朝駐駕何地)</div>
-<div class=”entry-tags”><span class=”tag” style=”--c:#c0392b”>胡亂</span></div>
+<div class="sillok-entry" data-persons="李元翼 鄭經世 李命俊" data-themes="胡亂" style="--entry-color:#c0392b">
+<div class="entry-meta">
+<div class="entry-date">仁祖五年 正月 · 引見備局兩司 (分朝駐駕何地)</div>
+<div class="entry-tags"><span class="tag" style="--c:#c0392b">胡亂</span></div>
 </div>
-<div class=”entry-text”>上引見備局、兩司長官曰：”分朝駐駕，當於何地？”李元翼曰：”宜先往全州，收拾兩道。”鄭經世曰：”安、平兩城，不戰而潰，臨津天塹，今將棄之，宜乎百姓之謂’和，誤國也。’無已則世子入于江都，大駕則南幸，忠臣義士，孰不爲王同仇乎？臣受本道號召之命，今當下去。伏願殿下，無自摧沮，以鼓三軍之氣。”上曰：”同力國事，以之死生者，本道有其人乎？”經世曰：”是則有之。”上曰：”卿等姑退。世子將出矣。”諸臣趨出。引見分朝僚屬、將官。上曰：”世子幼沖，善輔導之。”李命俊曰：”國事至此，不知所云。前有藩籬，民乃有固志。李曙盡率精鋭，退入南漢，此誠何意也？李曙避亂之計則得矣，爲國捍禦之道則失矣。李曙受國厚恩，而今若是，豈不痛哉？”上曰：”卿等只論分朝事可也。”是日，世子發行。政院及侍臣等，出送門外，莫不飮泣，道路觀者，亦有垂涕者。</div>
-<details class=”translation-toggle”>
+<div class="entry-text">上引見備局、兩司長官曰："分朝駐駕，當於何地？"李元翼曰："宜先往全州，收拾兩道。"鄭經世曰："安、平兩城，不戰而潰，臨津天塹，今將棄之，宜乎百姓之謂'和，誤國也。'無已則世子入于江都，大駕則南幸，忠臣義士，孰不爲王同仇乎？臣受本道號召之命，今當下去。伏願殿下，無自摧沮，以鼓三軍之氣。"上曰："同力國事，以之死生者，本道有其人乎？"經世曰："是則有之。"上曰："卿等姑退。世子將出矣。"諸臣趨出。引見分朝僚屬、將官。上曰："世子幼沖，善輔導之。"李命俊曰："國事至此，不知所云。前有藩籬，民乃有固志。李曙盡率精鋭，退入南漢，此誠何意也？李曙避亂之計則得矣，爲國捍禦之道則失矣。李曙受國厚恩，而今若是，豈不痛哉？"上曰："卿等只論分朝事可也。"是日，世子發行。政院及侍臣等，出送門外，莫不飮泣，道路觀者，亦有垂涕者。</div>
+<details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
-<div class=”translation-text”>君王召見備局及兩司長官，議定分朝駐駕之地為全州。當日世子發行，政院及侍臣出送門外無不飲泣，道路旁觀者亦有垂涕者。</div>
+<div class="translation-text">君王召見備局及兩司長官，議定分朝駐駕之地為全州。當日世子發行，政院及侍臣出送門外無不飲泣，道路旁觀者亦有垂涕者。</div>
 </details>
-<div class=”entry-note”>The King determined Jeonju as the base for the Crown Prince’s Divided Court. On this day the Prince departed — officials wept at the gate, and passersby shed tears at the roadside.</div>
+<div class="entry-note">The King determined Jeonju as the base for the Crown Prince's Divided Court. On this day the Prince departed — officials wept at the gate, and passersby shed tears at the roadside.</div>
 </div>
 <div class="bunjyo-map-container">
 <div class="bunjyo-map-header">
@@ -1228,7 +716,7 @@
 <div class="entry-date">仁祖五年 三月 · 下教旨 (世子還宮)</div>
 <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
 </div>
-<div class="entry-text">上下教曰：“世子還宮時，歷入廟所，拜謁而來，似合情禮。言于禮曹。”</div>
+<div class="entry-text">上下教曰："世子還宮時，歷入廟所，拜謁而來，似合情禮。言于禮曹。"</div>
 <details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
 <div class="translation-text">君王下達教旨，認為世子回宮時應先去廟所參拜，這才符合情理。</div>
@@ -1240,7 +728,7 @@
 <div class="entry-date">仁祖五年 九月 · 嘉禮都監 啓 (親迎之禮)</div>
 <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
 </div>
-<div class="entry-text">嘉禮都監啓曰：“別宮既有世子嬪所御之處，則世子親迎之禮，當行於別宮，而或有親迎於太平館之時。此雖謬禮，既有是規，何以處之？”答曰：“別宮非但狹隘，親迎於太平館，乃是前規，依前例施行。”</div>
+<div class="entry-text">嘉禮都監啓曰："別宮既有世子嬪所御之處，則世子親迎之禮，當行於別宮，而或有親迎於太平館之時。此雖謬禮，既有是規，何以處之？"答曰："別宮非但狹隘，親迎於太平館，乃是前規，依前例施行。"</div>
 <details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
 <div class="translation-text">嘉禮都監討論世子婚禮的親迎禮地點。君王決定在太平館舉行，因為別宮狹窄且有前例可循。</div>
@@ -1252,7 +740,7 @@
 <div class="entry-date">仁祖五年 十月 · 丁酉 禮曹 啓 (世子嬪外祖父母喪禮)</div>
 <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
 </div>
-<div class="entry-text">丁酉禮曹啓曰：“以王世子臨外祖父母喪儀注，考諸《五禮儀》則無正文，只有臨師傅、貳師喪儀注，而禮貌繁多。考諸《大明集禮》，東宮臨外祖父母喪，則頗似詳明，而節目太略，故就《五禮儀》及《大明集禮》，乘與臨王公大大臣喪儀注，參酌刪潤以入矣。”</div>
+<div class="entry-text">丁酉禮曹啓曰："以王世子臨外祖父母喪儀注，考諸《五禮儀》則無正文，只有臨師傅、貳師喪儀注，而禮貌繁多。考諸《大明集禮》，東宮臨外祖父母喪，則頗似詳明，而節目太略，故就《五禮儀》及《大明集禮》，乘與臨王公大大臣喪儀注，參酌刪潤以入矣。"</div>
 <details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
 <div class="translation-text">禮曹討論世子參見外祖父母喪禮的儀軌。因《五禮儀》無明文，故參照《大明集禮》並參酌刪改後呈上。</div>
@@ -1288,7 +776,7 @@
 <div class="entry-date">仁祖五年 十一月 · 皇上 崩訃 · 舉哀</div>
 <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span><span class="tag" style="--c:#7d6608">禮制</span></div>
 </div>
-<div class="entry-text">禮曹啓曰：“皇上崩逝，訃報已至，請行舉哀之禮。”上率王世子、百官，舉哀於崇政殿階上。備局啓曰：“請差秩高官員具摺，以慰毛將。”從之。</div>
+<div class="entry-text">禮曹啓曰："皇上崩逝，訃報已至，請行舉哀之禮。"上率王世子、百官，舉哀於崇政殿階上。備局啓曰："請差秩高官員具摺，以慰毛將。"從之。</div>
 <details class="translation-toggle">
 <summary>查看白話文翻譯</summary>
 <div class="translation-text">大明熹宗天啟帝駕崩的消息傳到，君王率世子及百官在崇政殿舉哀。</div>
@@ -1583,289 +1071,150 @@
         let activePerson = 'all';
         let searchQuery = '';
 
-        // Store original content for highlighting
         const entryData = [];
-        document.querySelectorAll('.sillok-entry').forEach(entry => {
-            const textEl = entry.querySelector('.entry-text');
-            const noteEl = entry.querySelector('.entry-note');
-            entryData.push({
-                element: entry,
-                textEl: textEl,
-                noteEl: noteEl,
-                originalText: textEl ? textEl.innerHTML : '',
-                originalNote: noteEl ? noteEl.innerHTML : '',
-                themes: (entry.dataset.themes || '').split(' '),
-                persons: (entry.dataset.persons || '').split(' '),
-                section: entry.closest('.period-section')
+        function initData() {
+            document.querySelectorAll('.sillok-entry').forEach(entry => {
+                const textEl = entry.querySelector('.entry-text');
+                const noteEl = entry.querySelector('.entry-note');
+                entryData.push({
+                    element: entry,
+                    textEl: textEl,
+                    noteEl: noteEl,
+                    originalText: textEl ? textEl.innerHTML : '',
+                    originalNote: noteEl ? noteEl.innerHTML : '',
+                    themes: (entry.dataset.themes || '').split(' '),
+                    persons: (entry.dataset.persons || '').split(' '),
+                    section: entry.closest('.period-section')
+                });
             });
-        });
+        }
 
         function getHighlightedHTML(html, query) {
             if (!query) return html;
-            // Avoid highlighting inside tags or script
             const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
             return html.replace(regex, '<mark>$1</mark>');
-        }
-        
-        const paginationContainer = document.getElementById('pagination-container');
-        const pageNumbersEl = document.getElementById('page-numbers');
-        const prevBtn = document.getElementById('prev-page');
-        const nextBtn = document.getElementById('next-page');
-
-        function renderPagination() {
-            if (!pageNumbersEl) return;
-            pageNumbersEl.innerHTML = '';
-            periods.forEach((period, index) => {
-                const btn = document.createElement('button');
-                btn.className = `page-num-btn ${period === activePeriod ? 'active' : ''}`;
-                btn.textContent = index + 1;
-                btn.title = period;
-                btn.addEventListener('click', () => {
-                    activePeriod = period;
-                    update();
-                    updateSidebarActive();
-                    document.querySelector('.main-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-                pageNumbersEl.appendChild(btn);
-            });
-            
-            const currentIndex = periods.indexOf(activePeriod);
-            if (prevBtn) prevBtn.disabled = currentIndex <= 0;
-            if (nextBtn) nextBtn.disabled = currentIndex >= periods.length - 1;
-        }
-
-        if (prevBtn) {
-            prevBtn.addEventListener('click', () => {
-                const currentIndex = periods.indexOf(activePeriod);
-                if (currentIndex > 0) {
-                    activePeriod = periods[currentIndex - 1];
-                    update();
-                    updateSidebarActive();
-                    document.querySelector('.main-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        }
-
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
-                const currentIndex = periods.indexOf(activePeriod);
-                if (currentIndex >= 0 && currentIndex < periods.length - 1) {
-                    activePeriod = periods[currentIndex + 1];
-                    update();
-                    updateSidebarActive();
-                    document.querySelector('.main-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        }
-        
-        function updateSidebarActive() {
-            document.querySelectorAll('.period-nav-list button').forEach(b => {
-                b.classList.toggle('active', b.dataset.period === activePeriod);
-            });
         }
 
         function update() {
             let totalVisible = 0;
             const query = searchQuery.toLowerCase();
             const isSearching = query !== '';
-            
-            const showPagination = !isSearching && activePeriod !== 'all';
-            if (paginationContainer) paginationContainer.style.display = showPagination ? 'flex' : 'none';
-            if (showPagination) renderPagination();
-
-            // Clear sections first
-            const sections = document.querySelectorAll('.period-section');
-            const sectionVisCount = new Map();
-            sections.forEach(s => sectionVisCount.set(s, 0));
 
             entryData.forEach(data => {
-                const periodMatch = isSearching || activePeriod === 'all' || data.section.dataset.period === activePeriod;
+                const periodMatch = isSearching || activePeriod === 'all' || (data.section && data.section.dataset.period === activePeriod);
                 const themeMatch = activeTheme === 'all' || data.themes.includes(activeTheme);
                 const personMatch = activePerson === 'all' || data.persons.includes(activePerson);
-                
-                // Search logic (match against raw text)
-                const fullText = (data.originalText + ' ' + data.originalNote).toLowerCase();
-                const searchMatch = query === '' || fullText.includes(query);
+                const searchMatch = !isSearching || (data.originalText + ' ' + (data.originalNote || '')).toLowerCase().includes(query);
 
                 const show = periodMatch && themeMatch && personMatch && searchMatch;
-                data.element.classList.toggle('hidden', !show);
+                data.element.style.display = show ? 'block' : 'none';
 
                 if (show) {
-                    sectionVisCount.set(data.section, sectionVisCount.get(data.section) + 1);
                     totalVisible++;
-                    // Apply highlighting
-                    if (data.textEl) data.textEl.innerHTML = getHighlightedHTML(data.originalText, searchQuery);
-                    if (data.noteEl) data.noteEl.innerHTML = getHighlightedHTML(data.originalNote, searchQuery);
-                } else {
-                    // Restore original
-                    if (data.textEl) data.textEl.innerHTML = data.originalText;
-                    if (data.noteEl) data.noteEl.innerHTML = data.originalNote;
+                    if (isSearching) {
+                        if (data.textEl) data.textEl.innerHTML = getHighlightedHTML(data.originalText, searchQuery);
+                        if (data.noteEl) data.noteEl.innerHTML = getHighlightedHTML(data.originalNote, searchQuery);
+                    } else {
+                        if (data.textEl) data.textEl.innerHTML = data.originalText;
+                        if (data.noteEl) data.noteEl.innerHTML = data.originalNote;
+                    }
                 }
             });
 
-            sections.forEach(section => {
-                const count = sectionVisCount.get(section);
-                const periodMatch = isSearching || activePeriod === 'all' || section.dataset.period === activePeriod;
-                const show = periodMatch && count > 0;
-                section.style.display = show ? '' : 'none';
+            document.querySelectorAll('.period-section').forEach(section => {
+                const sectionPeriod = section.dataset.period;
+                const sectionHasVisibleEntries = Array.from(section.querySelectorAll('.sillok-entry')).some(e => e.style.display !== 'none');
                 
-                const sep = section.nextElementSibling;
-                if (sep && sep.classList.contains('section-sep')) {
-                    sep.style.display = show ? '' : 'none';
+                if (isSearching || activePeriod === 'all') {
+                    section.style.display = sectionHasVisibleEntries ? 'block' : 'none';
+                } else {
+                    section.style.display = (sectionPeriod === activePeriod) ? 'block' : 'none';
                 }
             });
 
-            document.getElementById('no-results').style.display = totalVisible === 0 ? 'block' : 'none';
+            const noResults = document.getElementById('no-results');
+            if (noResults) noResults.style.display = totalVisible === 0 ? 'block' : 'none';
 
-            // Refresh Leaflet map if it becomes visible
-            if (!window._bunjyoMap) {
-                setTimeout(() => initBunjyoMap(), 200);
-            } else {
-                setTimeout(() => window._bunjyoMap.invalidateSize(), 200);
+            if (activePeriod === '1627' || isSearching) {
+                setTimeout(initBunjyoMap, 300);
             }
         }
 
-        // Initialize display
-        update();
-
-        // Period nav (sidebar)
-        document.querySelectorAll('.period-nav-list button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                activePeriod = btn.dataset.period;
-                update();
-                updateSidebarActive();
-                document.querySelector('.main-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        function updateSidebar() {
+            document.querySelectorAll('.period-nav-list button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.period === activePeriod);
             });
-        });
+        }
 
-        // Theme pills
-        document.querySelectorAll('.theme-grid:not(#person-filters) .pill').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.theme-grid:not(#person-filters) .pill').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                activeTheme = btn.dataset.theme;
-                update();
-            });
-        });
-        document.querySelectorAll('#person-filters .pill').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('#person-filters .pill').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                activePerson = btn.dataset.person;
-                update();
-            });
-        });
-
-
-        // Search input
-        const searchInput = document.getElementById('search-input');
-        searchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value;
+        window.addEventListener('DOMContentLoaded', () => {
+            initData();
             update();
-        });
+            updateSidebar();
 
-        // Sidebar Toggle
-        const sidebar = document.getElementById('sidebar');
-        const toggleBtn = document.getElementById('toggle-btn');
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-        });
-        // ── Bunjyo Map (Leaflet) — Lazy Init ──────────────────
-        const bunjyoLocations = [
-            {
-                name: '漢城 (Hanseong)',
-                desc: '朝鮮都城 · Capital of Chosŏn',
-                detail: 'The capital where the court was based before the Later Jin invasion forced evacuation.',
-                lat: 37.5665, lng: 126.9780,
-                color: '#2c3e50'
-            },
-            {
-                name: '江華島 (Ganghwa Island)',
-                desc: '國王避難所 · King Injo\'s Refuge (江都)',
-                detail: 'King Injo evacuated here on the 14th day of the 1st month, 1627. The fortified island served as the temporary royal capital during the Jŏngmyo Horan.',
-                lat: 37.7467, lng: 126.4878,
-                color: '#c0392b'
-            },
-            {
-                name: '全州 (Jeonju)',
-                desc: '世子南都指揮所 · Crown Prince\'s Southern Command',
-                detail: 'The Crown Prince arrived here on March 26, 1627 (丁未) as part of the Divided Court (分朝) strategy. He returned to Ganghwa on May 8 (庚寅) after the peace treaty.',
-                lat: 35.8242, lng: 127.1480,
-                color: '#e67e22'
+            document.querySelectorAll('.period-nav-list button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    activePeriod = btn.dataset.period;
+                    update();
+                    updateSidebar();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+
+            document.querySelectorAll('#theme-filters .pill').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#theme-filters .pill').forEach(p => p.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeTheme = btn.dataset.theme;
+                    update();
+                });
+            });
+
+            document.querySelectorAll('#person-filters .pill').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#person-filters .pill').forEach(p => p.classList.remove('active'));
+                    btn.classList.add('active');
+                    activePerson = btn.dataset.person;
+                    update();
+                });
+            });
+
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                update();
+            });
+
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    document.getElementById('sidebar').classList.toggle('collapsed');
+                });
             }
-        ];
+        });
 
         function initBunjyoMap() {
-            if (window._bunjyoMap) return; // already initialized
             const el = document.getElementById('bunjyo-map');
-            if (!el || el.offsetParent === null) return; // still hidden
-
-            const bMap = L.map('bunjyo-map', {
-                center: [36.8, 126.8],
-                zoom: 7,
-                zoomControl: true,
-                scrollWheelZoom: false
-            });
+            if (!el || window._bunjyoMap || el.offsetParent === null) return;
+            
+            const bMap = L.map('bunjyo-map').setView([36.8, 127], 7);
             window._bunjyoMap = bMap;
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                maxZoom: 18,
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO'
             }).addTo(bMap);
 
-            // Route lines
-            L.polyline([[37.5665, 126.9780], [37.7467, 126.4878]], {
-                color: '#c0392b', weight: 2.5, opacity: 0.6, dashArray: '8,6'
-            }).addTo(bMap);
-            L.polyline([[37.5665, 126.9780], [35.8242, 127.1480]], {
-                color: '#e67e22', weight: 2.5, opacity: 0.6, dashArray: '8,6'
-            }).addTo(bMap);
+            const locations = [
+                { name: '漢城 (Hanseong)', lat: 37.5665, lng: 126.9780, color: '#2c3e50' },
+                { name: '江華島 (Ganghwa)', lat: 37.7467, lng: 126.4878, color: '#c0392b' },
+                { name: '全州 (Jeonju)', lat: 35.8242, lng: 127.1480, color: '#e67e22' }
+            ];
 
-            // Markers
-            bunjyoLocations.forEach(loc => {
-                const icon = L.divIcon({
-                    className: '',
-                    html: `<div style="
-                        width:22px; height:22px; border-radius:50%;
-                        background:${loc.color}; border:2px solid white;
-                        box-shadow:0 2px 6px rgba(0,0,0,0.35);
-                        display:flex; align-items:center; justify-content:center;
-                        color:white; font-size:10px; font-weight:bold;
-                    ">📍</div>`,
-                    iconSize: [22, 22],
-                    iconAnchor: [11, 11],
-                    popupAnchor: [0, -14],
-                });
-
-                L.marker([loc.lat, loc.lng], { icon })
-                    .addTo(bMap)
-                    .bindPopup(`
-                        <div class="bunjyo-popup">
-                            <h4>${loc.name}</h4>
-                            <div class="popup-meta">${loc.desc}</div>
-                            <div style="font-size:12px;color:#555;margin-top:6px;border-top:1px solid #eee;padding-top:6px;">${loc.detail}</div>
-                        </div>`, { maxWidth: 260 });
+            locations.forEach(loc => {
+                L.circleMarker([loc.lat, loc.lng], {
+                    radius: 8, fillOpacity: 0.8, color: 'white', weight: 2, fillColor: loc.color
+                }).addTo(bMap).bindPopup(`<b>${loc.name}</b>`);
             });
-
-            // Fullscreen toggle
-            const bunjyoFsBtn = document.getElementById('bunjyo-map-fs-btn');
-            const bunjyoWrapper = document.getElementById('bunjyo-map-wrapper');
-            if (bunjyoFsBtn && bunjyoWrapper) {
-                bunjyoFsBtn.addEventListener('click', () => {
-                    if (!document.fullscreenElement) {
-                        bunjyoWrapper.requestFullscreen().catch(err => console.error(err));
-                    } else {
-                        document.exitFullscreen();
-                    }
-                });
-                document.addEventListener('fullscreenchange', () => {
-                    setTimeout(() => bMap.invalidateSize(), 100);
-                });
-            }
         }
-
-        // Try to init on page load (in case 1627 is visible)
-        initBunjyoMap();
     </script>
+
 </body>
 </html>
