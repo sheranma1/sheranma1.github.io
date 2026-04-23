@@ -410,6 +410,57 @@
             padding-top: 12px;
         }
 
+        /* Translation Toggle Styles */
+        .translation-toggle {
+            margin-top: 15px;
+            font-size: 15px;
+            border-top: 1px dashed #ede7da;
+            padding-top: 10px;
+        }
+
+        .translation-toggle summary {
+            cursor: pointer;
+            color: #2c3e50;
+            font-weight: bold;
+            outline: none;
+            user-select: none;
+            display: inline-block;
+            transition: color 0.2s;
+            list-style: none; /* Hide default arrow in some browsers */
+        }
+        
+        .translation-toggle summary::-webkit-details-marker {
+            display: none; /* Hide default arrow in webkit */
+        }
+
+        .translation-toggle summary::before {
+            content: "▶";
+            display: inline-block;
+            margin-right: 6px;
+            font-size: 12px;
+            color: #7a6c55;
+            transition: transform 0.2s;
+        }
+
+        .translation-toggle[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        .translation-toggle summary:hover {
+            color: #e67e22;
+        }
+
+        .translation-text {
+            margin-top: 10px;
+            padding: 12px 18px;
+            background-color: #faf9f6;
+            border-left: 3px solid #cfc4a4;
+            color: #444;
+            line-height: 1.7;
+            border-radius: 0 4px 4px 0;
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+
         /* No results */
         .no-results {
             display: none;
@@ -564,6 +615,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
                     </div>
                     <div class="entry-text">以金瑬爲吏曹判書，南道兵使申景瑗爲北道兵使，尹暄爲兵曹參判，李元翼爲世子師，尹昉爲世子傅，李廷龜爲左賓客，吳允謙爲右賓客，鄭曄爲左副賓客，鄭經世爲右副賓客，李植爲輔德，鄭百昌爲弼善，姜碩期爲兼司書，俞伯曾爲兼文學，金光炫爲司書，沈之源爲兼説書，李楘爲執義，鄭宗溟爲檢詳。</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">任命金瑬为吏曹判书，南道兵马使申景瑗为北道兵马使，尹暄为兵曹参判，李元翼为世子师，尹昉为世子傅，李廷龟为左宾客，吴允谦为右宾客，郑晔为左副宾客，郑经世为右副宾客，李植为辅德，郑百昌为弼善，姜硕期为兼司书，俞伯曾为兼文学，金光炫为司书，沈之源为兼说书，李楘为执义，郑宗溟为检详。</div>
+                    </details>
+                    <div class="entry-note">Officials appointed to the Crown Prince's household and education staff.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
@@ -572,6 +628,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
                     </div>
                     <div class="entry-text">李植、鄭百昌之文學，當今罕儔，而至於輔導世子，皆以親屬爲之，則未免偏係之私。</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">李植、郑百昌的文学造诣当今罕有匹敌，但至于辅导世子之职，都由亲属来担任，则未免有偏私之嫌。</div>
+                    </details>
+                    <div class="entry-note">The historian notes that while Li Sik and Jeong Baek-chang are exceptional scholars, their appointment as the Crown Prince's tutors, given their family relations, cannot escape the suspicion of partiality.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
@@ -580,6 +641,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
                     </div>
                     <div class="entry-text">丙子冊封元子𪶁爲王世子，年十四歲也。上出御隆政殿，命近臣宣教，命又授竹册。教命文曰：宗儲主鬯，所以順天經，貳極定名，所以固國本，須位序之早正，宜典册之極崇。</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">丙子日，册封元子㴭为王世子，当时十四岁。君王亲自出御隆政殿，命近臣宣读教旨，又赐予竹册。教命文中写道：宗室储君主理祭祀，是为了顺应天道纲常；确定副君的名分，是为了巩固国家根本，必须尽早端正位序，应当举行极其隆重的册封大典。</div>
+                    </details>
+                    <div class="entry-note">On the day of Bingzi, the 14-year-old eldest son was officially invested as the Crown Prince. The King issued the investiture edict emphasizing the importance of securing the nation's foundation.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
@@ -588,6 +654,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
                     </div>
                     <div class="entry-text">丁丑上御隆政殿，受群臣賀，蓋賀王世子冊禮成也。左議政尹昉等率百官進箋，卽日宣教大赦。上下教曰：「世子師傅吳允謙、鄭曄、鄭經世及百官加親授。李廷龜族屬中六品遷轉。」 廷龜已至輔國階，故有是命。師傅，元子時師傅也。</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">丁丑日，君王出御隆政殿，接受群臣的祝贺，这是为了祝贺王世子册封典礼完成。左议政尹昉等人率领百官进呈贺笺，当天便宣读教旨实行大赦。君王下达教旨说：“世子师傅吴允谦、郑晔、郑经世以及百官，都加封亲授之职。李廷龟家族中六品官员予以升迁。” 李廷龟此时已达到辅国阶，所以有这样的命令。这里提到的师傅，是元子时期的师傅。</div>
+                    </details>
+                    <div class="entry-note">The King received congratulations from the officials on the successful completion of the Crown Prince's investiture and declared a general amnesty.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
@@ -596,6 +667,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
                     </div>
                     <div class="entry-text">憲府啓曰：「春坊之官，極一時之选，居講筵者，固無踰於鄭百昌。今世子富於春秋，師道在嚴，前日筵臣之陳啓者，有意存焉，請遞鄭百昌兼輔德之任。」 答曰：「鄭百昌固不合於講官。爾等所謂有意存焉者，是誠何心也？予不識爾等之意，故不卽允從。大抵臺官，不當如是碌碌也。」</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">司宪府启奏说：“春坊（太子宫）的官员，都是一时之选，但在讲筵中任职的，确实没有超过郑百昌的。如今世子正值青春年华，为师之道在于严厉，前几天筵席上臣子们的陈启，是别有深意的，请免去郑百昌兼任的辅德职务。” 君王回答说：“郑百昌确实不适合担任讲官。你们所谓的‘别有深意’，到底安的是什么心？我不明白你们的意思，所以没有立即答应。大抵作为台官，不应该如此碌碌无为、随波逐流。”</div>
+                    </details>
+                    <div class="entry-note">The Office of the Inspector General petitioned to dismiss Jeong Baek-chang from his role as tutor, arguing that the Crown Prince's education requires strict impartiality. The King rejected the petition, criticizing the officials for being overly pliant to rumors.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
@@ -604,6 +680,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
                     </div>
                     <div class="entry-text">○乙未持平金堉啓曰：「昨論鄭百昌之事者，非有他意，只爲百昌親暱於世子，而世子富於春秋，殿下之所以教導者，當示以至公無私之道。豈無他人，而使百昌兼任，使世子習知親私之可親、疏遠之可疏哉？且親私則不嚴，疏遠則生敬，開講之際，損益可知也。不然則以百昌名望，出入三司，踐歷華貫，其誰曰不可於此也。頃日筵臣之陳啓者，亦有見乎此，其意實在防微之遠慮，而未浹數旬，旋入講院。故臣發言於僚席，請遞其任，而措語之際，未能明白。殿下之不卽允從，出於不識其意而然也。反示未安之意，折之以碌碌之教者何哉？殿下之輕蔑臺臣，厭聞忠言，不啻詑詑之色，雖有古之遺直，孰肯爲殿下盡言哉？緣臣措語之失，致有聖德之累，臣之罪戾，誠出自作，決不可仍冒，請罷臣職。」 大司憲洪瑞鳳、掌令尹衡彥、李如璜亦以此引避，玉堂處置請出。</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">乙未日，持平金堉启奏说：“昨天议论郑百昌的事情，并没有其他意思，只是因为郑百昌与世子关系亲昵，而世子正值青春年华，殿下用来教导世子的，理应展示出至公无私的原则。难道没有其他人了吗？非要让郑百昌兼任，让世子习惯性地区分谁是可以亲近的亲属、谁是应该疏远的外人吗？而且关系亲近就会缺乏威严，关系疏远则会产生敬畏，在开讲授课的时候，这其中的利弊是显而易见的。如果不是这样，凭借郑百昌的名望，出入三司，历任显要官职，谁会说他不适合这个职位呢？前几天筵席上臣子们的陈启，也是看到了这一点，其本意实在是为了防微杜渐的长远考虑，可是还没过几十天，郑百昌就又进入了讲院。所以我在同僚席上发言，请求免去他的职务，但措辞之间，没能表达清楚。殿下没有立即答应，是因为不了解其中的深意才这样的。但殿下反而表现出不满的意思，用‘碌碌无为’这样的话来斥责，这是为什么呢？殿下轻视台臣，讨厌听忠言，不仅面露不悦之色，这样下去，就算有古代遗留下来的正直之士，谁还肯为殿下畅所欲言呢？因为我措辞的失误，导致连累了圣明之德，我的罪过，实属咎由自取，绝不可以继续身居此位，请罢免我的官职。” 大司宪洪瑞凤、掌令尹衡彦、李如璜也因为这个原因请求辞职避嫌，玉堂（弘文馆）也请求做出处理。</div>
+                    </details>
+                    <div class="entry-note">Inspector Kim Yuk delivered a detailed and impassioned petition explaining that Jeong Baek-chang's close relationship with the Crown Prince undermines the strict respect needed for education. Kim offered his resignation due to his harsh words.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="外交" style="--entry-color:#1a5276">
@@ -612,6 +693,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
                     </div>
                     <div class="entry-text">丁未禮曹啓曰：「王世子册封事，當據例奏請，别遣使臣，或順付於謝恩使、或冬至‧聖節使，議大臣以定何如？」答曰：「世子册封，据例奏请，未爲不可。但兩天使纔過，而繼有詔使之行，則赤立之民，決難支堪，徐待後日，更觀民力而處之可也。」</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">丁未日，礼曹启奏说：“王世子册封的事情，理应按照惯例向天朝奏请，是单独派遣使臣，还是顺便让谢恩使、或者冬至、圣节使带去，请让大臣们议论决定，怎么样？” 君王回答说：“世子册封，按惯例奏请，并不是不可以。但两位天使（明朝使节）刚刚离开，接着又有诏使到来，一贫如洗的百姓，实在难以支撑，慢慢等到以后，再看看民力情况来处理吧。”</div>
+                    </details>
+                    <div class="entry-note">The Ministry of Rites requested to formally notify the Ming Dynasty of the Crown Prince's investiture. The King agreed but postponed it due to the country's depleted resources from recently hosting Ming envoys.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="論議 外交" style="--entry-color:#566573">
@@ -620,6 +706,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span><span class="tag" style="--c:#1a5276">外交</span></div>
                     </div>
                     <div class="entry-text">領事尹昉曰：「臣再侍王世子於册禮之後，則世子岥嶷夙成，講學之際，深解旨義，誠一國臣民之慶、祖宗社稷之福也。册封奏請，不可遲緩，臣等欲付謝恩使之行，自上以民弊爲慮，不卽允從。臣等之意，不如從速奏聞。」 上曰：「此非急急之事，今番接待詔使，亦恐民力之难堪。况年年酬應詔使，則何以爲國乎？姑待後日。」</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">领事尹昉说：“臣在册封典礼之后再次侍奉王世子，发现世子早慧成熟，在讲学的时候，能够深刻理解其中的要旨，这真的是全城臣民的庆幸、祖宗社稷的福气啊。册封奏请的事情，不能再迟缓了，臣等想让谢恩使顺便带去，皇上因为担心劳民伤财，没有立即答应。臣等的意思，不如赶快奏报天朝。” 君王说：“这不是十万火急的事情，这次接待诏使，我都担心民力难以承受。更何况年年都要应酬诏使，那拿什么来治理国家呢？姑且等到以后再说吧。”</div>
+                    </details>
+                    <div class="entry-note">Chief State Councillor Yun Bang praised the Crown Prince's intelligence and maturity, urging the King to notify the Ming Dynasty without delay. The King again deferred the notification, citing the people's hardship.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
@@ -657,6 +748,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span><span class="tag" style="--c:#566573">論議</span></div>
                     </div>
                     <div class="entry-text">庚午禮曹啓曰：「王世子正位東宮，今已三年，尚未受册命於天朝。臣曹據例啓請，而適值兩璫之行，公私物力掃盡，聖上軫念民生，遂從姑待後年之議，以至於今。竊念莫大應行之典，因此稽遲，豈非未安之甚乎？詔使若問：『既已册封，而何不奏請？』云，則可以物力為辭乎？今於謝恩使之行，送請封奏文，则此是例典，必無持難之事，请令大臣定奪。」答曰：「啓辭甚是。但如此蕩竭之時，詔使連三年出來，則民力極難支堪。更待後日奏請，勿為重困吾民。」 ——《仁祖大王實錄》卷之十二</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">庚午日，礼曹启奏说：“王世子入主东宫，至今已经三年了，还没有得到天朝的册封任命。臣等按照惯例请求奏报，却正好遇到两位太监使者到来，公私物资都被搜刮一空，圣上体恤民生，于是采纳了姑且等到后年的建议，一直拖延到现在。臣私下以为，这等必须进行的重大典礼，因为这些原因而耽搁，难道不是非常不妥吗？诏使如果问：‘既然已经册封了，为什么不奏请？’这样的话，难道能以物力匮乏作为借口吗？现在趁着谢恩使出行的机会，送去请求册封的奏文，这是符合常规的典礼，肯定不会有遇到留难的事情，请让大臣们定夺。” 君王回答说：“启奏的话很有道理。但是在这个国家财力荡然无存的时候，诏使连续三年过来，民力已经极难支撑了。再等以后奏请吧，不要再让我的百姓陷入重重困境了。”</div>
+                    </details>
+                    <div class="entry-note">Three years after the investiture, the Ministry of Rites again urged the King to notify the Ming court. The King continued to delay the mission to spare the impoverished people from the burden of envoy diplomacy.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
@@ -665,6 +761,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
                     </div>
                     <div class="entry-text">○憲府、諫院合啓曰：「自古有天下國家者，必首建儲貳者，乃所以固本繫望，而不拔之勢也。世子受册經年，名位已定，而久稽奏請之舉，尚欠封典之降，人心鬱抑，願望益切。殿下雖軫念赤子之重困，欲待後日，而為宗廟、社稷之計，寧可以民弊，而少緩大事乎？頃日有司之請，實出於群情之所同然，请依该曹陳啓，速為奏請，以慰臣民之望。」 答曰：「有民然後，有國。百姓離散，誰與為國乎？奏請雖重，民力亦不可不顧。爾等退而思之，勿為更煩。」 ——《仁祖大王實錄》卷之十三</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">司宪府、司谏院联合启奏说：“自古以来拥有天下国家的人，必定首先设立储君，这是为了巩固根本、维系希望，形成不可动摇的局势。世子接受册封已经好几年了，名分地位已经确定，但长久拖延奏请的举动，还欠缺册封典礼的降临，使得人心抑郁，盼望的心情日益迫切。殿下虽然体恤百姓的重重困苦，想要等到以后再说，但为了宗庙、社稷的长远大计，难道能因为百姓的一点困苦，就稍微暂缓这等国家大事吗？前几天有司的请求，确实是出于大家共同的愿望，请按照该曹的陈奏，赶快进行奏请，以慰藉臣民的期望。” 君王回答说：“有了百姓之后，才会有国家。百姓如果流离失所，谁来和你一起保卫国家呢？奏请虽然重要，但民力也不能不顾。你们退下去好好想想，不要再来烦我了。”</div>
+                    </details>
+                    <div class="entry-note">The Offices of the Inspector General and Remonstrance jointly petitioned to immediately notify the Ming court of the investiture, arguing that national stability should outweigh temporary financial hardships. The King rebuffed them, prioritizing the people's livelihood.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="外交 禮制" style="--entry-color:#1a5276">
@@ -673,6 +774,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span><span class="tag" style="--c:#7d6608">禮制</span></div>
                     </div>
                     <div class="entry-text">迎接都監啓曰：「世子接見當否，問于館伴、大臣以啓事，傳教矣。天使要見王世子，在道中亦屢言之。今日詣闕時，欲仍與王世子相會，臣令譯官，告之以『國王前同會，則坐次非便。老爺若欲見之，世子當於閑日來拜』云，则天使曰：『俺之欲往見，禮也；世子之來拜，亦禮也』云。其意蓋欲世子來拜也。以此觀之则要见，非文具也，其欲先為往见，乃文具之言也。世子若送拜帖請拜，则彼必喜之矣。」 答曰：「依啓。」</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">迎接都监启奏说：“世子接见（使者）是否妥当，向馆伴、大臣询问了意见并上报，已经传达教旨了。天使要求见王世子，在路上也多次提及。今天到宫阙的时候，想顺便和王世子会面，臣让译官告诉他：‘在国王面前一起会面，座次安排不太方便。老爷如果想见他，世子会在空闲的日子来拜访。’天使说：‘我想去见他，是出于礼节；世子来拜访我，也是礼节。’他的意思大概是希望世子来拜访。从这看来，他是真的想见，不是说说而已的客套话，他说的想先去拜访，才是客套话。世子如果送上拜帖请求拜访，他一定会很高兴的。” 君王回答说：“按照启奏的去办。”</div>
+                    </details>
+                    <div class="entry-note">The reception committee asked the King how to handle the Ming envoy's repeated requests to meet the Crown Prince. They suggested the Crown Prince should send a visiting card, to which the King agreed.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="禮制 外交" style="--entry-color:#7d6608">
@@ -681,6 +787,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span><span class="tag" style="--c:#1a5276">外交</span></div>
                     </div>
                     <div class="entry-text">禮曹啓曰：「王世子接見詔使時冠服，議于大臣，则左議政尹昉、右議政申欽以為：『該曹啓辭，詳盡無餘。臣等亦記丙午年天使時，该曹以翼善冠、衮龍袍啓請，而先王以未册封之故，初以為疑，卒從大臣之議，依该曹啓辭為之矣。若着帽子，則下同臣僚，似未妥當。今亦遵行丙午之例何如？』」答曰：「知道。依丁酉年例，着帽子相见，似为合宜，更议以启。」 大臣以为：「依上教施行，亦似无妨。」从之。谏院请从该曹之议，不许。<br><br>○世子傅使侍講院啓曰：「世子時未受册，命着翼善冠，於華使所见处，虽或未安，而至于黑角带、无纹袍，则本非世子品服。今依此施行，则不但與宮官卑秩，混同無別。今以世子有服之故，而遽着不當服之服，接待王人，事體未安，天使亦必疑訝其非禮，着有紋袍及烏角帶，允為合宜。」 答曰：「依啓。着有紋袍，則用犀帶似可，更議以定。」 復啓曰：「臣意亦以為，依上教，用犀帶允當，而但既用犀带，则不可無綉子，以備儀章。龍綉雖不可用，大君所着麒麟，用之為當，而麒麟未及措備，則一品所用白澤、仙鶴中，隨所得用之之意，敢啓。」 答曰：「用白澤綉子，可也。」</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">礼曹启奏说：“王世子接见诏使时穿的冠服，和大臣们商议后，左议政尹昉、右议政申钦认为：‘该曹的启奏，详细周全没有遗漏。臣等也记得丙午年迎接天使的时候，该曹请求让世子穿翼善冠、衮龙袍，而先王因为世子还没有得到册封的缘故，起初有些疑虑，最终听从了大臣的建议，按照该曹的启奏去做了。如果戴普通帽子，那就和下面的臣僚一样了，似乎不太妥当。现在也遵循丙午年的先例怎么样？’” 君王回答说：“知道了。依照丁酉年的先例，戴着帽子相见，似乎比较合适，再商议一下上报。” 大臣认为：“按照圣上的旨意实行，似乎也无妨。” 君王听从了。谏院请求听从礼曹的建议，君王不允许。<br><br>世子傅使侍讲院启奏说：“世子现在还没有接受（天朝）册封，命令戴翼善冠，在中华使者看到的地方，虽然可能有些不妥，但如果穿黑角带、无纹袍，那本来就不是世子的品级服饰。现在如果这样实行，那不仅和宫中官阶低微的人混同在一起没有区别。现在因为世子还在服丧的原因，却突然穿上不合时宜的衣服，去接待皇帝的使臣，体统上不太安妥，天使也一定会疑惑这不合礼仪，穿有纹袍和乌角带，应该是比较合适的。” 君王回答说：“按启奏办。穿有纹袍的话，用犀带似乎可以，再商议决定。” 再次启奏说：“臣的意思也认为，依照圣旨，用犀带是妥当的，但既然用了犀带，那就不能没有绣子（补子），以此来完备仪仗制度。龙绣虽然不能用，大君所穿的麒麟补子，用起来是合适的，但麒麟补子来不及准备，那么在一品官员使用的白泽、仙鹤中，随便找到哪种就用哪种，冒昧上报。” 君王回答说：“用白泽绣子，可以。”</div>
+                    </details>
+                    <div class="entry-note">The Ministry of Rites debated what attire the uninvested Crown Prince should wear when meeting the Ming envoy. After consulting precedents and ministers, the King approved the use of an official robe with a rhino-horn belt and a Baize emblem.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="外交" style="--entry-color:#1a5276">
@@ -689,6 +800,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
                     </div>
                     <div class="entry-text">○詔使詣成均館，拜文廟後，上殿周覽，仍步往明倫堂。館伴李延龜、遠接使金瑬，行再拜禮，各就坐。儒生入庭行禮，詔使起立，拱手答揖。詔使謂譯官曰：「貴國文廟之制，一如中朝，多士濟濟，可見禮義之風。但俺等二人當分庭行禮，而俱設拜席於東庭，此與天朝有異」云。</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">诏使前往成均馆，拜谒文庙之后，登上大殿四处参观，然后步行前往明伦堂。馆伴李延龟、远接使金瑬，行了两次拜礼，各自就座。儒生们进入庭院行礼，诏使站起来，拱手还礼。诏使对译官说：“贵国文庙的规制，和中朝完全一样，众多士子人才济济，可见礼义的风范。但是我们两个人应当在不同的庭院行礼，所以都在东庭设置了拜席，这和天朝有些不同。”</div>
+                    </details>
+                    <div class="entry-note">The Ming envoys visited the Royal Confucian Academy (Seonggyungwan). They noted that the institution's layout was similar to China's, praising the abundance of scholars, though they performed the greeting rituals in the eastern courtyard rather than the main hall.</div>
                 </div>
 
                 <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
@@ -697,6 +813,11 @@
                         <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
                     </div>
                     <div class="entry-text">上賜世子接見天使時陪從官，輔德豹皮一領，弼善以下各鹿皮一領。</div>
+                    <details class="translation-toggle">
+                        <summary>查看白話文翻譯</summary>
+                        <div class="translation-text">君王赏赐了世子接见天使时的随从官员，辅德赏赐豹皮一件，弼善及以下官员每人赏赐鹿皮一件。</div>
+                    </details>
+                    <div class="entry-note">The King bestowed gifts of leopard and deer skins upon the officials who accompanied the Crown Prince during his meeting with the Ming envoy.</div>
                 </div>
             </div>
             <div class="section-sep">· · ·</div>
