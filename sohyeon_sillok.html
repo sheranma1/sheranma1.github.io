@@ -1,97 +1,251 @@
 <!DOCTYPE html>
 <html lang="zh">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>昭顯世子 · 仁祖大王實錄 - Shuyi Ma</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ── Intro ───────────────────────────── */
-        .page-subtitle {
-            color: #999;
-            font-size: 15px;
-            margin-bottom: 22px;
-            font-style: italic;
+        /* ── Body override for wide layout ───── */
+        body {
+            max-width: 1260px !important;
+            padding: 0 28px !important;
+            background-color: transparent !important;
+            box-shadow: none !important;
+            animation: none !important;
         }
 
-        .intro-box {
-            background: rgba(44, 62, 80, 0.04);
-            border-radius: 8px;
-            padding: 18px 22px;
-            margin-bottom: 28px;
-            border: 1px solid #c9b99a;
-            font-size: 19px;
+        /* ── Page layout ─────────────────────── */
+        .page-layout {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            margin-top: 0;
         }
 
-        .intro-box p { margin-bottom: 8px; }
-        .intro-box p:last-child { margin-bottom: 0; }
-
-        /* ── Sticky controls ─────────────────── */
-        .controls-bar {
+        /* ══════════════════════════════════════
+           SIDEBAR
+        ══════════════════════════════════════ */
+        .sidebar {
+            width: 260px;
+            flex-shrink: 0;
             position: sticky;
             top: 0;
-            z-index: 50;
-            background: rgba(248, 245, 238, 0.97);
-            border: 1px solid #d8cdb8;
-            border-radius: 10px;
-            padding: 12px 16px 10px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(6px);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: rgba(244, 241, 230, 0.98);
+            border-right: 1px solid #cfc4a4;
+            padding: 20px 0 40px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
+            scrollbar-width: thin;
+            scrollbar-color: #c9b99a transparent;
+            z-index: 100;
         }
 
-        .controls-label {
-            font-size: 11px;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #aaa;
-            margin-bottom: 6px;
+        .sidebar.collapsed {
+            width: 70px;
         }
 
-        .period-row, .theme-row {
+        /* Sidebar toggle button */
+        .sidebar-toggle {
+            position: absolute;
+            right: 10px;
+            top: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #2c3e50;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s, transform 0.4s;
+            z-index: 110;
             display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
             align-items: center;
+            justify-content: center;
         }
 
-        .period-row { margin-bottom: 8px; }
+        .sidebar-toggle:hover {
+            background: rgba(44, 62, 80, 0.08);
+        }
 
-        /* Period tabs */
-        .tab {
-            padding: 5px 12px;
-            border: 1.5px solid #c9b99a;
-            border-radius: 16px;
+        .sidebar.collapsed .sidebar-toggle {
+            right: 50%;
+            transform: translateX(50%) rotate(180deg);
+        }
+
+        /* Decorative watermark character */
+        .sidebar::before {
+            content: '錄';
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 140px;
+            color: rgba(44,62,80,0.04);
+            pointer-events: none;
+            line-height: 1;
+            user-select: none;
+        }
+
+        .sidebar-title-block {
+            padding: 0 20px 22px;
+            border-bottom: 1px solid #cfc4a4;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-zh-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2c3e50;
+            letter-spacing: 0.05em;
+            line-height: 1.3;
+        }
+
+        .sidebar-sub {
+            font-size: 11px;
+            color: #a89878;
+            margin-top: 6px;
+            letter-spacing: 0.04em;
+            line-height: 1.5;
+        }
+
+        .sidebar-section-label {
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #b0a080;
+            padding: 0 20px 8px;
+        }
+
+        /* Period nav items */
+        .period-nav-list {
+            list-style: none;
+            margin: 0 0 22px;
+            padding: 0;
+        }
+
+        .period-nav-list li button {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 9px 20px 9px 17px;
+            border: none;
+            border-left: 3px solid transparent;
             background: transparent;
             cursor: pointer;
-            font-size: 13px;
-            color: #5a4e3a;
+            text-align: left;
             font-family: Georgia, serif;
-            transition: all 0.18s;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .period-nav-list li button:hover {
+            background: rgba(44,62,80,0.06);
+        }
+
+        .period-nav-list li button.active {
+            background: rgba(44,62,80,0.09);
+            border-left-color: var(--pc, #2c3e50);
+        }
+
+        .nav-year {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+            line-height: 1.2;
             white-space: nowrap;
         }
 
-        .tab:hover { background: rgba(44,62,80,0.07); }
-
-        .tab.active {
-            background: #2c3e50;
-            color: #f0e8d4;
-            border-color: #2c3e50;
+        .nav-event {
+            font-size: 11px;
+            color: #9a8c70;
+            margin-top: 2px;
+            white-space: nowrap;
         }
 
-        /* Theme pills */
+        /* Hide text when collapsed */
+        .sidebar.collapsed .sidebar-title-block,
+        .sidebar.collapsed .sidebar-section-label,
+        .sidebar.collapsed .nav-year,
+        .sidebar.collapsed .nav-event,
+        .sidebar.collapsed .theme-grid,
+        .sidebar.collapsed .sidebar-divider {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .sidebar.collapsed .sidebar-zh-title {
+            display: none;
+        }
+
+        /* Search Bar Styles */
+        .search-container {
+            padding: 0 16px 20px;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+
+        .sidebar.collapsed .search-container {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 12px 10px 35px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid #cfc4a4;
+            border-radius: 20px;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            background: #fff;
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.05);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            color: #a89878;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: #cfc4a4;
+            margin: 0 20px 18px;
+        }
+
+        /* Theme pills grid */
+        .theme-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 0 16px;
+        }
+
         .pill {
-            padding: 4px 11px;
-            border-radius: 12px;
+            padding: 4px 10px;
+            border-radius: 11px;
             border: 1.5px solid var(--c, #888);
             background: transparent;
             color: var(--c, #888);
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11.5px;
             font-family: Georgia, serif;
-            transition: all 0.18s;
-            white-space: nowrap;
+            transition: all 0.15s;
         }
 
         .pill:hover { background: color-mix(in srgb, var(--c, #888) 12%, transparent); }
@@ -101,78 +255,118 @@
             color: #fff;
         }
 
-        .filter-label {
-            font-size: 12px;
+        /* ══════════════════════════════════════
+           MAIN CONTENT
+        ══════════════════════════════════════ */
+        .main-area {
+            flex: 1;
+            min-width: 0;
+            padding: 36px 48px 60px;
+            background: rgba(255,255,255,0.72);
+            border-right: 1px solid #e4ddd0;
+        }
+
+        /* Page header */
+        .page-header {
+            margin-bottom: 28px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid #e4ddd0;
+        }
+
+        .page-header h1 {
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
             color: #aaa;
-            margin-right: 4px;
-        }
-
-        /* ── Period sections ─────────────────── */
-        .period-section {
-            margin: 32px 0;
-            border-left: 4px solid var(--period-color, #b5a07a);
-            padding-left: 18px;
-        }
-
-        .period-header {
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-            margin-bottom: 2px;
-        }
-
-        .period-year {
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--period-color, #2c3e50);
-        }
-
-        .period-event {
-            font-size: 17px;
-            color: #2c3e50;
-            font-weight: bold;
-        }
-
-        .period-vol {
-            font-size: 13px;
-            color: #bbb;
-            font-weight: normal;
-        }
-
-        .period-subtitle {
             font-size: 14px;
-            color: #999;
-            margin-bottom: 14px;
             font-style: italic;
         }
 
-        /* ── Entry cards ─────────────────────── */
-        .sillok-entry {
-            margin: 12px 0;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 7px;
-            padding: 14px 16px 12px;
-            border: 1px solid #e0d8c8;
-            border-left: 3px solid var(--entry-color, #c9b99a);
-            transition: opacity 0.2s, transform 0.2s;
+        /* Intro box */
+        .intro-box {
+            background: rgba(44,62,80,0.03);
+            border-radius: 8px;
+            padding: 24px 30px;
+            margin-bottom: 40px;
+            border: 1px solid #d8cfbb;
+            font-size: 20px;
+            line-height: 1.9;
         }
 
-        .sillok-entry.hidden {
-            display: none;
+        .intro-box p { margin-bottom: 8px; }
+        .intro-box p:last-child { margin-bottom: 0; }
+
+        /* Period sections */
+        .period-section {
+            margin: 42px 0;
+            padding-left: 22px;
+            border-left: 4px solid var(--period-color, #b5a07a);
         }
+
+        .period-section-header {
+            margin-bottom: 14px;
+        }
+
+        .period-year-large {
+            font-size: 38px;
+            font-weight: bold;
+            color: var(--period-color, #2c3e50);
+            line-height: 1;
+            letter-spacing: -0.01em;
+        }
+
+        .period-event-name {
+            font-size: 17px;
+            color: #2c3e50;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .period-vol-label {
+            font-size: 12px;
+            color: #bbb;
+            margin-top: 3px;
+        }
+
+        .period-subtitle {
+            font-size: 13.5px;
+            color: #999;
+            font-style: italic;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        /* Entry cards */
+        .sillok-entry {
+            margin: 14px 0;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            padding: 16px 20px 14px;
+            border: 1px solid #e4ddd0;
+            border-left: 3px solid var(--entry-color, #c9b99a);
+            transition: box-shadow 0.18s;
+        }
+
+        .sillok-entry:hover {
+            box-shadow: 0 3px 16px rgba(0,0,0,0.07);
+        }
+
+        .sillok-entry.hidden { display: none; }
 
         .entry-meta {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 7px;
-            gap: 8px;
+            margin-bottom: 9px;
+            gap: 10px;
         }
 
         .entry-date {
-            font-size: 14px;
-            color: #7f8c8d;
+            font-size: 13px;
+            color: #9a8c76;
             flex: 1;
+            line-height: 1.4;
         }
 
         .entry-tags {
@@ -182,49 +376,60 @@
         }
 
         .tag {
-            font-size: 11px;
+            font-size: 10.5px;
             padding: 2px 7px;
             border-radius: 8px;
-            background: color-mix(in srgb, var(--c, #888) 15%, transparent);
+            background: color-mix(in srgb, var(--c, #888) 13%, transparent);
             color: var(--c, #666);
-            border: 1px solid color-mix(in srgb, var(--c, #888) 35%, transparent);
+            border: 1px solid color-mix(in srgb, var(--c, #888) 30%, transparent);
         }
 
         .entry-text {
-            font-size: 18px;
-            line-height: 1.95;
-            color: #2c3e50;
+            font-size: 24px;
+            line-height: 1.8;
+            color: #1a2a3a;
+            font-family: "Noto Serif SC", "Songti SC", serif;
         }
 
         .entry-note {
-            font-size: 13.5px;
-            color: #999;
-            margin-top: 8px;
+            font-size: 15px;
+            color: #7a6c55;
+            margin-top: 15px;
             font-style: italic;
-            line-height: 1.6;
+            line-height: 1.7;
             border-top: 1px solid #ede7da;
-            padding-top: 7px;
+            padding-top: 12px;
         }
 
-        /* ── No results ──────────────────────── */
+        /* No results */
         .no-results {
             display: none;
             text-align: center;
-            padding: 40px 20px;
-            color: #bbb;
+            padding: 60px 20px;
+            color: #ccc;
             font-style: italic;
             font-size: 16px;
         }
 
-        /* ── Source footer ───────────────────── */
+        /* Section separator ornament */
+        .section-sep {
+            text-align: center;
+            color: #cfc4a4;
+            font-size: 16px;
+            margin: 36px 0 0;
+            letter-spacing: 0.3em;
+            user-select: none;
+        }
+
+        /* Source footer */
         .source-footer {
-            margin-top: 44px;
+            margin-top: 50px;
             padding: 14px 20px;
-            background: rgba(44, 62, 80, 0.04);
+            background: rgba(44,62,80,0.03);
             border-radius: 8px;
-            border: 1px solid #c9b99a;
+            border: 1px solid #d8cfbb;
             font-size: 13px;
-            color: #aaa;
+            color: #bbb;
         }
 
         .source-footer p { margin-bottom: 0; }
@@ -240,548 +445,600 @@
         <a href="blog.html">Blog</a>
     </nav>
 
-    <h1>昭顯世子 · 仁祖大王實錄</h1>
-    <p class="page-subtitle">Selected passages from the <em>Annals of King Injo</em> (仁祖大王實錄) · Crown Prince Sohyeon (昭顯世子, 1612–1645)</p>
+    <div class="page-layout">
 
-    <div class="intro-box">
-        <p>昭顯世子（1612–1645），名𪶁，字成之，朝鮮第十六代王仁祖之長子，元妃韓氏所出。仁祖三年（1625）冊立為王世子，時年十四歲。仁祖十五年（1637）丙子胡亂後，作為人質赴清朝瀋陽，滯留長達八年。仁祖二十三年（1645）春歸國，數月後薨逝於昌慶宮，年三十四，謚曰昭顯。</p>
-        <p style="font-size:14px;color:#aaa;margin-bottom:0;">In the Sillok, the Crown Prince is referred to as 王世子 or 世子 during his lifetime. The posthumous title 昭顯 was conferred in the fifth month of 仁祖 23年 (1645).</p>
-    </div>
+        <!-- ══ SIDEBAR ══════════════════════════ -->
+        <aside class="sidebar" id="sidebar">
+            <button class="sidebar-toggle" id="toggle-btn" title="Toggle Sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
 
-    <!-- ── Controls ───────────────────────────── -->
-    <div class="controls-bar" id="controls">
-        <div class="controls-label">時期</div>
-        <div class="period-row">
-            <button class="tab active" data-period="all">全部</button>
-            <button class="tab" data-period="1625">1625 · 冊封</button>
-            <button class="tab" data-period="1626-1628">1626–28 · 大慼</button>
-            <button class="tab" data-period="1627">1627 · 丁卯胡亂</button>
-            <button class="tab" data-period="1637">1637 · 入質</button>
-            <button class="tab" data-period="1638">1638 · 在瀋陽</button>
-            <button class="tab" data-period="1645">1645 · 薨逝</button>
-            <button class="tab" data-period="1646">1646 · 姜嬪獄</button>
-            <button class="tab" data-period="1647">1647 · 流配</button>
-            <button class="tab" data-period="附錄">附錄</button>
-        </div>
-        <div class="theme-row">
-            <span class="filter-label">主題</span>
-            <button class="pill active" data-theme="all" style="--c:#2c3e50">全部</button>
-            <button class="pill" data-theme="禮制" style="--c:#7d6608">禮制</button>
-            <button class="pill" data-theme="論議" style="--c:#566573">論議</button>
-            <button class="pill" data-theme="外交" style="--c:#1a5276">外交</button>
-            <button class="pill" data-theme="服制" style="--c:#6c3483">服制</button>
-            <button class="pill" data-theme="胡亂" style="--c:#922b21">胡亂</button>
-            <button class="pill" data-theme="入質" style="--c:#0e6655">入質</button>
-            <button class="pill" data-theme="在瀋" style="--c:#17a589">在瀋</button>
-            <button class="pill" data-theme="薨逝" style="--c:#4a235a">薨逝</button>
-            <button class="pill" data-theme="身後事" style="--c:#424949">身後事</button>
-        </div>
-    </div>
-
-    <div class="no-results" id="no-results">目前篩選條件下無符合條目。</div>
-
-    <!-- ═══════════════════════════════════════════
-         1625 · 冊封
-    ═══════════════════════════════════════════════ -->
-    <div class="period-section" data-period="1625" style="--period-color:#c9a227">
-        <div class="period-header">
-            <span class="period-year">1625</span>
-            <span class="period-event">冊封</span>
-            <span class="period-vol">卷之八 · 仁祖三年</span>
-        </div>
-        <div class="period-subtitle">Investiture as Crown Prince: appointment of the Eastern Palace staff, the ceremony, and early debates</div>
-
-        <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖三年 正月 · 東宮 官員 임명</div>
-                <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
+            <div class="sidebar-title-block">
+                <div class="sidebar-zh-title">昭顯世子</div>
+                <div class="sidebar-sub">仁祖大王實錄<br>Selected Passages</div>
             </div>
-            <div class="entry-text">以金瑬爲吏曹判書，南道兵使申景瑗爲北道兵使，尹暄爲兵曹參判，李元翼爲世子師，尹昉爲世子傅，李廷龜爲左賓客，吳允謙爲右賓客，鄭曄爲左副賓客，鄭經世爲右副賓客，李植爲輔德，鄭百昌爲弼善，姜碩期爲兼司書，俞伯曾爲兼文學，金光炫爲司書，沈之源爲兼説書，李楘爲執義，鄭宗溟爲檢詳。</div>
-            <div class="entry-note">Officials appointed to the Crown Prince's household and education staff.</div>
-        </div>
 
-        <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖三年 · 史臣 按語</div>
-                <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" class="search-input" placeholder="全文檢索 (Search content...)">
+                </div>
             </div>
-            <div class="entry-text">李植、鄭百昌之文學，當今罕儔，而至於輔導世子，皆以親屬爲之，則未免偏係之私。</div>
-            <div class="entry-note">Commentary: "Though 李植 and 鄭百昌 are rare literary talents of the age, appointing only relatives to guide the Crown Prince cannot avoid the taint of partiality."</div>
-        </div>
 
-        <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖三年 正月 丙子日 · 冊封</div>
-                <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
+            <div class="sidebar-section-label">時期 (Periods)</div>
+            <ul class="period-nav-list">
+                <li><button class="active" data-period="all" style="--pc:#2c3e50">
+                    <span class="nav-year">全部時期</span>
+                </button></li>
+                <li><button data-period="1625" style="--pc:#c9a227">
+                    <span class="nav-year">1625</span>
+                    <span class="nav-event">冊封</span>
+                </button></li>
+                <li><button data-period="1626-1628" style="--pc:#ca6f1e">
+                    <span class="nav-year">1626–28</span>
+                    <span class="nav-event">大慼 · 服制 · 明使</span>
+                </button></li>
+                <li><button data-period="1627" style="--pc:#c0392b">
+                    <span class="nav-year">1627</span>
+                    <span class="nav-event">丁卯胡亂</span>
+                </button></li>
+                <li><button data-period="1637" style="--pc:#922b21">
+                    <span class="nav-year">1637</span>
+                    <span class="nav-event">丙子胡亂 · 入質</span>
+                </button></li>
+                <li><button data-period="1638" style="--pc:#17a589">
+                    <span class="nav-year">1638</span>
+                    <span class="nav-event">在瀋陽</span>
+                </button></li>
+                <li><button data-period="1645" style="--pc:#6c3483">
+                    <span class="nav-year">1645</span>
+                    <span class="nav-event">歸國 · 薨逝</span>
+                </button></li>
+                <li><button data-period="1646" style="--pc:#7b241c">
+                    <span class="nav-year">1646</span>
+                    <span class="nav-event">姜嬪之獄</span>
+                </button></li>
+                <li><button data-period="1647" style="--pc:#2c3e50">
+                    <span class="nav-year">1647</span>
+                    <span class="nav-event">三子流配</span>
+                </button></li>
+                <li><button data-period="附錄" style="--pc:#7f8c8d">
+                    <span class="nav-year">附錄</span>
+                    <span class="nav-event">傳記摘要</span>
+                </button></li>
+            </ul>
+
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section-label">主題</div>
+            <div class="theme-grid">
+                <button class="pill active" data-theme="all" style="--c:#2c3e50">全部</button>
+                <button class="pill" data-theme="禮制" style="--c:#7d6608">禮制</button>
+                <button class="pill" data-theme="論議" style="--c:#566573">論議</button>
+                <button class="pill" data-theme="外交" style="--c:#1a5276">外交</button>
+                <button class="pill" data-theme="服制" style="--c:#6c3483">服制</button>
+                <button class="pill" data-theme="胡亂" style="--c:#922b21">胡亂</button>
+                <button class="pill" data-theme="入質" style="--c:#0e6655">入質</button>
+                <button class="pill" data-theme="在瀋" style="--c:#17a589">在瀋</button>
+                <button class="pill" data-theme="薨逝" style="--c:#4a235a">薨逝</button>
+                <button class="pill" data-theme="身後事" style="--c:#424949">身後事</button>
             </div>
-            <div class="entry-text">丙子册封元子爲王世子，年十四歲也。上出御隆政殿，命近臣宣教，命又授竹册。教命文曰：宗儲主鬯，所以順天經，貳極定名，所以固國本，須位序之早正，宜典册之極崇。</div>
-            <div class="entry-note">On the day 丙子 (a cyclical day-name within the first month), the Crown Prince was formally invested at age 14. The investiture edict reads: "Establishing the heir to the ancestral shrine is how Heaven's order is followed; naming the one who shares the throne is how the nation's foundation is secured. The position must be confirmed early, and the investiture rites must be of the highest solemnity."</div>
-        </div>
+        </aside>
 
-        <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖三年 正月 丁丑日 · 大赦</div>
-                <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
+        <!-- ══ MAIN CONTENT ══════════════════════ -->
+        <main class="main-area">
+
+            <div class="page-header">
+                <h1>昭顯世子 · 仁祖大王實錄</h1>
+                <div class="page-subtitle">Selected passages from the <em>Annals of King Injo</em> concerning Crown Prince Sohyeon (昭顯世子, 1612–1645)</div>
             </div>
-            <div class="entry-text">丁丑上御隆政殿，受群臣賀，蓋賀王世子册禮成也。左議政尹昉等率百官進箋，卽日宣教大赦。上下教曰：「世子師傅吳允謙、鄭曄、鄭經世及百官加親授。李廷龜族屬中六品遷轉。」</div>
-            <div class="entry-note">The King received congratulations from all officials. A general amnesty was declared.</div>
-        </div>
 
-        <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖三年 · 憲府 啓 · 鄭百昌 論議</div>
-                <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+            <div class="intro-box">
+                <p>昭顯世子（1612–1645），名𪶁，字成之，朝鮮第十六代王仁祖之長子，元妃韓氏所出。仁祖三年（1625）冊立為王世子，時年十四歲。仁祖十五年（1637）丙子胡亂後，作為人質赴清朝瀋陽，滯留長達八年。仁祖二十三年（1645）春歸國，數月後薨逝於昌慶宮，年三十四，謚曰昭顯。</p>
+                <p style="font-size:13px;color:#bbb;margin-bottom:0;">In the Sillok, the Crown Prince is referred to as 王世子 or 世子 during his lifetime. The posthumous title 昭顯 was conferred in the fifth month of 仁祖 23年 (1645).</p>
             </div>
-            <div class="entry-text">憲府啓曰：「春坊之官，極一時之選，居講筵者，固無踰於鄭百昌。今世子富於春秋，師道在嚴，前日筵臣之陳啓者，有意存焉，請遞鄭百昌兼輔德之任。」答曰：「鄭百昌固不合於講官。爾等所謂有意存焉者，是誠何心也？予不識爾等之意，故不卽允從。大抵臺官，不當如是碌碌也。」</div>
-            <div class="entry-note">The Office of the Inspector General petitioned to remove 鄭百昌 as concurrent 輔德, citing that the Crown Prince's closeness with him violated the principle of impartial instruction. The King rebuked the petition sharply.</div>
-        </div>
 
-        <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖三年 乙未日 · 持平 金堉 啓</div>
-                <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+            <div class="no-results" id="no-results">目前篩選條件下無符合條目。</div>
+
+            <!-- 1625 -->
+            <div class="period-section" data-period="1625" style="--period-color:#c9a227">
+                <div class="period-section-header">
+                    <div class="period-year-large">1625</div>
+                    <div class="period-event-name">冊封</div>
+                    <div class="period-vol-label">卷之八 · 仁祖三年</div>
+                    <div class="period-subtitle">Investiture as Crown Prince: Eastern Palace staff, ceremony, and early court debates</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖三年 正月 · 東宮 官員 임명</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
+                    </div>
+                    <div class="entry-text">以金瑬爲吏曹判書，南道兵使申景瑗爲北道兵使，尹暄爲兵曹參判，李元翼爲世子師，尹昉爲世子傅，李廷龜爲左賓客，吳允謙爲右賓客，鄭曄爲左副賓客，鄭經世爲右副賓客，李植爲輔德，鄭百昌爲弼善，姜碩期爲兼司書，俞伯曾爲兼文學，金光炫爲司書，沈之源爲兼説書，李楘爲執義，鄭宗溟爲檢詳。</div>
+                    <div class="entry-note">Officials appointed to the Crown Prince's household and education staff.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖三年 · 史臣 按語</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+                    </div>
+                    <div class="entry-text">李植、鄭百昌之文學，當今罕儔，而至於輔導世子，皆以親屬爲之，則未免偏係之私。</div>
+                    <div class="entry-note">"Though 李植 and 鄭百昌 are rare literary talents of the age, appointing only relatives to guide the Crown Prince cannot avoid the taint of partiality."</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖三年 正月 丙子日 · 冊封</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
+                    </div>
+                    <div class="entry-text">丙子册封元子爲王世子，年十四歲也。上出御隆政殿，命近臣宣教，命又授竹册。教命文曰：宗儲主鬯，所以順天經，貳極定名，所以固國本，須位序之早正，宜典册之極崇。</div>
+                    <div class="entry-note">On the day 丙子 (a cyclical day within the first month), the Crown Prince was formally invested at age 14. The investiture edict: "Establishing the heir to the ancestral shrine is how Heaven's order is followed; naming the one who shares the throne is how the nation's foundation is secured."</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖三年 正月 丁丑日 · 大赦</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
+                    </div>
+                    <div class="entry-text">丁丑上御隆政殿，受群臣賀，蓋賀王世子册禮成也。左議政尹昉等率百官進箋，卽日宣教大赦。上下教曰：「世子師傅吳允謙、鄭曄、鄭經世及百官加親授。李廷龜族屬中六品遷轉。」</div>
+                    <div class="entry-note">The King received congratulations from all officials; a general amnesty was declared.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖三年 · 憲府 啓 · 鄭百昌 論議</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+                    </div>
+                    <div class="entry-text">憲府啓曰：「春坊之官，極一時之選，居講筵者，固無踰於鄭百昌。今世子富於春秋，師道在嚴，前日筵臣之陳啓者，有意存焉，請遞鄭百昌兼輔德之任。」答曰：「鄭百昌固不合於講官。爾等所謂有意存焉者，是誠何心也？予不識爾等之意，故不卽允從。大抵臺官，不當如是碌碌也。」</div>
+                    <div class="entry-note">The Office of the Inspector General petitioned to remove 鄭百昌 as concurrent 輔德, arguing the Crown Prince's closeness with him violated the principle of impartial instruction. The King rebuked the petition sharply.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖三年 乙未日 · 持平 金堉 啓</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+                    </div>
+                    <div class="entry-text">持平金堉啓曰：「昨論鄭百昌之事者，非有他意，只爲百昌親暱於世子，而世子富於春秋，殿下之所以教導者，當示以至公無私之道。豈無他人，而使百昌兼任，使世子習知親私之可親、疏遠之可疏哉？且親私則不嚴，疏遠則生敬，開講之際，損益可知也。」</div>
+                    <div class="entry-note">Inspector 金堉 (1580–1658): "Intimacy breeds laxity; distance breeds respect. The difference this makes in lectures is self-evident."</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="外交" style="--entry-color:#1a5276">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖三年 丁未日 · 禮曹 啓 · 奏請</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
+                    </div>
+                    <div class="entry-text">禮曹啓曰：「王世子册封事，當據例奏請，别遣使臣，或順付於謝恩使、或冬至‧聖節使，議大臣以定何如？」答曰：「世子册封，據例奏請，未爲不可。但兩天使纔過，而繼有詔使之行，則赤立之民，決難支堪，徐待後日，更觀民力而處之可也。」</div>
+                    <div class="entry-note">The Ministry of Rites asked whether to send a separate mission to Ming to formally notify the investiture. The King agreed in principle but deferred, citing exhaustion from hosting recent Ming envoys.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖三年 · 領事 尹昉 稱頌</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+                    </div>
+                    <div class="entry-text">領事尹昉曰：「臣再侍王世子於册禮之後，則世子岥嶷夙成，講學之際，深解旨義，誠一國臣民之慶、祖宗社稷之福也。册封奏請，不可遲緩。」</div>
+                    <div class="entry-note">Chief State Councillor 尹昉: "The Crown Prince is precociously mature; in his studies he grasps the meaning deeply — truly a blessing for the altars of the state."</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖三年 · 李廷龜 · 隨駕</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+                    </div>
+                    <div class="entry-text">廷龜曰：「郊外擧動，例有王世子隨駕之事，至於謁聖祭享之時，亦有此規，而但今世子沖年務學，寸陰可惜，至於觀武才等事，尤不宜隨駕。」上曰：「卿言甚當，何必隨往乎？」</div>
+                    <div class="entry-note">左賓客 李廷龜 suggested that the young Crown Prince need not accompany the King on military reviews. The King agreed.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖三年 癸酉日 · 世子 召見 李貴</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+                    </div>
+                    <div class="entry-text">癸酉王世子召見延平府院君李貴於景賢堂。蓋李貴曾以請對世子之意，屢陳上前，故至是上使世子召見。</div>
+                    <div class="entry-note">The Crown Prince received 李貴 (延平府院君, key figure in Injo's coup) in Gyeonghyeon Hall, arranged after 李貴 had repeatedly petitioned the King for the meeting.</div>
+                </div>
             </div>
-            <div class="entry-text">持平金堉啓曰：「昨論鄭百昌之事者，非有他意，只爲百昌親暱於世子，而世子富於春秋，殿下之所以教導者，當示以至公無私之道。豈無他人，而使百昌兼任，使世子習知親私之可親、疏遠之可疏哉？且親私則不嚴，疏遠則生敬，開講之際，損益可知也。」</div>
-            <div class="entry-note">Inspector 金堉 (1580–1658): "Intimacy breeds laxity; distance breeds respect. The difference this makes in lectures is self-evident."</div>
-        </div>
+            <div class="section-sep">· · ·</div>
 
-        <div class="sillok-entry" data-themes="外交" style="--entry-color:#1a5276">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖三年 丁未日 · 禮曹 啓 · 奏請</div>
-                <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
+            <!-- 1626–28 -->
+            <div class="period-section" data-period="1626-1628" style="--period-color:#ca6f1e">
+                <div class="period-section-header">
+                    <div class="period-year-large">1626–28</div>
+                    <div class="period-event-name">大慼 · 服制 · 明使</div>
+                    <div class="period-vol-label">卷之十–十二 · 仁祖四–六年</div>
+                    <div class="period-subtitle">Mourning for 啓運宮, debates over the Crown Prince's mourning dress, and Ming envoy reception protocols</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖四年 (1626) 卷之十 · 世子 見 李元翼</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+                    </div>
+                    <div class="entry-text">上曰：「世子欲見卿，卿出去時，暫見可也。」元翼退出。世子見元翼曰：「久不相見，常切戀思。今也出仕，喜幸極矣。」元翼曰：「邸下春秋方盛，十分勉學幸甚。」</div>
+                    <div class="entry-note">Crown Prince to 李元翼 (1547–1634, 世子師): "I have not seen you for so long and have constantly missed you." 李元翼: "Your Highness is in the prime of youth — it is a great blessing that you apply yourself fully to learning."</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="論議 服制" style="--entry-color:#566573">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖四年 (1626) 卷之十一 · 侍講院 啓 · 廢講</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span><span class="tag" style="--c:#6c3483">服制</span></div>
+                    </div>
+                    <div class="entry-text">戊戌侍講院啓曰：「王世子以侍病，自歲前停講，終值大慼，迄未開筵。沖年講學，寸陰可惜，而廢講之久，殆至三箇月，事極可悶。揆以《禮經》，未葬讀喪禮之義，則卒哭前專廢講業，似未妥當。來月爲始，開筵何如？」從之。</div>
+                    <div class="entry-note">The Office of Crown Prince Instruction petitioned to resume lectures, suspended since the Crown Prince attended his ailing grandmother (侍病), then halted by the 大慼 (death of 啓運宮, Injo's birth mother). Suspended for nearly three months; the King approved resumption.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="服制" style="--entry-color:#6c3483">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖四年 (1626) 卷之十一 · 庚子 · 世子 服色</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#6c3483">服制</span></div>
+                    </div>
+                    <div class="entry-text">庚子下教曰：「世子服色，卒哭前以白袍磨鍊，今以淺淡服磨鍊，何前後不同如是耶？内官以下及講官變服，亦無是理，此單子還爲出給，使之改磨鍊。」</div>
+                    <div class="entry-note">The King questioned why the Crown Prince's mourning dress had been changed from white robes (白袍) to light-colored robes (淺淡服) before the wailing ceremony, and directed the clothing regulations to be revised.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="服制 論議" style="--entry-color:#6c3483">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖四–五年 (1626–27) 卷之十一–十二 · 服色 論議</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#6c3483">服制</span><span class="tag" style="--c:#566573">論議</span></div>
+                    </div>
+                    <div class="entry-text">禮曹啓曰：「殿下卒哭前視事，服旣以白袍，則王世子書筵、視事，當用淺淡服矣。」……辛亥諫院啓曰：「沖年講學，一日爲急，請依該曹所定，以淺淡服，從速開筵，卒哭後更令該曹，次第磨鍊。」答曰：「世子之服，雖是期喪，方在喪側，用淺淡服，似乎未安矣。」連啓，乃從之。</div>
+                    <div class="entry-note">Prolonged debate: the Ministry of Rites argued the Crown Prince should wear light mourning dress (淺淡服) at lectures. The Office of Remonstrance pressed for an immediate resumption. After repeated petitions, the King reluctantly agreed.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="外交" style="--entry-color:#1a5276">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖五–六年 (1627–28) 卷之十二 · 甲子 · 明使 接見 禮節</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
+                    </div>
+                    <div class="entry-text">甲子禮曹啓曰：「天使入京，則王世子似當有接見之禮，儀注節目，令該曹講定矣。王世子受册命於天朝之後，則迎詔及宴享，俱當出參。今則時未受册於天朝，似難依例接見，但天使若或聞知而請見，則不可不見，冠服及服色，議大臣，預爲講定宜當。」</div>
+                    <div class="entry-note">The Ministry of Rites raised a protocol question: since the Crown Prince had not yet been formally recognized by the Ming court, what ceremony should apply if Ming envoys requested to see him?</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="外交 服制" style="--entry-color:#1a5276">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖五–六年 (1627–28) 卷之十二 · 遠接使 金瑬 · 藍籤</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span><span class="tag" style="--c:#6c3483">服制</span></div>
+                    </div>
+                    <div class="entry-text">遠接使金瑬馳啓曰：「正使問曰：『國王拜帖，何用藍籤？』禮忠答曰：『國王於本年正月，丁生母憂矣。』正使曰：『是則爾國私喪。今此詔敕，乃聖天子莫大之慶，何其不知禮？此後藍籤帖子，俺斷不受。』」政院請改用紅籤，從之。</div>
+                    <div class="entry-note">Ambassador 金瑬 (1571–1648) reported that the Ming chief envoy objected to Korea's use of blue-bordered mourning correspondence (藍籤). The King agreed to switch to red-bordered paper (紅籤) for the occasion.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖五–六年 (1627–28) 卷之十二 · 丁卯日 · 魂宮 亞獻</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
+                    </div>
+                    <div class="entry-text">丁卯上幸魂宮，行别祭。上行初獻，世子行亞獻。</div>
+                    <div class="entry-note">The King visited the spirit hall (魂宮) and conducted a special sacrifice. The King performed the first libation (初獻); the Crown Prince performed the second (亞獻).</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="外交" style="--entry-color:#1a5276">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖六年 (戊辰, 1628) 卷之十二 · 庚午 · 今已三年</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
+                    </div>
+                    <div class="entry-text">庚午禮曹啓曰：「王世子正位東宮，今已三年，尚未受册命於天朝。臣曹據例啓請，而適值兩璫之行，公私物力掃盡，遂從姑待後年之議，以至於今。竊念莫大應行之典，因此稽遲，豈非未安之甚乎？」上曰：「此非急急之事，今番接待詔使，亦恐民力之難堪。况年年酬應詔使，則何以爲國乎？姑待後日。」</div>
+                    <div class="entry-note">The Ministry of Rites noted it had been three years since investiture, yet no Ming recognition had been obtained. The mission was delayed after the two eunuch envoys (兩璫之行, 1626) drained all resources. The King again deferred: "Receiving envoys year after year — how can the country bear it?"</div>
+                </div>
             </div>
-            <div class="entry-text">禮曹啓曰：「王世子册封事，當據例奏請，别遣使臣，或順付於謝恩使、或冬至‧聖節使，議大臣以定何如？」答曰：「世子册封，據例奏請，未爲不可。但兩天使纔過，而繼有詔使之行，則赤立之民，決難支堪，徐待後日，更觀民力而處之可也。」</div>
-            <div class="entry-note">The Ministry of Rites asked whether to send a separate mission to Ming to formally notify them of the Crown Prince's investiture. The King agreed in principle but deferred, citing the people's exhaustion from hosting recent Ming envoy missions.</div>
-        </div>
+            <div class="section-sep">· · ·</div>
 
-        <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖三年 · 領事 尹昉 稱頌</div>
-                <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+            <!-- 1627 -->
+            <div class="period-section" data-period="1627" style="--period-color:#c0392b">
+                <div class="period-section-header">
+                    <div class="period-year-large">1627</div>
+                    <div class="period-event-name">丁卯胡亂</div>
+                    <div class="period-vol-label">仁祖五年</div>
+                    <div class="period-subtitle">The First Manchu Invasion: court debates sending the Crown Prince south as a rallying point</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="胡亂" style="--entry-color:#922b21">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖五年 正月 十八日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#922b21">胡亂</span></div>
+                    </div>
+                    <div class="entry-text">世子年幼，不可遠去矣。</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="胡亂 論議" style="--entry-color:#922b21">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖五年 正月 二十一日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#922b21">胡亂</span><span class="tag" style="--c:#566573">論議</span></div>
+                    </div>
+                    <div class="entry-text">世子雖幼沖，若向南方，則人心有所依賴矣。</div>
+                    <div class="entry-note">Officials argued that even a young Crown Prince sent south could serve as a focal point of legitimacy for a divided court (分朝).</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="胡亂" style="--entry-color:#922b21">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖五年 正月 二十四日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#922b21">胡亂</span></div>
+                    </div>
+                    <div class="entry-text">世子發行。……世子至全州。</div>
+                </div>
             </div>
-            <div class="entry-text">領事尹昉曰：「臣再侍王世子於册禮之後，則世子岥嶷夙成，講學之際，深解旨義，誠一國臣民之慶、祖宗社稷之福也。册封奏請，不可遲緩。」</div>
-            <div class="entry-note">Chief State Councillor 尹昉 praised the Crown Prince: "He is precociously mature and accomplished; in his studies he grasps the meaning deeply — truly a blessing for the altars of the state." He urged that notification to Ming not be delayed.</div>
-        </div>
+            <div class="section-sep">· · ·</div>
 
-        <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖三年 · 李廷龜 啓 · 隨駕</div>
-                <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+            <!-- 1637 -->
+            <div class="period-section" data-period="1637" style="--period-color:#922b21">
+                <div class="period-section-header">
+                    <div class="period-year-large">1637</div>
+                    <div class="period-event-name">丙子胡亂 · 入質瀋陽</div>
+                    <div class="period-vol-label">仁祖十五年</div>
+                    <div class="period-subtitle">The Second Manchu Invasion: surrender at Samjondo and departure for Shenyang as a hostage</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="入質" style="--entry-color:#0e6655">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖十五年 正月 三十日 · 三田渡</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#0e6655">入質</span></div>
+                    </div>
+                    <div class="entry-text">王世子從焉。</div>
+                    <div class="entry-note">The Crown Prince accompanied King Injo to Samjondo (三田渡) for the surrender ceremony.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="入質" style="--entry-color:#0e6655">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖十五年 二月 一日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#0e6655">入質</span></div>
+                    </div>
+                    <div class="entry-text">王世子及嬪宮、鳳林大君及夫人於陣中。……以麟坪大君及夫人，還送于京中。</div>
+                    <div class="entry-note">The Crown Prince, his consort, and 鳳林大君 were detained in the Qing camp. 麟坪大君 was sent back to the capital.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="入質" style="--entry-color:#0e6655">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖十五年 二月 五日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#0e6655">入質</span></div>
+                    </div>
+                    <div class="entry-text">世子自虜營返回，向群臣辭別。……上敎：「說書兪棨在山城，極言和議之非……命勿陪往。」</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="入質" style="--entry-color:#0e6655">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖十五年 二月 八日 · 昌陵 西</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#0e6655">入質</span></div>
+                    </div>
+                    <div class="entry-text">上於昌陵西送別世子。世子臨別受敎：「勉之哉！勿激怒，勿見輕。」世子對群臣曰：「主上在此，何敢乃爾？」</div>
+                    <div class="entry-note">King Injo's parting words: "Do your best. Do not provoke anger, and do not let yourself be looked down upon." The Crown Prince replied to the officials: "The King is here — how could any of you dare act otherwise?"</div>
+                </div>
             </div>
-            <div class="entry-text">廷龜曰：「郊外擧動，例有王世子隨駕之事，至於謁聖祭享之時，亦有此規，而但今世子沖年務學，寸陰可惜，至於觀武才等事，尤不宜隨駕。」上曰：「卿言甚當，何必隨往乎？」</div>
-            <div class="entry-note">左賓客 李廷龜 suggested that the young Crown Prince need not accompany the King on all excursions — especially not military reviews. The King agreed.</div>
-        </div>
+            <div class="section-sep">· · ·</div>
 
-        <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖三年 癸酉日 · 世子 召見 李貴</div>
-                <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+            <!-- 1638 -->
+            <div class="period-section" data-period="1638" style="--period-color:#17a589">
+                <div class="period-section-header">
+                    <div class="period-year-large">1638</div>
+                    <div class="period-event-name">在瀋陽</div>
+                    <div class="period-vol-label">仁祖十六年</div>
+                    <div class="period-subtitle">Life in Shenyang as a hostage: provisions, festival greetings, illness</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="在瀋" style="--entry-color:#17a589">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖十六年 三月 二十一日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#17a589">在瀋</span></div>
+                    </div>
+                    <div class="entry-text">世子在瀋陽，平安監司每朔進膳。世子念農務方緊，令減四月朔膳，西民感悅。</div>
+                    <div class="entry-note">The Pyeongan governor sent monthly provisions to the Crown Prince. Knowing the farming season was pressing, the Crown Prince ordered the April provisions reduced, earning goodwill from the western population.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="在瀋" style="--entry-color:#17a589">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖十六年 四月 二十五日 · 端午</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#17a589">在瀋</span></div>
+                    </div>
+                    <div class="entry-text">王世子遣輔德李時楷問安，以端午節日也。</div>
+                    <div class="entry-note">On the Dragon Boat Festival, the Crown Prince dispatched his attendant 李時楷 back to Korea to inquire after the King's health.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="在瀋" style="--entry-color:#17a589">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖十六年 五月 二十日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#17a589">在瀋</span></div>
+                    </div>
+                    <div class="entry-text">世子有疾，遣宣傳官于瀋陽以問之。</div>
+                </div>
             </div>
-            <div class="entry-text">癸酉王世子召見延平府院君李貴於景賢堂。蓋李貴曾以請對世子之意，屢陳上前，故至是上使世子召見。</div>
-            <div class="entry-note">The Crown Prince received 李貴 (延平府院君, key figure in Injo's enthronement coup) in the Gyeonghyeon Hall, arranged after 李貴 had repeatedly petitioned the King for an audience.</div>
-        </div>
-    </div>
+            <div class="section-sep">· · ·</div>
 
-    <!-- ═══════════════════════════════════════════
-         1626–1628 · 大慼 · 服制 · 明使
-    ═══════════════════════════════════════════════ -->
-    <div class="period-section" data-period="1626-1628" style="--period-color:#ca6f1e">
-        <div class="period-header">
-            <span class="period-year">1626–28</span>
-            <span class="period-event">大慼 · 服制 · 明使</span>
-            <span class="period-vol">卷之十–十二 · 仁祖四–六年</span>
-        </div>
-        <div class="period-subtitle">Mourning for 啓運宮 (Injo's birth mother), debates over the Crown Prince's mourning dress, and reception of Ming envoys</div>
+            <!-- 1645 -->
+            <div class="period-section" data-period="1645" style="--period-color:#6c3483">
+                <div class="period-section-header">
+                    <div class="period-year-large">1645</div>
+                    <div class="period-event-name">歸國 · 薨逝 · 賜謚</div>
+                    <div class="period-vol-label">仁祖二十三年</div>
+                    <div class="period-subtitle">Return from Shenyang, sudden death at Changgyeong Palace, bestowal of the posthumous title 昭顯</div>
+                </div>
 
-        <div class="sillok-entry" data-themes="論議" style="--entry-color:#566573">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖四年 (1626) 卷之十 · 世子 見 李元翼</div>
-                <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span></div>
+                <div class="sillok-entry" data-themes="薨逝" style="--entry-color:#4a235a">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖二十三年 二月 十八日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#4a235a">薨逝</span></div>
+                    </div>
+                    <div class="entry-text">世子還，淸使偕入京。先是，淸使固要上郊迎……於是，上扶掖而出，迎于闕庭。</div>
+                    <div class="entry-note">The Crown Prince returned with Qing envoys. The envoys had insisted the King personally go out to receive his son; ultimately the King went out and welcomed him in the palace courtyard.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="薨逝" style="--entry-color:#4a235a">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖二十三年 四月 二十六日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#4a235a">薨逝</span></div>
+                    </div>
+                    <div class="entry-text">王世子卒于昌慶宮歡慶堂。世子姿質英明，而器量不弘……世子十年異域，備嘗險艱，東還纔數月而遘疾，醫官等亦妄施鍼藥，終至不救。……世子年三十四，有三子三女。</div>
+                    <div class="entry-note">The Crown Prince died suddenly at Hwangyeong Hall in Changgyeong Palace, age 34. The Sillok notes that after ten years in a foreign land, the physicians' improper use of acupuncture and medicine contributed to his death.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="薨逝 禮制" style="--entry-color:#4a235a">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖二十三年 五月 十六日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#4a235a">薨逝</span><span class="tag" style="--c:#7d6608">禮制</span></div>
+                    </div>
+                    <div class="entry-text">議謚曰昭顯。</div>
+                    <div class="entry-note">The posthumous title 昭顯 was officially determined.</div>
+                </div>
             </div>
-            <div class="entry-text">上曰：「世子欲見卿，卿出去時，暫見可也。」元翼退出。世子見元翼曰：「久不相見，常切戀思。今也出仕，喜幸極矣。」元翼曰：「邸下春秋方盛，十分勉學幸甚。」</div>
-            <div class="entry-note">The Crown Prince to 李元翼 (1547–1634, appointed 世子師): "I have not seen you for so long and have constantly missed you. That you are in office again fills me with joy." 李元翼: "Your Highness is in the prime of youth — it is a great blessing that you apply yourself fully to learning."</div>
-        </div>
+            <div class="section-sep">· · ·</div>
 
-        <div class="sillok-entry" data-themes="論議 服制" style="--entry-color:#566573">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖四年 (1626) 卷之十一 · 侍講院 啓 · 廢講</div>
-                <div class="entry-tags"><span class="tag" style="--c:#566573">論議</span><span class="tag" style="--c:#6c3483">服制</span></div>
+            <!-- 1646 -->
+            <div class="period-section" data-period="1646" style="--period-color:#7b241c">
+                <div class="period-section-header">
+                    <div class="period-year-large">1646</div>
+                    <div class="period-event-name">嬪宮姜氏之獄</div>
+                    <div class="period-vol-label">仁祖二十四年</div>
+                    <div class="period-subtitle">The trial and execution of the Crown Prince's consort, Consort Gang (愍懷嬪)</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖二十四年 正月 三日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
+                    </div>
+                    <div class="entry-text">上進生鰒灸有毒，遂疑姜嬪。</div>
+                    <div class="entry-note">King Injo was served grilled abalone suspected of containing poison; suspicion fell upon Consort Gang.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖二十四年 二月 三日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
+                    </div>
+                    <div class="entry-text">備忘記云：「姜嬪在瀋之時，潛圖易位，預造紅錦翟衣，僭稱內殿之號。」</div>
+                    <div class="entry-note">The royal memorandum accused Consort Gang of secretly plotting to usurp the queen's position while in Shenyang — having royal robes made in advance and unlawfully using the title of the Inner Palace.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖二十四年 二月 十二日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
+                    </div>
+                    <div class="entry-text">上下敎于政院：「廢出賜死之意，言于兩司。」</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖二十四年 三月 十四日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
+                    </div>
+                    <div class="entry-text">廢昭顯世子嬪姜氏，賜死於故第，收其敎命竹冊、印、章服焚之。</div>
+                    <div class="entry-note">Consort Gang was stripped of her title and ordered to die at her former residence. Her investiture documents, bamboo scroll, seal, and ceremonial garments were confiscated and burned.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖二十四年 五月 二日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
+                    </div>
+                    <div class="entry-text">命以姜氏私藏銀一萬六百五十兩、黃金一百六十兩、倭劍十九柄，歸于戶曹，使之別置一庫，以備昭顯諸子婚娶之需。</div>
+                    <div class="entry-note">Consort Gang's private holdings — 10,650 taels of silver, 160 taels of gold, and 19 Japanese swords — were transferred to the Board of Revenue for the future marriages of 昭顯世子's sons.</div>
+                </div>
             </div>
-            <div class="entry-text">戊戌侍講院啓曰：「王世子以侍病，自歲前停講，終值大慼，迄未開筵。沖年講學，寸陰可惜，而廢講之久，殆至三箇月，事極可悶。揆以《禮經》，未葬讀喪禮之義，則卒哭前專廢講業，似未妥當。會講、朝講，雖不可爲，常時開筵，不可久停，而前受《大學》、《小學》，實與《禮經》無異。來月爲始，開筵何如？」從之。</div>
-            <div class="entry-note">The Office of Crown Prince Instruction petitioned to resume lectures, suspended since the Crown Prince had been attending to the sick (侍病), then interrupted by the 大慼 (death of 啓運宮, Injo's birth mother). Suspended for nearly three months; the King approved resumption.</div>
-        </div>
+            <div class="section-sep">· · ·</div>
 
-        <div class="sillok-entry" data-themes="服制" style="--entry-color:#6c3483">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖四年 (1626) 卷之十一 · 庚子 · 世子 服色</div>
-                <div class="entry-tags"><span class="tag" style="--c:#6c3483">服制</span></div>
+            <!-- 1647 -->
+            <div class="period-section" data-period="1647" style="--period-color:#2c3e50">
+                <div class="period-section-header">
+                    <div class="period-year-large">1647</div>
+                    <div class="period-event-name">三子流配濟州</div>
+                    <div class="period-vol-label">仁祖二十五年</div>
+                    <div class="period-subtitle">The three sons of 昭顯世子 exiled to Jeju Island</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="身後事 禮制" style="--entry-color:#424949">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖二十五年 二月 四日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span><span class="tag" style="--c:#7d6608">禮制</span></div>
+                    </div>
+                    <div class="entry-text">昭顯世子魂宮，姑設於仁慶宮內，而此非神主永妥之所。三年後似當依順懷宮之例，別立廟宇于他處。</div>
+                    <div class="entry-note">The Ministry of Rites noted that the spirit shrine for 昭顯世子, temporarily housed at Ingyeong Palace, was not a suitable permanent location, and recommended establishing a separate shrine after three years.</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
+                    <div class="entry-meta">
+                        <div class="entry-date">仁祖二十五年 五月 十三日</div>
+                        <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
+                    </div>
+                    <div class="entry-text">配昭顯世子三子石鐵、石麟、石堅于濟州。上諭：「一處定配，使之相依以生。內官、別將等輪定以送。」</div>
+                    <div class="entry-note">The three sons — 石鐵 (age 12), 石麟 (age 8), and 石堅 (age 4) — were exiled to Jeju Island. King Injo directed that they be sent to the same place so that they might support one another.</div>
+                </div>
             </div>
-            <div class="entry-text">庚子下教曰：「世子服色，卒哭前以白袍磨鍊，今以淺淡服磨鍊，何前後不同如是耶？内官以下及講官變服，亦無是理，此單子還爲出給，使之改磨鍊。」</div>
-            <div class="entry-note">The King questioned why the Crown Prince's mourning dress had been changed from white robes (白袍) to light-colored robes (淺淡服) before the wailing ceremony (卒哭), and directed the regulations to be revised.</div>
-        </div>
+            <div class="section-sep">· · ·</div>
 
-        <div class="sillok-entry" data-themes="服制 論議" style="--entry-color:#6c3483">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖四–五年 (1626–27) 卷之十一–十二 · 服色 論議</div>
-                <div class="entry-tags"><span class="tag" style="--c:#6c3483">服制</span><span class="tag" style="--c:#566573">論議</span></div>
+            <!-- 附錄 -->
+            <div class="period-section" data-period="附錄" style="--period-color:#7f8c8d">
+                <div class="period-section-header">
+                    <div class="period-year-large" style="font-size:28px;letter-spacing:0.05em">附錄</div>
+                    <div class="period-event-name">傳記摘要</div>
+                    <div class="period-subtitle">Biographical summary from the Appendix of 仁祖大王實錄</div>
+                </div>
+
+                <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
+                    <div class="entry-meta">
+                        <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
+                    </div>
+                    <div class="entry-text">王元妃韓氏誕三男，長昭顯世子諱𪶁早卒，次今上殿下，次麟坪大君㴭。……丁丑往瀋陽，轉入燕京，乙酉春大歸，尋疾革殂逝。昭顯世子有三男、三女，男二死，一幼，三女未筓。</div>
+                    <div class="entry-note">Queen Han bore three sons — 昭顯世子 (died young), the present King [Hyojong], and 麟坪大君. Sohyeon went to Shenyang in 丁丑 [1637], later transferred to Beijing, returned in the spring of 乙酉 [1645], and soon died of illness. He had three sons and three daughters; two sons died young.</div>
+                </div>
             </div>
-            <div class="entry-text">禮曹啓曰：「王世子名位已定，喪制降殺之節，當與殿下一體故也。殿下卒哭前視事，服旣以白袍，則王世子書筵、視事，當用淺淡服矣。」……辛亥諫院啓曰：「沖年講學，一日爲急，請依該曹所定，以淺淡服，從速開筵，卒哭後更令該曹，次第磨鍊。」答曰：「世子之服，雖是期喪，方在喪側，用淺淡服，似乎未安矣。」連啓，乃從之。</div>
-            <div class="entry-note">A prolonged debate: the Ministry of Rites argued that since the King used white robes for audiences, the Crown Prince should wear light-colored dress (淺淡服) for study sessions. After repeated petitions from the Office of Remonstrance, the King reluctantly agreed.</div>
-        </div>
 
-        <div class="sillok-entry" data-themes="外交" style="--entry-color:#1a5276">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖五–六年 (1627–28) 卷之十二 · 甲子 · 明使 接見 禮節</div>
-                <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
+            <div class="source-footer">
+                <p>Sources: 朝鮮王朝實錄·仁祖大王實錄 (卷之八·十·十一·十二·十五·十六·二十三·二十四·二十五; 附錄), via
+                    <a href="https://zh.wikisource.org/wiki/%E6%9C%9D%E9%AE%AE%E7%8E%8B%E6%9C%9D%E5%AF%A6%E9%8C%84/%E4%BB%81%E7%A5%96%E5%AF%A6%E9%8C%84" target="_blank">Wikisource 維基文庫</a>
+                    and <a href="https://www.shidianguji.com" target="_blank">識典古籍</a>.
+                    Page compiled by Shuyi Ma, April 2026.
+                </p>
             </div>
-            <div class="entry-text">甲子禮曹啓曰：「天使入京，則王世子似當有接見之禮，儀注節目，令該曹講定矣。王世子受册命於天朝之後，則迎詔及宴享，俱當出參，又當有别行請宴之禮矣。今則時未受册於天朝，似難依例接見，但天使若或聞知而請見，則不可不見，冠服及服色，議大臣，預爲講定宜當。」</div>
-            <div class="entry-note">The Ministry of Rites raised a protocol question: since the Crown Prince had not yet been formally recognized by the Ming court, what should the ceremony look like if Ming envoys requested to see him?</div>
-        </div>
 
-        <div class="sillok-entry" data-themes="外交 服制" style="--entry-color:#1a5276">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖五–六年 (1627–28) 卷之十二 · 遠接使 金瑬 · 藍籤</div>
-                <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span><span class="tag" style="--c:#6c3483">服制</span></div>
-            </div>
-            <div class="entry-text">遠接使金瑬馳啓曰：「正使問曰：『國王拜帖，何用藍籤？』禮忠答曰：『國王於本年正月，丁生母憂矣。』正使曰：『是則爾國私喪。今此詔敕，乃聖天子莫大之慶，何其不知禮，如是之甚也？此後藍籤帖子，俺斷不受，爾等可傳語遠接陪臣，後勿如是。』」政院請改用紅籤，從之。</div>
-            <div class="entry-note">Ambassador 金瑬 (1571–1648) reported that the Ming chief envoy objected to Korea's use of blue-bordered correspondence (藍籤, used during mourning). The Office of the Royal Secretariat asked to switch to red-bordered paper (紅籤) for the occasion; the King agreed.</div>
-        </div>
+        </main><!-- end .main-area -->
+    </div><!-- end .page-layout -->
 
-        <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖五–六年 (1627–28) 卷之十二 · 丁卯日 · 魂宮 亞獻</div>
-                <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
-            </div>
-            <div class="entry-text">丁卯上幸魂宮，行别祭。上行初獻，世子行亞獻。</div>
-            <div class="entry-note">The King visited the spirit hall (魂宮) and conducted a special sacrifice. The King performed the first libation (初獻) and the Crown Prince performed the second (亞獻).</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="外交" style="--entry-color:#1a5276">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖六年 (戊辰, 1628) 卷之十二 · 庚午 · 今已三年</div>
-                <div class="entry-tags"><span class="tag" style="--c:#1a5276">外交</span></div>
-            </div>
-            <div class="entry-text">庚午禮曹啓曰：「王世子正位東宮，今已三年，尚未受册命於天朝。臣曹據例啓請，而適值兩璫之行，公私物力掃盡，聖上軫念民生，遂從姑待後年之議，以至於今。竊念莫大應行之典，因此稽遲，豈非未安之甚乎？」上曰：「此非急急之事，今番接待詔使，亦恐民力之難堪。况年年酬應詔使，則何以爲國乎？姑待後日。」</div>
-            <div class="entry-note">The Ministry of Rites noted that it had been three years since investiture, yet no Ming recognition had been obtained. The mission had been delayed after the two eunuch envoys (兩璫之行, 1626) drained all resources. The King again deferred: "Receiving envoys year after year — how can the country bear it?"</div>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════
-         1627 · 丁卯胡亂
-    ═══════════════════════════════════════════════ -->
-    <div class="period-section" data-period="1627" style="--period-color:#c0392b">
-        <div class="period-header">
-            <span class="period-year">1627</span>
-            <span class="period-event">丁卯胡亂</span>
-            <span class="period-vol">仁祖五年</span>
-        </div>
-        <div class="period-subtitle">The First Manchu Invasion: court debates sending the Crown Prince south as a rallying point</div>
-
-        <div class="sillok-entry" data-themes="胡亂" style="--entry-color:#922b21">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖五年 正月 十八日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#922b21">胡亂</span></div>
-            </div>
-            <div class="entry-text">世子年幼，不可遠去矣。</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="胡亂 論議" style="--entry-color:#922b21">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖五年 正月 二十一日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#922b21">胡亂</span><span class="tag" style="--c:#566573">論議</span></div>
-            </div>
-            <div class="entry-text">世子雖幼沖，若向南方，則人心有所依賴矣。</div>
-            <div class="entry-note">Officials argued that even a young Crown Prince sent south could serve as a focal point of legitimacy for a divided court (分朝).</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="胡亂" style="--entry-color:#922b21">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖五年 正月 二十四日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#922b21">胡亂</span></div>
-            </div>
-            <div class="entry-text">世子發行。……世子至全州。</div>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════
-         1637 · 丙子胡亂 · 入質
-    ═══════════════════════════════════════════════ -->
-    <div class="period-section" data-period="1637" style="--period-color:#922b21">
-        <div class="period-header">
-            <span class="period-year">1637</span>
-            <span class="period-event">丙子胡亂 · 入質瀋陽</span>
-            <span class="period-vol">仁祖十五年</span>
-        </div>
-        <div class="period-subtitle">The Second Manchu Invasion: the surrender at Samjondo and departure for Shenyang as a hostage</div>
-
-        <div class="sillok-entry" data-themes="入質" style="--entry-color:#0e6655">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖十五年 正月 三十日 · 三田渡</div>
-                <div class="entry-tags"><span class="tag" style="--c:#0e6655">入質</span></div>
-            </div>
-            <div class="entry-text">王世子從焉。</div>
-            <div class="entry-note">The Crown Prince accompanied King Injo to Samjondo (三田渡) for the surrender ceremony.</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="入質" style="--entry-color:#0e6655">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖十五年 二月 一日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#0e6655">入質</span></div>
-            </div>
-            <div class="entry-text">王世子及嬪宮、鳳林大君及夫人於陣中。……以麟坪大君及夫人，還送于京中。</div>
-            <div class="entry-note">The Crown Prince, his consort, and 鳳林大君 were detained in the Qing camp. 麟坪大君 was sent back to the capital.</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="入質" style="--entry-color:#0e6655">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖十五年 二月 五日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#0e6655">入質</span></div>
-            </div>
-            <div class="entry-text">世子自虜營返回，向群臣辭別。……上敎：「說書兪棨在山城，極言和議之非……命勿陪往。」</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="入質" style="--entry-color:#0e6655">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖十五年 二月 八日 · 昌陵 西</div>
-                <div class="entry-tags"><span class="tag" style="--c:#0e6655">入質</span></div>
-            </div>
-            <div class="entry-text">上於昌陵西送別世子。世子臨別受敎：「勉之哉！勿激怒，勿見輕。」世子對群臣曰：「主上在此，何敢乃爾？」</div>
-            <div class="entry-note">King Injo's parting words: "Do your best. Do not provoke anger, and do not let yourself be looked down upon." The Crown Prince replied to the officials: "The King is here — how could any of you dare act otherwise?"</div>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════
-         1638 · 在瀋陽
-    ═══════════════════════════════════════════════ -->
-    <div class="period-section" data-period="1638" style="--period-color:#17a589">
-        <div class="period-header">
-            <span class="period-year">1638</span>
-            <span class="period-event">在瀋陽</span>
-            <span class="period-vol">仁祖十六年</span>
-        </div>
-        <div class="period-subtitle">Life in Shenyang as a hostage: provisions, festival greetings, illness</div>
-
-        <div class="sillok-entry" data-themes="在瀋" style="--entry-color:#17a589">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖十六年 三月 二十一日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#17a589">在瀋</span></div>
-            </div>
-            <div class="entry-text">世子在瀋陽，平安監司每朔進膳。世子念農務方緊，令減四月朔膳，西民感悅。</div>
-            <div class="entry-note">The Pyeongan provincial governor sent monthly provisions to the Crown Prince. Knowing the farming season was pressing, the Crown Prince ordered the April provisions reduced, earning goodwill from the western population.</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="在瀋" style="--entry-color:#17a589">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖十六年 四月 二十五日 · 端午</div>
-                <div class="entry-tags"><span class="tag" style="--c:#17a589">在瀋</span></div>
-            </div>
-            <div class="entry-text">王世子遣輔德李時楷問安，以端午節日也。</div>
-            <div class="entry-note">On the Dragon Boat Festival, the Crown Prince dispatched his attendant 李時楷 back to Korea to inquire after the King's health.</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="在瀋" style="--entry-color:#17a589">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖十六年 五月 二十日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#17a589">在瀋</span></div>
-            </div>
-            <div class="entry-text">世子有疾，遣宣傳官于瀋陽以問之。</div>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════
-         1645 · 歸國 · 薨逝 · 賜謚
-    ═══════════════════════════════════════════════ -->
-    <div class="period-section" data-period="1645" style="--period-color:#6c3483">
-        <div class="period-header">
-            <span class="period-year">1645</span>
-            <span class="period-event">歸國 · 薨逝 · 賜謚</span>
-            <span class="period-vol">仁祖二十三年</span>
-        </div>
-        <div class="period-subtitle">Return from Shenyang, sudden death at Changgyeong Palace, and bestowal of the posthumous title 昭顯</div>
-
-        <div class="sillok-entry" data-themes="薨逝" style="--entry-color:#4a235a">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖二十三年 二月 十八日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#4a235a">薨逝</span></div>
-            </div>
-            <div class="entry-text">世子還，淸使偕入京。先是，淸使固要上郊迎……於是，上扶掖而出，迎于闕庭。</div>
-            <div class="entry-note">The Crown Prince returned with Qing envoys. The envoys had insisted that King Injo go out personally to receive his son; ultimately the King went out and welcomed him in the palace courtyard.</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="薨逝" style="--entry-color:#4a235a">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖二十三年 四月 二十六日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#4a235a">薨逝</span></div>
-            </div>
-            <div class="entry-text">王世子卒于昌慶宮歡慶堂。世子姿質英明，而器量不弘……世子十年異域，備嘗險艱，東還纔數月而遘疾，醫官等亦妄施鍼藥，終至不救。……世子年三十四，有三子三女。</div>
-            <div class="entry-note">The Crown Prince died suddenly at Hwangyeong Hall in Changgyeong Palace, age 34. The Sillok notes that after ten years in a foreign land the physicians' improper use of acupuncture and medicine contributed to his death.</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="薨逝 禮制" style="--entry-color:#4a235a">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖二十三年 五月 十六日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#4a235a">薨逝</span><span class="tag" style="--c:#7d6608">禮制</span></div>
-            </div>
-            <div class="entry-text">議謚曰昭顯。</div>
-            <div class="entry-note">The posthumous title 昭顯 was officially determined.</div>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════
-         1646 · 嬪宮姜氏之獄
-    ═══════════════════════════════════════════════ -->
-    <div class="period-section" data-period="1646" style="--period-color:#7b241c">
-        <div class="period-header">
-            <span class="period-year">1646</span>
-            <span class="period-event">嬪宮姜氏之獄</span>
-            <span class="period-vol">仁祖二十四年</span>
-        </div>
-        <div class="period-subtitle">The trial and execution of the Crown Prince's consort, Consort Gang (愍懷嬪)</div>
-
-        <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖二十四年 正月 三日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
-            </div>
-            <div class="entry-text">上進生鰒灸有毒，遂疑姜嬪。</div>
-            <div class="entry-note">King Injo was served grilled abalone suspected of containing poison; suspicion fell upon Consort Gang.</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖二十四年 二月 三日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
-            </div>
-            <div class="entry-text">備忘記云：「姜嬪在瀋之時，潛圖易位，預造紅錦翟衣，僭稱內殿之號。」</div>
-            <div class="entry-note">The royal memorandum accused Consort Gang of secretly plotting to usurp the queen's position while in Shenyang — having royal robes made in advance and unlawfully using the title of the Inner Palace.</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖二十四年 二月 十二日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
-            </div>
-            <div class="entry-text">上下敎于政院：「廢出賜死之意，言于兩司。」</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖二十四年 三月 十四日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
-            </div>
-            <div class="entry-text">廢昭顯世子嬪姜氏，賜死於故第，收其敎命竹冊、印、章服焚之。</div>
-            <div class="entry-note">Consort Gang was stripped of her title and ordered to die at her former residence. Her investiture documents, bamboo scroll, seal, and ceremonial garments were confiscated and burned.</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖二十四年 五月 二日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
-            </div>
-            <div class="entry-text">命以姜氏私藏銀一萬六百五十兩、黃金一百六十兩、倭劍十九柄，歸于戶曹，使之別置一庫，以備昭顯諸子婚娶之需。</div>
-            <div class="entry-note">Consort Gang's private holdings — 10,650 taels of silver, 160 taels of gold, and 19 Japanese swords — were transferred to the Board of Revenue for the future marriages of 昭顯世子's sons.</div>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════
-         1647 · 三子流配濟州
-    ═══════════════════════════════════════════════ -->
-    <div class="period-section" data-period="1647" style="--period-color:#2c3e50">
-        <div class="period-header">
-            <span class="period-year">1647</span>
-            <span class="period-event">三子流配濟州</span>
-            <span class="period-vol">仁祖二十五年</span>
-        </div>
-        <div class="period-subtitle">The three sons of 昭顯世子 exiled to Jeju Island</div>
-
-        <div class="sillok-entry" data-themes="身後事 禮制" style="--entry-color:#424949">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖二十五年 二月 四日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span><span class="tag" style="--c:#7d6608">禮制</span></div>
-            </div>
-            <div class="entry-text">昭顯世子魂宮，姑設於仁慶宮內，而此非神主永妥之所。三年後似當依順懷宮之例，別立廟宇于他處。</div>
-            <div class="entry-note">The Ministry of Rites noted that the spirit shrine for 昭顯世子, temporarily housed at Ingyeong Palace, was not a suitable permanent location, and recommended establishing a separate shrine after three years.</div>
-        </div>
-
-        <div class="sillok-entry" data-themes="身後事" style="--entry-color:#424949">
-            <div class="entry-meta">
-                <div class="entry-date">仁祖二十五年 五月 十三日</div>
-                <div class="entry-tags"><span class="tag" style="--c:#424949">身後事</span></div>
-            </div>
-            <div class="entry-text">配昭顯世子三子石鐵、石麟、石堅于濟州。上諭：「一處定配，使之相依以生。內官、別將等輪定以送。」</div>
-            <div class="entry-note">The three sons of 昭顯世子 — 石鐵 (age 12), 石麟 (age 8), and 石堅 (age 4) — were exiled to Jeju Island. King Injo directed that they be assigned to the same place so that they might support one another.</div>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════
-         附錄 · 傳記
-    ═══════════════════════════════════════════════ -->
-    <div class="period-section" data-period="附錄" style="--period-color:#7f8c8d">
-        <div class="period-header">
-            <span class="period-year">附錄</span>
-            <span class="period-event">傳記 摘要</span>
-        </div>
-        <div class="period-subtitle">Biographical summary from the Appendix of 仁祖大王實錄</div>
-
-        <div class="sillok-entry" data-themes="禮制" style="--entry-color:#7d6608">
-            <div class="entry-meta">
-                <div class="entry-tags"><span class="tag" style="--c:#7d6608">禮制</span></div>
-            </div>
-            <div class="entry-text">王元妃韓氏誕三男，長昭顯世子諱𪶁早卒，次今上殿下，次麟坪大君㴭。……丁丑往瀋陽，轉入燕京，乙酉春大歸，尋疾革殂逝。昭顯世子有三男、三女，男二死，一幼，三女未筓。</div>
-            <div class="entry-note">Queen Han bore three sons — 昭顯世子 (died young), the present King [Hyojong], and 麟坪大君. Sohyeon went to Shenyang in 丁丑 [1637], later transferred to Beijing, returned in the spring of 乙酉 [1645], and soon died of illness. He had three sons and three daughters; two sons died, one was young, three daughters were unmarried at his death.</div>
-        </div>
-    </div>
-
-    <div class="source-footer">
-        <p>Sources: 朝鮮王朝實錄·仁祖大王實錄 (卷之八·十·十一·十二·十五·十六·二十三·二十四·二十五; 附錄), via
-            <a href="https://zh.wikisource.org/wiki/%E6%9C%9D%E9%AE%AE%E7%8E%8B%E6%9C%9D%E5%AF%A6%E9%8C%84/%E4%BB%81%E7%A5%96%E5%AF%A6%E9%8C%84" target="_blank">Wikisource 維基文庫</a>
-            and <a href="https://www.shidianguji.com" target="_blank">識典古籍</a>.
-            Page compiled by Shuyi Ma, April 2026.
-        </p>
-    </div>
-
-    <footer>&copy; 2026 Shuyi Ma</footer>
+    <footer style="text-align:center;font-size:14px;color:#aaa;padding:20px 0 30px;">&copy; 2026 Shuyi Ma</footer>
 
     <script>
-        const THEME_COLORS = {
-            '禮制': '#7d6608', '論議': '#566573', '外交': '#1a5276',
-            '服制': '#6c3483', '胡亂': '#922b21', '入質': '#0e6655',
-            '在瀋': '#17a589', '薨逝': '#4a235a', '身後事': '#424949'
-        };
-
         let activePeriod = 'all';
         let activeTheme = 'all';
+        let searchQuery = '';
 
         function update() {
             let totalVisible = 0;
+            const query = searchQuery.toLowerCase();
 
             document.querySelectorAll('.period-section').forEach(section => {
-                const sectionPeriod = section.dataset.period;
-                const periodMatch = activePeriod === 'all' || sectionPeriod === activePeriod;
-
+                const periodMatch = activePeriod === 'all' || section.dataset.period === activePeriod;
                 let sectionVisible = 0;
+                
                 section.querySelectorAll('.sillok-entry').forEach(entry => {
-                    const themes = entry.dataset.themes ? entry.dataset.themes.split(' ') : [];
+                    const themes = (entry.dataset.themes || '').split(' ');
                     const themeMatch = activeTheme === 'all' || themes.includes(activeTheme);
-                    const show = periodMatch && themeMatch;
+                    
+                    // Search logic
+                    const contentText = entry.innerText.toLowerCase();
+                    const searchMatch = query === '' || contentText.includes(query);
+
+                    const show = periodMatch && themeMatch && searchMatch;
                     entry.classList.toggle('hidden', !show);
                     if (show) sectionVisible++;
                 });
-
-                section.style.display = (periodMatch && sectionVisible > 0) ? '' : 'none';
+                // show/hide section + its following separator
+                const show = periodMatch && sectionVisible > 0;
+                section.style.display = show ? '' : 'none';
+                const sep = section.nextElementSibling;
+                if (sep && sep.classList.contains('section-sep')) {
+                    sep.style.display = show ? '' : 'none';
+                }
                 totalVisible += sectionVisible;
             });
-
             document.getElementById('no-results').style.display = totalVisible === 0 ? 'block' : 'none';
         }
 
-        // Period tabs
-        document.querySelectorAll('.tab').forEach(btn => {
+        // Period nav (sidebar)
+        document.querySelectorAll('.period-nav-list button').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.period-nav-list button').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 activePeriod = btn.dataset.period;
                 update();
+                document.querySelector('.main-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
 
@@ -794,7 +1051,20 @@
                 update();
             });
         });
+
+        // Search input
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            update();
+        });
+
+        // Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggle-btn');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
     </script>
 </body>
-
 </html>
